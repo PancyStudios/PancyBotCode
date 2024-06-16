@@ -30,45 +30,55 @@ export class Logs {
         this.warnDiscord(log)
     }
 
-    debugDiscord(log: string) {
+    async debugDiscord(log: string) {
+        await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
         .setDescription(log)
+        .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Blue)
         .setTimestamp()
 
         Webhook.send({ embeds: [Embed] })
     }
 
-    infoDiscord(log: string) {
+    async infoDiscord(log: string) {
+        await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
         .setDescription(log)
+        .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Aqua)
         .setTimestamp()
 
         Webhook.send({ embeds: [Embed] })
     }
 
-    logDiscord(log: string) {
+    async logDiscord(log: string) {
+        await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
         .setDescription(log)
+        .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Greyple)
         .setTimestamp()
 
         Webhook.send({ embeds: [Embed] })
     }
 
-    errorDiscord(log: string) {
+    async errorDiscord(log: string) {
+        await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
         .setDescription(log)
+        .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Red)
         .setTimestamp()
 
         Webhook.send({ embeds: [Embed] })
     }
 
-    warnDiscord(log: string) {
+    async warnDiscord(log: string) {
+        await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
         .setDescription(log)
+        .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Yellow)
         .setTimestamp()
 

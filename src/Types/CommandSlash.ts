@@ -6,7 +6,7 @@ import {
     PermissionResolvable
 } from "discord.js";
 import { ExtendedClient } from "../Structures/Client";
-import { GuildDataFirst } from "../database/typings/Security";
+import { GuildDataFirst } from "../Database/Types/Security";
 
 /**
  * {

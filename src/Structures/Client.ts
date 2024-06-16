@@ -14,9 +14,10 @@ import glob from "glob";
 import { promisify } from "util";
 import { RegisterCommandsOptions } from "../Types/Client";
 import { Event } from "./Events"; 
-import { cacheManager, cacheManagerDatabase } from "../utils/CacheSystem/cacheManager";
+import { cacheManager, cacheManagerDatabase } from "../utils/Handlers/CacheHandler/cacheManager";
 import { Poru } from "poru";
-import { player } from "..";
+import { PoruClient } from "../Utils/Clients/Poru";
+import { logs } from "..";
 const globPromise = promisify(glob);
 
 export class ExtendedClient extends Client {
@@ -68,7 +69,7 @@ export class ExtendedClient extends Client {
         }
 
         this.super = {
-            cache: new cacheManager()
+            cache: new cacheManager('null')
         }
         
     }
@@ -79,10 +80,10 @@ export class ExtendedClient extends Client {
     async registerCommands({ commands, guildId }: RegisterCommandsOptions) {
         if (guildId) {
             this.guilds.cache.get(guildId)?.commands.set(commands);
-            console.log(`Registering commands to ${guildId}`);
+            logs.log(`Registering commands to ${guildId}`);
         } else {
             this.application?.commands.set(commands);
-            console.log("Registering global commands");
+            logs.log("Registering global commands");
         }
     }
 
@@ -96,7 +97,7 @@ export class ExtendedClient extends Client {
         commandFiles.forEach(async (filePath) => {
             const command: CommandType = await this.importFile(filePath);
             if (!command.name) return;
-            console.log(command);
+            logs.log(command as unknown as string);
 
             this.commands.set(command.name, command);
             slashCommands.push(command);
@@ -107,8 +108,8 @@ export class ExtendedClient extends Client {
                 commands: slashCommands,
                 guildId: null
             });
-            console.debug("[DEBUG] Client.ts is ready")
-            this.player = player
+            logs.debug("[DEBUG] Client.ts is ready")
+            this.player = new PoruClient(this)
         });
         //Message Commands
 
@@ -118,7 +119,7 @@ export class ExtendedClient extends Client {
         commandFilesMsg.forEach(async (filePath) => {
             const command: CommandTypeMsg = await this.importFile(filePath)
             if(!command.name) return;
-            console.log(command)
+            logs.log(command as unknown as string)
             this.commandsMsg.set(command.name, command)
         })
 
@@ -133,11 +134,10 @@ export class ExtendedClient extends Client {
             const event: Event<keyof ClientEvents> = await this.importFile(
                 filePath
             );
-            console.log(event.event)
+            logs.log(event.event)
             this.on(event.event, event.run);
         });
-        console.log(`/../events`)
-        console.log(`${path.join(__dirname, "../../")}src\\events`)
-        console.log(true)
+        logs.log(`/../events`)
+        logs.log(`${path.join(__dirname, "../../")}src\\events`)
     }
 }

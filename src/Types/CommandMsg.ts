@@ -3,7 +3,7 @@ import {
     Message,
     PermissionResolvable
 } from "discord.js";
-import { GuildDataFirst } from "../database/typings/Security";
+import { GuildDataFirst } from "../Database/Types/Security";
 import { ExtendedClient } from "../Structures/Client";
 
 /**

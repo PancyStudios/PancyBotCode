@@ -1,5 +1,5 @@
 import { EmbedBuilder, Colors } from "discord.js";
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 
 export default new Command({
   name: `ppt`,

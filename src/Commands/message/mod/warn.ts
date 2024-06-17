@@ -1,9 +1,7 @@
-import { Command } from "../../../structures/CommandMsg";
-import { warns as Warns } from "../../../database/Warns";
-import { Timers } from "../../../database/Timers";
-import { utils } from "../../..";
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, createComponent } from "discord.js";
-import { updateDataBase } from "../../../utils/CacheSystem/functions";
+import { Command } from "../../../Structure/CommandMsg";
+import { warns as Warns } from "../../../Database/Warns";
+import { utils } from '../../..';
+import { EmbedBuilder } from "discord.js";
 
 export default new Command({
   name: "warn",
@@ -12,8 +10,9 @@ export default new Command({
   use: "<user> <reason>",
   userPermissions: ["ManageMessages"],
   botPermissions: ["ManageRoles"],
+  database: true,
 
-  run: async ({ message, args, client, _guild }) => {
+  run: async ({ message, args, _guild }) => {
     let reason = (args.slice(1) as string[]).join(" ");
     let userMention = message.mentions.members.first();
     if (!userMention)

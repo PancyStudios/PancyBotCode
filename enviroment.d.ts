@@ -4,11 +4,12 @@ declare global {
             botToken: string;
             mongodbUrl: string;
             topggPassword: string;
-            ubfbToken: string;
             errorWebhook: string;
+            logsWebhook: string;
+            guildsWebhook: string;
             enviroment: "dev" | "prod" | "debug";
+            PORT: number;
             PasswordApi: string;
-            OpenAIApi: string;
             username: string;
             password: string;
             imageDbUrl: string;

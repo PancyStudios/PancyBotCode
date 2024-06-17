@@ -1,6 +1,6 @@
 
 import { Schema, SchemaTypes, model } from "mongoose";
-import { Warns } from "./Types/Warns";
+import { Warns } from "./Type/Warns";
 
 interface WarnsInterface {
     guildId: string;

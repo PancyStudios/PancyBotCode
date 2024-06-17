@@ -1,8 +1,8 @@
-import { logs } from "../.."
-import { Event } from "../../Structures/Events"
-import axios from "axios"
+import { logs } from '../..'
+import { Event } from '../../Structure/Events'
+import axios from 'axios'
 
-export default new Event("ready", async (client) => { 
+export default new Event('ready', async (client) => { 
     setTimeout(() => {
         axios.post('https://califerbot.tk/api/info', {
         apikey: process.env.PasswordApi,
@@ -16,4 +16,6 @@ export default new Event("ready", async (client) => {
         logs.log(x.status as undefined)
     }).finally(() => { logs.log('send')})
     }, 30 * 1000)
+
+
 })

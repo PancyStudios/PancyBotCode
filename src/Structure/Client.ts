@@ -14,7 +14,7 @@ import glob from "glob";
 import { promisify } from "util";
 import { RegisterCommandsOptions } from "../Types/Client";
 import { Event } from "./Events"; 
-import { cacheManager, cacheManagerDatabase } from "../utils/Handlers/CacheHandler/cacheManager";
+import { cacheManager, cacheManagerDatabase } from '../Utils/Handlers/CacheHandler/cacheManager';
 import { Poru } from "poru";
 import { PoruClient } from "../Utils/Clients/Poru";
 import { logs } from "..";
@@ -54,14 +54,19 @@ export class ExtendedClient extends Client {
                 Partials.User,
                 Partials.GuildMember
             ],
+            rest: {
+                retries: 4,
+                globalRequestsPerSecond: 50,
+            }
 
         });
+        logs.warn('Iniciando cliente')
     }
     
 
-    start() {
-        this.registerModules();
-        this.login(process.env.botToken);
+    async start() {
+        await this.registerModules();
+        await this.login(process.env.botToken);
         
         this.database = {
             guild: new cacheManagerDatabase(this, 'g'),
@@ -73,6 +78,7 @@ export class ExtendedClient extends Client {
         }
         
     }
+
     async importFile(filePath: string) {
         return (await import(filePath))?.default;
     }
@@ -127,7 +133,7 @@ export class ExtendedClient extends Client {
 
         // Event
         const eventFiles = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBot/src/events/*/*{.ts,.js}`
+            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/events/*/*{.ts,.js}`
         );
         eventFiles.forEach(async (filePath) => {
             

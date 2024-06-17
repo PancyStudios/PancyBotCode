@@ -1,4 +1,4 @@
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder } from "discord.js";
 
 export default new Command({

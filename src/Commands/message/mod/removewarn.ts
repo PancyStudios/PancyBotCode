@@ -1,6 +1,6 @@
-import { Command } from "../../../structures/CommandMsg";
-import { warns } from "../../../database/Warns";
-import { utils } from "../../..";
+import { Command } from "../../../Structure/CommandMsg";
+import { warns } from "../../../Database/Warns";
+import { utils } from '../../..';
 import { EmbedBuilder } from "discord.js";
 
 export default new Command({

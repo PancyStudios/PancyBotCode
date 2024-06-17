@@ -1,9 +1,10 @@
 import { WebhookClient, Colors, EmbedBuilder } from 'discord.js'
-import { version } from '../../../../package.json'
-const Webhook = new WebhookClient({url: 'https://discord.com/api/webhooks/1251721656049864804/3ZoJPbH5UcKpD7f7u8EvF5HbRowxIY5-3J4iZjcZXrvGFBkpbUdu9KYOIURC3cQb8Kcz' })
+const Webhook = new WebhookClient({ url: process.env.logsWebhook })
 
 export class Logs {
-    constructor(){}
+    constructor(){
+        this.info("[LOGS] Sistema de log iniciado")
+    }
 
     debug(log: string) {
         console.debug(log)
@@ -33,7 +34,7 @@ export class Logs {
     async debugDiscord(log: string) {
         await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
-        .setDescription(log)
+        .setDescription(`${log}`)
         .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Blue)
         .setTimestamp()
@@ -44,7 +45,7 @@ export class Logs {
     async infoDiscord(log: string) {
         await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
-        .setDescription(log)
+        .setDescription(`${log}`)
         .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Aqua)
         .setTimestamp()
@@ -55,7 +56,7 @@ export class Logs {
     async logDiscord(log: string) {
         await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
-        .setDescription(log)
+        .setDescription(`${log}`)
         .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Greyple)
         .setTimestamp()
@@ -66,7 +67,7 @@ export class Logs {
     async errorDiscord(log: string) {
         await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
-        .setDescription(log)
+        .setDescription(`${log}`)
         .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Red)
         .setTimestamp()
@@ -77,7 +78,7 @@ export class Logs {
     async warnDiscord(log: string) {
         await Webhook.rest.globalDelay
         const Embed = new EmbedBuilder()
-        .setDescription(log)
+        .setDescription(`${log}`)
         .setFooter({ text: `Rate limit: ${Webhook.rest.globalRemaining}`})
         .setColor(Colors.Yellow)
         .setTimestamp()

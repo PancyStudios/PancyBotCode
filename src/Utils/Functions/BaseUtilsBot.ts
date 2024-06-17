@@ -1,8 +1,5 @@
 import { connection } from "mongoose";
-import { ChannelType, Message, EmbedBuilder, TextChannel } from "discord.js";
-import { updateDataBase } from "../Handlers/CacheHandler/functions";
-import { ExtendedClient } from "../../Structures/Client";
-import { GuildDataFirst } from "../../Database/Types/Security";
+import { Message, EmbedBuilder } from "discord.js";
 import { warns } from "../../Database/Warns";
 import { Timers } from "../../Database/Timers";
 import { client } from "../.."

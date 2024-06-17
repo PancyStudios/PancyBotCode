@@ -1,7 +1,7 @@
-import { Event } from "../../Structures/Events";
-import { version } from "../../../package.json"
-import { client, logs } from "../..";
-import { ActivityType } from "discord.js"
+import { Event } from '../../Structure/Events';
+import { version } from '../../../package.json'
+import { client, logs } from '../..';
+import { ActivityType } from 'discord.js'
 export default new Event('ready', async (_) => {
     logs.log('Bot encendido')
 

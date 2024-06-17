@@ -5,7 +5,7 @@ import {
     PlayerlistTimer2Interface, 
     PlayerlistTimerInterface, 
     LoopInterface 
-} from "./Types/Music";
+} from "./Type/Music";
 import { model, Schema, SchemaTypes } from "mongoose";
 
 const QueueSechema = new Schema<QueueInterface>({

@@ -1,7 +1,7 @@
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder } from "discord.js";
-import { utils } from "../../..";
-import { warns } from "../../../database/Warns";
+import { utils } from '../../..';
+import { warns } from "../../../Database/Warns";
 
 export default new Command({
   name: "warns",
@@ -11,6 +11,7 @@ export default new Command({
   isDev: false,
   botPermissions: ["EmbedLinks"],
   userPermissions: ["ManageMessages"],
+  database: true,
   async run({ message, _guild }) {
     let userMention = message.mentions.members.first();
     if (!userMention)

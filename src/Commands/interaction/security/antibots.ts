@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from "discord.js";
-import { Command } from "../../../structures/CommandSlash";
-import { updateDataBase } from "../../../utils/CacheSystem/functions";
+import { Command } from "../../../Structure/CommandSlash";
+import { updateDataBase } from "../../../Utils/Handlers/CacheHandler/functions";
 
 export default new Command({
     name: "antibots",

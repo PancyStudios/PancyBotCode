@@ -1,8 +1,8 @@
-import { Command } from "../../../structures/CommandMsg";
-import { install_commands } from "../../../utils/install";
+import { Command } from "../../../Structure/CommandMsg";
+import { install_commands } from "../../../Utils/Handlers/CacheHandler/install";
 import { version } from '../../../../package.json'
 import { EmbedBuilder, Colors, WebhookClient } from "discord.js";
-import { app } from "../../../utils/SystemServer";
+import { logs, Server } from '../../..';
 
 const Webhook = new WebhookClient({ url: 'https://discord.com/api/webhooks/990077896498483260/tATJeJMEF03sfW0G3YwUCCrmGd7znIimQuFpwG-5tMs8DGQsMwoTFPMdL60bt8cf0_vJ'})
 
@@ -18,7 +18,7 @@ export default new Command({
             install_commands(client, message.guild)
             .catch(x => {
                 message.reply('Ocurrio un error al ejecutar la funcion. Mas info en consola')
-                console.error(x)
+                logs.error(x)
             })
             .finally(() => {
                 message.reply('Se completo la funcion')
@@ -102,7 +102,7 @@ export default new Command({
                     .setTimestamp()
                     msg.edit({ embeds: [EmbedConfirm], })
 
-                    app.removeAllListeners()
+                    Server.close()
                     await msg.react('✅')
                 })
             })

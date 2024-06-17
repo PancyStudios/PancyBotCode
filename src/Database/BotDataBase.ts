@@ -1,6 +1,6 @@
-import { GuildDataFirst } from "./Types/Security";
+import { GuildDataFirst } from './Type/Security';
 import { Schema, model, SchemaTypes } from 'mongoose'
-import { UserData } from "./Types/User";
+import { UserData } from './Type/User';
 
 
 const guildsSchema = new Schema({
@@ -84,10 +84,6 @@ const guildsSchema = new Schema({
             enable: SchemaTypes.Boolean,
             amount: SchemaTypes.Number,
             rememberOwners: SchemaTypes.String
-        },
-        intelligentSOS: {
-            enable: SchemaTypes.Boolean,
-            cooldown: SchemaTypes.Boolean
         },
         intelligentAntiflood: SchemaTypes.Boolean,
         antiflood: SchemaTypes.Boolean,

@@ -1,6 +1,6 @@
-import { sendImage } from "../../../utils/SystemBot/sendImage";
-import { craiyon, crashClient, utils } from "../../..";
-import { Command } from "../../../structures/CommandMsg";
+import { sendImage } from "../../../Utils/Functions/sendImage";
+import { craiyon, errorHandler, utils, logs } from '../../..';
+import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder, AttachmentBuilder, Colors } from "discord.js";
 import path from "path"
 import fs from "fs"
@@ -9,7 +9,7 @@ export default new Command({
     name: "createimage",
     description: "Genera una imagen",
     isDev: false,
-    category: "openia",
+    category: "ia",
     botPermissions: ["EmbedLinks"],
     use: "<Descripcion de la imagen>",
 
@@ -17,7 +17,7 @@ export default new Command({
         const text = args[0]
         if(!text) return utils.dataRequired("Necesitas dar una descripcion sobre la imagen que quieres generar "+_guild.configuration.prefix+"createImage <Depcription>")
         try {
-            console.log(1)
+            logs.log(1 as unknown as string)
             message.reply("Generando...").then(async msg => {
                 const firstTime = Date.now()
                 await craiyon.generate({
@@ -46,7 +46,7 @@ export default new Command({
                     try {
                         await sendImage(path.join(__dirname, '../../../', '/temp', '/images', name), `${process.env.imageDbUrl}upload`, name, authBase64)
                     } catch {
-                        console.warn('[API] No se pudo cargar la imagen')
+                        logs.warn('[API] No se pudo cargar la imagen')
                     }
                 }).catch(err => console.log(err))
                 .finally(() => console.log("done"))
@@ -60,8 +60,8 @@ export default new Command({
 
                 message.reply({ embeds: [ErrorMessage] })
 
-                crashClient.report({ error: "Craiyon", message: error })
-                console.log(error)
+                errorHandler.report({ error: "Craiyon", message: error })
+                logs.log(error)
         }
     }
 })

@@ -1,7 +1,7 @@
 import { Guild, antiRF } from '../../../Database/BotDataBase'
 import { version, privatebot } from '../../../../package.json'
 import discord from 'discord.js'
-import { ExtendedClient } from '../../../Structures/Client';
+import { ExtendedClient } from '../../../Structure/Client';
 
 
 export async function install_commands(client: ExtendedClient, guild: discord.Guild) {

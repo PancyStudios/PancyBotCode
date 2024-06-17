@@ -1,15 +1,11 @@
 import {
-  Client,
-  Message,
   EmbedBuilder,
   ActionRowBuilder,
   StringSelectMenuBuilder,
-  APISelectMenuComponent,
-  SelectMenuBuilder,
   Colors,
   ComponentType
 } from "discord.js";
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 
 export default new Command({
     name: "commands",

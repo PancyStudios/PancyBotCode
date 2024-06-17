@@ -1,6 +1,6 @@
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder } from "discord.js";
-import { client, utils } from "../../../";
+import { utils } from "../../../";
 
 export default new Command({
     name: "softban",
@@ -27,7 +27,8 @@ export default new Command({
         const reason = (args.slice(1) as string[]).join(" ") || "No reason provided";
 
         await userBan.send(`Has sido softbanned por ${message.author.tag} por la razon: ${reason}`);
-        await userBan.ban({ reason: reason, deleteMessageSeconds: 604800 });
+        await userBan.ban({ reason: reason, deleteMessageSeconds: 604800 })
+        await message.guild.bans.remove(userBan, 'Softban completado')
 
     }
 })

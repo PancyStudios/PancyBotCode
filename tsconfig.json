@@ -15,6 +15,7 @@
         "skipDefaultLibCheck": true,
         "resolveJsonModule": true,
         "importHelpers": true,
+        "forceConsistentCasingInFileNames": false,
     },
     "include": ["src", "enviroment.d.ts"],
     "exclude": ["node_modules",],

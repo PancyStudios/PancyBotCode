@@ -1,6 +1,6 @@
 import { EmbedBuilder, ButtonStyle, ButtonBuilder, ActionRowBuilder, TextChannel, ButtonInteraction, GuildMember} from 'discord.js'
 import { Poru } from 'poru'
-import { ExtendedClient } from '../../Structures/Client'
+import { ExtendedClient } from '../../Structure/Client'
 import { logs } from '../..'
 import { errorHandler } from '../..'
 import ms from 'ms'

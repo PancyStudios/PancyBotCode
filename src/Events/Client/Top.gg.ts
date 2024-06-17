@@ -1,6 +1,6 @@
 import { Webhook } from '@top-gg/sdk'
 import { Router} from 'express'
-import { Event } from '../../Structures/Events'
+import { Event } from '../../Structure/Events'
 import { logs } from '../..'
 export var RouterVotos = Router()
 

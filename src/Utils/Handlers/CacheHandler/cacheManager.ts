@@ -1,7 +1,7 @@
 const Cacheger = require('cacheger')
 const client = require('discord.js').Client
 
-export class cacheManager extends Cacheger {
+class cacheManager extends Cacheger {
     
     constructor(name, base = {}, metadatable = true) {
         super(name, base);
@@ -74,7 +74,7 @@ export class cacheManager extends Cacheger {
 const cacheDatabase = new Map();
 let cacheClient;
 
-export class cacheManagerDatabase {
+class cacheManagerDatabase {
     
     constructor(client, type) { client.type = type; cacheClient = client; };
 
@@ -95,4 +95,8 @@ export class cacheManagerDatabase {
     async purgeAll() {
         cacheDatabase.clear();
     }
+}
+
+export  {
+    cacheManager, cacheManagerDatabase
 }

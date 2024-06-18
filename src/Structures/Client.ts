@@ -14,7 +14,7 @@ import glob from "glob";
 import { promisify } from "util";
 import { RegisterCommandsOptions } from "../Types/Client";
 import { Event } from "./Events"; 
-import { cacheManager, cacheManagerDatabase } from "../utils/Handlers/CacheHandler/cacheManager";
+import { cacheManager, cacheManagerDatabase } from "../Utils/Handlers/CacheHandler/cacheManager";
 import { Poru } from "poru";
 import { PoruClient } from "../Utils/Clients/Poru";
 import { logs } from "..";
@@ -91,7 +91,7 @@ export class ExtendedClient extends Client {
         // Commands
         const slashCommands: ApplicationCommandDataResolvable[] = [];
         const commandFiles = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/commands/interaction/*/*{.ts,.js}`
+            `${process.cwd()}/src/commands/interaction/*/*{.ts,.js}`
         );
        
         commandFiles.forEach(async (filePath) => {
@@ -114,7 +114,7 @@ export class ExtendedClient extends Client {
         //Message Commands
 
         const commandFilesMsg = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/commands/message/*/*{.js,.ts}`
+            `${process.cwd()}/src/commands/message/*/*{.js,.ts}`
         )
         commandFilesMsg.forEach(async (filePath) => {
             const command: CommandTypeMsg = await this.importFile(filePath)
@@ -127,7 +127,7 @@ export class ExtendedClient extends Client {
 
         // Event
         const eventFiles = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBot/src/events/*/*{.ts,.js}`
+            `${process.cwd()}/src/events/*/*{.ts,.js}`
         );
         eventFiles.forEach(async (filePath) => {
             

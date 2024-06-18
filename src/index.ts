@@ -29,3 +29,4 @@ export const db = connect(process.env.mongodbUrl, {
 
 logs.log(process.cwd())
 
+

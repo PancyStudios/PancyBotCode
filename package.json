@@ -8,7 +8,7 @@
   "privatebot": true,
   "scripts": {
     "start": "node build/src/index.js",
-    "poststart": "typescript restart && ts-node .",
+    "poststart": "ts-node .",
     "dev": "ts-node-dev src/index.ts",
     "tsc": "tsc"
   },

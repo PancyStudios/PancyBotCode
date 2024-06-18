@@ -97,7 +97,7 @@ export class ExtendedClient extends Client {
         // Commands
         const slashCommands: ApplicationCommandDataResolvable[] = [];
         const commandFiles = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/commands/interaction/*/*{.ts,.js}`
+            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/Commands/interaction/*/*{.ts,.js}`
         );
        
         commandFiles.forEach(async (filePath) => {
@@ -120,7 +120,7 @@ export class ExtendedClient extends Client {
         //Message Commands
 
         const commandFilesMsg = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/commands/message/*/*{.js,.ts}`
+            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/Commands/message/*/*{.js,.ts}`
         )
         commandFilesMsg.forEach(async (filePath) => {
             const command: CommandTypeMsg = await this.importFile(filePath)
@@ -133,7 +133,7 @@ export class ExtendedClient extends Client {
 
         // Event
         const eventFiles = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/events/*/*{.ts,.js}`
+            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/Events/*/*{.ts,.js}`
         );
         eventFiles.forEach(async (filePath) => {
             

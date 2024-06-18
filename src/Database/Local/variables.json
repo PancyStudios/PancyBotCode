@@ -1,0 +1,25 @@
+{
+    "botStaff": {
+      "ownerBot": "711329342193664012"
+    },
+    "exclusiveUsers": [
+      {
+        "id": "735194324047888466",
+        "name": "kittysoft",
+        "devPermissions": true,
+        "type": "best_friend" 
+      },
+      {
+        "id": "711329342193664012",
+        "name": "turbis",
+        "devPermissions": true,
+        "type": "owner" 
+      },
+      {
+        "id": "826930402199339018",
+        "name": "a...",
+        "devPermissions": false,
+        "type": "guild_exclusive_owner"
+      }
+    ]
+  }

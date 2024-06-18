@@ -1,6 +1,6 @@
 import { EmbedBuilder } from "@discordjs/builders";
 import { Colors, Guild, GuildMember, TextChannel, User } from "discord.js"
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 
 export default new Command({
     name: "ban",

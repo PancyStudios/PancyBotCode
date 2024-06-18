@@ -1,4 +1,4 @@
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 import axios from "axios";
 import fs from "fs";
 import { AttachmentBuilder, EmbedBuilder, Colors } from "discord.js";
@@ -7,7 +7,7 @@ import path from "path"
 export default new Command({
     name: "getimage",
     description: "Pide una imagen generada anteriormente",
-    category: "openai",
+    category: "ia",
     use: "<Imagen ID>",
 
     run: async ({ message, args }) =>{

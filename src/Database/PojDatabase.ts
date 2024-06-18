@@ -1,4 +1,4 @@
-import { Poj } from "./Types/Poj";
+import { Poj } from './Type/Poj';
 import { model, Schema, SchemaTypes } from "mongoose";
 
 const SchemaPoj = new Schema({

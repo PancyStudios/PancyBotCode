@@ -13,10 +13,12 @@ const logger = winston.createLogger({
     ],
   });
 
-const Webhook = new WebhookClient({ url: 'https://discord.com/api/webhooks/1251718990418411612/gIfSGc2UBDRiJVBnI9V56KLWIDL2qsJkR-BnGvFlxcNisBOyOfeB3VAbyF7bUTDyVsOK' })
+const Webhook = new WebhookClient({ url: process.env.errorWebhook })
 
 export class ErrorHandler {
-    constructor() {}
+    constructor() {
+        this.start()
+    }
 
     start() {
         let errors = 0
@@ -42,7 +44,7 @@ export class ErrorHandler {
             errors++;
             logs.log(`${errors}`)
             logs.log(' [antiCrash] :: Unhandled Rejection/Catch');
-            logs.log(`${reason} ${p}`);
+            logs.log(reason as unknown as string);
             logger.error(`unhandled Rejection: ${err.message}`)
             const data = `${reason} ${p}`
             if (!existsSync(`${process.cwd()}/ErrorLogs`)) {

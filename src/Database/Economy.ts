@@ -1,1 +1,1 @@
-import { EconomyGlobal } from "./Types/Economy";
+import { EconomyGlobal } from "./Type/Economy";

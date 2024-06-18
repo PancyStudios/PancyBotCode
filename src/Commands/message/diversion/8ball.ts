@@ -1,4 +1,4 @@
-import { Command } from '../../../structures/CommandMsg'
+import { Command } from '../../../Structure/CommandMsg'
 import { utils } from '../../..'
 import { EmbedBuilder, Colors } from 'discord.js'
 

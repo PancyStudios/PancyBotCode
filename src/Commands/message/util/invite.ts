@@ -1,6 +1,5 @@
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { version } from "../../../../package.json";
 
 export default new Command({
     name: "invite",
@@ -9,12 +8,12 @@ export default new Command({
     use: "",
     isDev: false,
     botPermissions: ["EmbedLinks"],
-    async run({ message }) {
+    async run({ message, client }) {
         const row = new ActionRowBuilder<ButtonBuilder>()
         .addComponents(
             new ButtonBuilder()
             .setLabel('Invite')
-            .setURL("https://discord.com/api/oauth2/authorize?client_id=978037412078964847&permissions=8&scope=bot%20applications.commands")
+            .setURL("https://discord.com/api/oauth2/authorize?client_id="+client.user.id+"&permissions=8&scope=bot%20applications.commands")
             .setStyle(ButtonStyle.Link)
         )
 

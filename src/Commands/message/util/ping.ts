@@ -1,5 +1,5 @@
-import { Command } from "../../../structures/CommandMsg";
-import { Guild } from "../../../database/BotDataBase";
+import { Command } from "../../../Structure/CommandMsg";
+import { Guild } from "../../../Database/BotDataBase";
 import ms from "ms";
 
 export default new Command({
@@ -7,6 +7,7 @@ export default new Command({
   description: "Command info",
   category: "util",
   use: "",
+  database: true,
 
   async run({ message, args, client }) {
     try {

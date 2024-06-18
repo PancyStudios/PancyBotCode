@@ -1,3 +1,3 @@
 import { model } from "mongoose";
-import { Prefixes } from "./Types/Prefix";
-import { Logs } from "./Types/Logs";
+import { Prefixes } from "./Type/Prefix";
+import { Logs } from "./Type/Logs";

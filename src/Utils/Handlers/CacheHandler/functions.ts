@@ -1,5 +1,5 @@
 import { Guild as GuildDb, antiRF } from "../../../Database/BotDataBase";
-import { ExtendedClient } from "../../../Structures/Client";
+import { ExtendedClient } from "../../../Structure/Client";
 import { install_commands } from "./install";
 import Discord, { Guild } from 'discord.js'
 const usersWithCooldown = new Map();
@@ -112,5 +112,6 @@ export {
     newResponse, 
     fecthDataBase, 
     fecthUsersDataBase ,
-    updateUsersDataBase
+    updateUsersDataBase,
+    ratelimitFilter
 }

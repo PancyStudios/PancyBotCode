@@ -1,7 +1,7 @@
 import { TextChannel, ChannelType } from "discord.js";
-import { Command } from "../../../structures/CommandMsg";
-import { updateDataBase } from "../../../utils/CacheSystem/functions";
-import { utils } from "../../..";
+import { Command } from "../../../Structure/CommandMsg";
+import { updateDataBase } from "../../../Utils/Handlers/CacheHandler/functions";
+import { utils } from '../../..';
 
 export default new Command({
     name: "logs",

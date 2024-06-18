@@ -2,14 +2,14 @@ import {
     ChatInputApplicationCommandData,
     Message,
     PermissionResolvable
-} from "discord.js";
-import { GuildDataFirst } from "../Database/Types/Security";
-import { ExtendedClient } from "../Structures/Client";
+} from 'discord.js';
+import { GuildDataFirst } from '../Database/Type/Security';
+import { ExtendedClient } from '../Structure/Client';
 
 /**
  * {
- *  name: "commandname",
- * description: "any description",
+ *  name: 'commandname',
+ * description: 'any description',
  * run: async({ message }) => {
  *
  * }
@@ -32,6 +32,7 @@ export type CommandTypeMsg = {
     userPermissions?: PermissionResolvable[];
     botPermissions?: PermissionResolvable[];
     inVoiceChannel?: boolean;
-    isDev?: boolean
+    isDev?: boolean;
     run: RunFunction;
+    database?: boolean;
 } & ChatInputApplicationCommandData;

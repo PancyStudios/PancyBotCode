@@ -1,4 +1,4 @@
-import { Command } from '../../../Structures/CommandMsg';
+import { Command } from '../../../Structure/CommandMsg';
 import { transpile } from 'typescript';
 import { inspect } from 'util';
 import { EmbedBuilder } from 'discord.js';

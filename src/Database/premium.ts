@@ -1,4 +1,4 @@
-import { Premium, PremiumGuild } from "./Types/Premium";
+import { Premium, PremiumGuild } from "./Type/Premium";
 import { Schema, SchemaTypes, model } from "mongoose";
 
 

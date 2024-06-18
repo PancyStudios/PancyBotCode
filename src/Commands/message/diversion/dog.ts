@@ -1,4 +1,4 @@
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder, Colors } from "discord.js";
 import nekos from "nekos.life";
 const neko = new nekos();

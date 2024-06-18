@@ -4,14 +4,14 @@ import {
     CommandInteractionOptionResolver,
     GuildMember,
     PermissionResolvable
-} from "discord.js";
-import { ExtendedClient } from "../Structures/Client";
-import { GuildDataFirst } from "../Database/Types/Security";
+} from 'discord.js';
+import { ExtendedClient } from '../Structure/Client';
+import { GuildDataFirst } from '../Database/Type/Security';
 
 /**
  * {
- *  name: "commandname",
- * description: "any description",
+ *  name: 'commandname',
+ * description: 'any description',
  * run: async({ interaction }) => {
  *
  * }
@@ -36,4 +36,5 @@ export type CommandType = {
     isDev?: boolean;
     inVoiceChannel?: boolean;
     run: RunFunction;
+    database?: boolean;
 } & ChatInputApplicationCommandData;

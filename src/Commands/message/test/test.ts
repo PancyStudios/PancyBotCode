@@ -1,4 +1,4 @@
-import { Command } from "../../../structures/CommandMsg";
+import { Command } from "../../../Structure/CommandMsg";
 
 export default new Command({
     name: 'test',

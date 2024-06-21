@@ -6,6 +6,7 @@ import { botStaff, forceDisableCommandsSlash } from '../../Database/Local/variab
 import { GuildDataFirst } from "../../Database/Type/Security";
 import { Document } from "mongoose";
 import { Guild } from "../../Database/BotDataBase";
+import { install_commands } from "../../Utils/Handlers/DatabaseHandler";
 let prefix: string
 let guildDb: GuildDataFirst
 
@@ -19,7 +20,10 @@ export default new Event("interactionCreate", async (interaction) => {
         const status = utils.getStatusDB()
         if(status) {
             guildDb = await Guild.findOne({ id: interaction.guild.id }) as GuildDataFirst
+            if(!guildDb.configuration) install_commands
             prefix = guildDb.configuration.prefix
+        } else {
+            prefix = "pan!"
         }
 
 

@@ -5,6 +5,7 @@ import { GuildDataFirst } from "../../Database/Type/Security";
 import { Document } from "mongoose";
 import { Guild } from "../../Database/BotDataBase";
 import { idText } from "typescript";
+import { install_commands } from "../../Utils/Handlers/DatabaseHandler";
 let prefix: string
 let guildDb: GuildDataFirst
 const mayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -28,7 +29,10 @@ export default new Event('messageCreate', async msg => {
     const status = utils.getStatusDB()
     if(status) {
         guildDb = await Guild.findOne({ id: msg.guild.id }) as GuildDataFirst
+        if(!guildDb.configuration) install_commands
         prefix = guildDb.configuration.prefix
+    } else { 
+      prefix = 'pan!'
     }
 
     

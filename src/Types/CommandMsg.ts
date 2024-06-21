@@ -22,7 +22,7 @@ interface RunOptions {
     message: Message;
     args: String[] | String[0] | Array<string>;
     prefix: string;
-    guilddb: Document<unknown, {}, GuildDataFirst>;
+    guilddb: GuildDataFirst;
 }
 
 type RunFunction = (options: RunOptions) => any;

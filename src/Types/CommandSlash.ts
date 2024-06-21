@@ -27,7 +27,7 @@ interface RunOptions {
     interaction: ExtendedInteraction;
     args: CommandInteractionOptionResolver;
     prefix: string;
-    guilddb: Document<unknown, {}, GuildDataFirst>;
+    guilddb: GuildDataFirst;
 }
 
 type RunFunction = (options: RunOptions) => any;

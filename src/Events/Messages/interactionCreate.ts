@@ -7,7 +7,7 @@ import { GuildDataFirst } from "../../Database/Type/Security";
 import { Document } from "mongoose";
 import { Guild } from "../../Database/BotDataBase";
 let prefix: string
-let guildDb: Document<unknown, {}, GuildDataFirst>
+let guildDb: GuildDataFirst
 
 
 export default new Event("interactionCreate", async (interaction) => {
@@ -15,10 +15,13 @@ export default new Event("interactionCreate", async (interaction) => {
         if(forceDisableCommandsSlash.some(x => x === interaction.commandName)) {
             return interaction.reply({ content: 'El comando se encuenta deshabilitado', ephemeral: true})
         }
+        
         const status = utils.getStatusDB()
         if(status) {
-            guildDb = await Guild.findOne({ id: interaction.guild.id })
+            guildDb = await Guild.findOne({ id: interaction.guild.id }) as GuildDataFirst
+            prefix = guildDb.configuration.prefix
         }
+
 
         await interaction.deferReply();
         const command = client.commands.get(interaction.commandName);

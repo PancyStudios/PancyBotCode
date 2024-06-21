@@ -4,11 +4,13 @@ import { botStaff } from '../../Database/Local/variables.json';
 import { GuildDataFirst } from "../../Database/Type/Security";
 import { Document } from "mongoose";
 import { Guild } from "../../Database/BotDataBase";
+import { idText } from "typescript";
 let prefix: string
-let guildDb: Document<unknown, {}, GuildDataFirst>
+let guildDb: GuildDataFirst
 const mayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export default new Event('messageCreate', async msg => {
+    if(msg.author.bot) return
     if(msg.webhookId) return
     const {guild } = msg
 
@@ -22,7 +24,13 @@ export default new Event('messageCreate', async msg => {
       );
     
     if (!prefixRegex.test(msg.content)) return;
-    if(msg.author.bot) return msg.reply({ content: 'Los bots no tienen permitidos los comandos' })
+        
+    const status = utils.getStatusDB()
+    if(status) {
+        guildDb = await Guild.findOne({ id: msg.guild.id }) as GuildDataFirst
+        prefix = guildDb.configuration.prefix
+    }
+
     
     const [, matchedPrefix] = msg.content.match(prefixRegex);
 

@@ -28,3 +28,4 @@ export const db = connect(process.env.mongodbUrl, {
 }).finally(() => logs.info('Conectado a la base de datos'))
 
 logs.log(process.cwd())
+

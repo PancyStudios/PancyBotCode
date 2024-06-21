@@ -1,22 +1,17 @@
 import { Event } from "../../Structure/Events";
 import { client, logs, utils } from '../..';
-import { fecthUsersDataBase, updateUsersDataBase, fecthDataBase, updateDataBase} from "../../Utils/Handlers/CacheHandler/functions";
-import { GuildDataFirst } from '../../Database/Type/Security';
-import { antiRF } from "../../Database/BotDataBase";
 import { botStaff } from '../../Database/Local/variables.json';
 const mayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-export let _guild: GuildDataFirst
 
 export default new Event('messageCreate', async msg => {
-    const data = await antiRF.findOne({ user: msg.author.id })
-    const {guild, author} = msg
+    if(msg.webhookId) return
+    const {guild } = msg
 
     if(!guild) return logs.log('No is guild');
     if(!guild.available) return logs.log('Guild unavilable');
+    
+    var prefix = 'pan!'
 
-    let _guild = await fecthDataBase(client, guild, true) as GuildDataFirst;
-    if(!_guild) return logs.log('No cache');
-    const prefix = _guild.configuration.prefix
     logs.log(prefix)
     const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const prefixRegex = new RegExp(
@@ -48,7 +43,6 @@ export default new Event('messageCreate', async msg => {
           args,
           client,
           message: msg,
-          _guild: _guild,
         })
       } else  if (command.database) {
         const DBStatus = utils.getStatusDB().isOnline
@@ -59,14 +53,12 @@ export default new Event('messageCreate', async msg => {
             args,
             client,
             message: msg,
-            _guild: _guild
         })
       } else {
         command.run({
           args,
           client,
           message: msg,
-          _guild: _guild
         })
       }
     } else {

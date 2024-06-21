@@ -10,7 +10,7 @@ export default new Command({
     userPermissions: ["BanMembers"],
     botPermissions: ["BanMembers", "EmbedLinks"],
 
-    async run({client, message, args, _guild}) {
+    async run({client, message, args }) {
         const canal = client.channels.cache.get("872627833225232434");
         const embed = new EmbedBuilder()
           .setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL()})

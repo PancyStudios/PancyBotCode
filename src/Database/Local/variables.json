@@ -21,5 +21,11 @@
         "devPermissions": false,
         "type": "guild_exclusive_owner"
       }
+    ],
+    "forceDisableCommandsMsg": [
+      "logs", "setprefix", "tempban"
+    ],
+    "forceDisableCommandsSlash": [
+      "antibots"
     ]
   }

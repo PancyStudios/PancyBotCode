@@ -1,6 +1,5 @@
 import { ApplicationCommandOptionType } from "discord.js";
 import { Command } from "../../../Structure/CommandSlash";
-import { updateDataBase } from "../../../Utils/Handlers/CacheHandler/functions";
 
 export default new Command({
     name: "antibots",
@@ -29,7 +28,7 @@ export default new Command({
     ],
     botPermissions: ['KickMembers'],
 
-    run: async ({ interaction, args, _guild }) => {
+    run: async ({ interaction, args }) => {
         
     }
 })

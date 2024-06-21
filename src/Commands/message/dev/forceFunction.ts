@@ -1,5 +1,4 @@
 import { Command } from "../../../Structure/CommandMsg";
-import { install_commands } from "../../../Utils/Handlers/CacheHandler/install";
 import { version } from '../../../../package.json'
 import { EmbedBuilder, Colors, WebhookClient } from "discord.js";
 import { logs, Server } from '../../..';
@@ -14,31 +13,7 @@ export default new Command({
     isDev: true,
 
     async run({ message, args, client }) {
-        if(args[0] === 'install') {
-            install_commands(client, message.guild)
-            .catch(x => {
-                message.reply('Ocurrio un error al ejecutar la funcion. Mas info en consola')
-                logs.error(x)
-            })
-            .finally(() => {
-                message.reply('Se completo la funcion')
-            })
-        } else if(args[0] === 'webhookPost') {
-            const Embed = new EmbedBuilder()
-            .setDescription('Tested')
-
-            const message2 = await Webhook.send({
-                username: `PancyBot ${version} | CrashError`,
-                avatarURL: 'https://califerbot.tk/assets/img/LaTurbis.jpg',
-                embeds: [
-                    Embed
-                ],
-            })
-
-            console.warn(`[AntiCrash] :: Sent CrashError to Webhook, Type: ${message2.type}`);
-
-            message.reply(`Status Code: ${message2.id}`) // Status Code: 200
-        } else if(args[0] === "killSystem") {
+        if(args[0] === "killSystem") {
             const Embed = new EmbedBuilder()
             .setDescription('Estas seguro que quieres forzar esta funcion?, en caso de estar seguro escribe `confirm`')
             .setColor(Colors.Yellow)

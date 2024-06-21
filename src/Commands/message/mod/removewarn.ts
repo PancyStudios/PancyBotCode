@@ -3,6 +3,8 @@ import { warns } from "../../../Database/Warns";
 import { utils } from '../../..';
 import { EmbedBuilder } from "discord.js";
 
+const prefix = "prefix"
+
 export default new Command({
   name: "unwarn",
   description: "Elimina un warn de un usuario",
@@ -11,14 +13,14 @@ export default new Command({
   isDev: false,
   botPermissions: ["EmbedLinks"],
   userPermissions: ["ManageMessages"],
-  async run({ message, args, _guild }) {
+  async run({ message, args }) {
     let userMention = message.mentions.members.first();
     if (!userMention)
       return message.reply(
         await utils.dataRequired(
           "Debes mencionar al usuario que deseas eliminarle un warn" +
             ".\n\n" +
-            _guild.configuration.prefix +
+            prefix +
             "unwarn <userMention> [all]"
         )
       );

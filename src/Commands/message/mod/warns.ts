@@ -2,6 +2,7 @@ import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder } from "discord.js";
 import { utils } from '../../..';
 import { warns } from "../../../Database/Warns";
+const prefix = 'pan!'
 
 export default new Command({
   name: "warns",
@@ -12,14 +13,14 @@ export default new Command({
   botPermissions: ["EmbedLinks"],
   userPermissions: ["ManageMessages"],
   database: true,
-  async run({ message, _guild }) {
+  async run({ message }) {
     let userMention = message.mentions.members.first();
     if (!userMention)
       return message.reply(
         await utils.dataRequired(
           "Necesitas mencionar al usuario que quieres ver sus warns" +
             ".\n\n" +
-            _guild.configuration.prefix +
+            prefix +
             "warn-list <userMention>"
         )
       );

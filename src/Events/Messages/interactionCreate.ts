@@ -1,14 +1,16 @@
 import { CommandInteractionOptionResolver, GuildMember } from "discord.js";
-import { client, utils } from '../..';
+import { client, utils, logs } from '../..';
 import { Event } from "../../Structure/Events";
 import { ExtendedInteraction } from "../../Types/CommandSlash";
-import { botStaff } from '../../Database/Local/variables.json'
-import { _guild } from "./messageCreate";
+import { botStaff, forceDisableCommandsSlash } from '../../Database/Local/variables.json'
 
 export default new Event("interactionCreate", async (interaction) => {
     console.log(interaction.id)
     if (interaction.isCommand()) {
         console.log(interaction.isRepliable())
+        if(forceDisableCommandsSlash.some(x => x === interaction.commandName)) {
+            return interaction.reply({ content: 'El comando se encuenta deshabilitado', ephemeral: true})
+        }
         await interaction.deferReply();
         const command = client.commands.get(interaction.commandName);
         if (!command)
@@ -23,7 +25,6 @@ export default new Event("interactionCreate", async (interaction) => {
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
-                _guild
             });
         } else if (command.database) {
             const DBStatus = utils.getStatusDB().isOnline
@@ -34,14 +35,12 @@ export default new Event("interactionCreate", async (interaction) => {
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
-                _guild
             });
         } else {
             command.run({
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
-                _guild
             });
         }
     }

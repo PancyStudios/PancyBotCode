@@ -1,5 +1,6 @@
 import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder } from "discord.js";
+const prefix = 'pan!'
 
 export default new Command({
     name: "prefix",
@@ -9,11 +10,11 @@ export default new Command({
     isDev: false,
     botPermissions: ["EmbedLinks"],
 
-    async run({ message, args, client, _guild }) {
+    async run({ message }) {
         let embed = new EmbedBuilder()
             .setTitle("Este es el prefix actual")
             .setColor("Blue")
-            .setDescription(`\`${_guild.configuration.prefix}\``)
+            .setDescription(`\`${prefix}\``)
             .setFooter({ text: "Powered by CacheSystem", iconURL: message.author.displayAvatarURL() });
 
         message.reply({ embeds: [embed] });

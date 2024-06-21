@@ -5,7 +5,6 @@ import {
     Collection,
     Partials,
     GatewayIntentBits,
-    TextChannel
 } from "discord.js";
 import { CommandType } from "../Types/CommandSlash";
 import path from "path"
@@ -14,22 +13,15 @@ import glob from "glob";
 import { promisify } from "util";
 import { RegisterCommandsOptions } from "../Types/Client";
 import { Event } from "./Events"; 
-import { cacheManager, cacheManagerDatabase } from '../Utils/Handlers/CacheHandler/cacheManager';
 import { Poru } from "poru";
 import { PoruClient } from "../Utils/Clients/Poru";
 import { logs } from "..";
+import { forceDisableCommandsMsg } from '../Database/Local/variables.json'
 const globPromise = promisify(glob);
 
 export class ExtendedClient extends Client {
     commands: Collection<string, CommandType> = new Collection();
     commandsMsg: Collection<string, CommandTypeMsg> = new Collection();
-    database: {
-        guild: cacheManagerDatabase 
-        users: cacheManagerDatabase
-    };
-    super: {
-        cache: cacheManager
-    };
     player: Poru;
 
     constructor() {
@@ -67,16 +59,6 @@ export class ExtendedClient extends Client {
     async start() {
         await this.registerModules();
         await this.login(process.env.botToken);
-        
-        this.database = {
-            guild: new cacheManagerDatabase(this, 'g'),
-            users: new cacheManagerDatabase(this, 'u')
-        }
-
-        this.super = {
-            cache: new cacheManager('null')
-        }
-        
     }
 
     async importFile(filePath: string) {
@@ -97,7 +79,7 @@ export class ExtendedClient extends Client {
         // Commands
         const slashCommands: ApplicationCommandDataResolvable[] = [];
         const commandFiles = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/Commands/interaction/*/*{.ts,.js}`
+            `${process.cwd()}/src/Commands/interaction/*/*{.ts,.js}`
         );
        
         commandFiles.forEach(async (filePath) => {
@@ -120,10 +102,13 @@ export class ExtendedClient extends Client {
         //Message Commands
 
         const commandFilesMsg = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/Commands/message/*/*{.js,.ts}`
+            `${process.cwd()}/src/Commands/message/*/*{.js,.ts}`
         )
         commandFilesMsg.forEach(async (filePath) => {
             const command: CommandTypeMsg = await this.importFile(filePath)
+            if(forceDisableCommandsMsg.some(x => x === command.name)) {
+                logs.warn(`Comando Msg deshabilitado: ${command.name}`)
+            }
             if(!command.name) return;
             logs.log(command as unknown as string)
             this.commandsMsg.set(command.name, command)
@@ -133,7 +118,7 @@ export class ExtendedClient extends Client {
 
         // Event
         const eventFiles = await globPromise(
-            `C:/Users/felic/Documents/GitHub/PancyBotCode2024/src/Events/*/*{.ts,.js}`
+            `${process.cwd()}/src/Events/*/*{.ts,.js}`
         );
         eventFiles.forEach(async (filePath) => {
             

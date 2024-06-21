@@ -3,7 +3,6 @@ import {
     Message,
     PermissionResolvable
 } from 'discord.js';
-import { GuildDataFirst } from '../Database/Type/Security';
 import { ExtendedClient } from '../Structure/Client';
 
 /**
@@ -20,7 +19,6 @@ interface RunOptions {
     client: ExtendedClient;
     message: Message;
     args: String[] | String[0] | Array<string>;
-    _guild: GuildDataFirst;
 }
 
 type RunFunction = (options: RunOptions) => any;

@@ -8,8 +8,6 @@ import { app } from './Utils/Handlers/Web'
 import { Client as Craiyon } from 'craiyon'
 import { connect } from 'mongoose'
 
-
-
 export const logs = new Logs()
 export const errorHandler = new ErrorHandler()
 export const client = new ExtendedClient()
@@ -20,11 +18,13 @@ export var Server = app.listen(process.env.PORT)
 client.start()
 
 export const db = connect(process.env.mongodbUrl, {
-    
+    dbName: 'PancyBot',
+    appName: "Cluster0",
+    retryWrites: true,  
 }).then(x => {
-    logs.info('Conectado a la base de datos')
+    logs.warn('Conectando a la base de datos')
 }).catch(x => {
     logs.error(x)
-})
+}).finally(() => logs.info('Conectado a la base de datos'))
 
 logs.log(process.cwd())

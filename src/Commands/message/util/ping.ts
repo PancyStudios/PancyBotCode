@@ -25,15 +25,12 @@ export default new Command({
             });
             ping = ping - timestamp;
             if (ping < 0) ping = ping + timestamp;
-            let nowcache = Date.now();
-            await client.database.guild.get(message.guild.id, true);
-            nowcache = nowcache - Date.now();
             m.edit({
               content: `:globe_with_meridians: Mensajes: ${ms(
                 ping
               )}\n:robot: Discord Api: ${ms(client.ws.ping)}\n📚 Database: ${ms(
                 timestamp
-              )}\n📁 Caché: ${ms(nowcache)}`,
+              )}`,
             });
           });
         });

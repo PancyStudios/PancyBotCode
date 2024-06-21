@@ -60,8 +60,6 @@ export class ErrorHandler {
             .setFooter({ text: `Pancybot v${version}` })
 
             const message = await Webhook.send({
-                username: `PancyBot ${version} | CrashError`,
-                avatarURL: 'https://califerbot.tk/assets/img/LaTurbis.jpg',
                 embeds: [
                     Embed
                 ],
@@ -96,6 +94,20 @@ export class ErrorHandler {
     }
 
     async report(data: ReportErrorOptions) {
+
+        const Embed = new EmbedBuilder()
+        .setAuthor({ name: `Error ${data.error}`})
+        .setDescription(`${data.message}`)
+        .setColor('Red')
+        .setFooter({ text: `Pancybot v${version}` })
+
+        const message = await Webhook.send({
+            embeds: [
+                Embed
+            ],
+        })
+
+        logs.warn(`[AntiCrash] :: Sent ErrorReport to Webhook, Type: ${message.type}`);
 
     }
 }

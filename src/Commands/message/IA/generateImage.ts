@@ -5,6 +5,8 @@ import { EmbedBuilder, AttachmentBuilder, Colors } from "discord.js";
 import path from "path"
 import fs from "fs"
 
+const prefix = "pan!"
+
 export default new Command({
     name: "createimage",
     description: "Genera una imagen",
@@ -13,9 +15,9 @@ export default new Command({
     botPermissions: ["EmbedLinks"],
     use: "<Descripcion de la imagen>",
 
-    async run({ message, args, _guild }) {
+    async run({ message, args }) {
         const text = args[0]
-        if(!text) return utils.dataRequired("Necesitas dar una descripcion sobre la imagen que quieres generar "+_guild.configuration.prefix+"createImage <Depcription>")
+        if(!text) return utils.dataRequired("Necesitas dar una descripcion sobre la imagen que quieres generar "+prefix+"createImage <Depcription>")
         try {
             logs.log(1 as unknown as string)
             message.reply("Generando...").then(async msg => {

@@ -3,6 +3,8 @@ import { warns as Warns } from "../../../Database/Warns";
 import { utils } from '../../..';
 import { EmbedBuilder } from "discord.js";
 
+const prefix = 'pan!'
+
 export default new Command({
   name: "warn",
   description: "Warn a user",
@@ -12,14 +14,14 @@ export default new Command({
   botPermissions: ["ManageRoles"],
   database: true,
 
-  run: async ({ message, args, _guild }) => {
+  run: async ({ message, args }) => {
     let reason = (args.slice(1) as string[]).join(" ");
     let userMention = message.mentions.members.first();
     if (!userMention)
       return message.reply(
         await utils.dataRequired(
           "No se menciono a nadie.\n\n" +
-            _guild.configuration.prefix +
+            prefix +
             "warn <userMention> [reason]"
         )
       );

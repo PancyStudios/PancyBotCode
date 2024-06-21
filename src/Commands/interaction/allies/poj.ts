@@ -1,6 +1,6 @@
 import { Command } from "../../../Structure/CommandSlash";
 import { ApplicationCommandOptionType, ChannelType, TextChannel, EmbedBuilder } from "discord.js";
-import { PojDB } from '../../../Database/PojDatabase'
+import { PojDB } from '../../../Database/BotDataBase'
 
 export default new Command({
     name: "poj",

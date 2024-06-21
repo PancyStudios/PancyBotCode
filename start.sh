@@ -1,1 +1,1 @@
-yarn && yarn audit &&
+yarn && yarn audit 

@@ -1,14 +1,13 @@
 import { GuildDataFirst } from './Type/Security';
+import { Poj } from './Type/Poj';
 import { Schema, model, SchemaTypes } from 'mongoose'
 import { UserData } from './Type/User';
 
 
 const guildsSchema = new Schema({
-    // SERVER ID
     id: SchemaTypes.String,
     ownerId: SchemaTypes.String,
 
-    // PROTECCIÓN
     protection: {
         antiraid: {
             enable: SchemaTypes.Boolean,
@@ -103,53 +102,6 @@ const guildsSchema = new Schema({
     },
 
     // MODERACIÓN
-    moderation: {
-        dataModeration: {
-            muterole: SchemaTypes.String,
-            forceReasons: SchemaTypes.Array,
-            timers: SchemaTypes.Array,
-            badwords: SchemaTypes.Array,
-            events: {
-                manyPings: SchemaTypes.Boolean,
-                capitalLetters: SchemaTypes.Boolean,
-                manyEmojis: SchemaTypes.Boolean,
-                manyWords: SchemaTypes.Boolean,
-                linkDetect: SchemaTypes.Boolean,
-                ghostping: SchemaTypes.Boolean,
-                nsfwFilter: SchemaTypes.Boolean,
-                iploggerFilter: SchemaTypes.Boolean
-            },
-            snipes: {
-                editeds: SchemaTypes.Array,
-                deleteds: SchemaTypes.Array
-            }
-        },
-        automoderator: {
-            enable: SchemaTypes.Boolean,
-            actions: {
-                warns: SchemaTypes.Array,
-                muteTime: SchemaTypes.Array,
-                action: SchemaTypes.String,
-                linksToIgnore: SchemaTypes.Array,
-                floodDetect: SchemaTypes.Number,
-                manyEmojis: SchemaTypes.Number,
-                manyPings: SchemaTypes.Number,
-                manyWords: SchemaTypes.Number,
-            },
-            events: {
-                badwordDetect: SchemaTypes.Boolean,
-                floodDetect: SchemaTypes.Boolean,
-                manyPings: SchemaTypes.Boolean,
-                capitalLetters: SchemaTypes.Boolean,
-                manyEmojis: SchemaTypes.Boolean,
-                manyWords: SchemaTypes.Boolean,
-                linkDetect: SchemaTypes.Boolean,
-                ghostping: SchemaTypes.Boolean,
-                nsfwFilter: SchemaTypes.Boolean,
-                iploggerFilter: SchemaTypes.Boolean
-            }
-        }
-    },
 
     // CONFIGURACIÓN
     configuration: {
@@ -200,5 +152,12 @@ const AntiRFSchema = new Schema({
     },
     servers: SchemaTypes.Array
 })
+
+const SchemaPoj = new Schema({
+    guildId: { type: SchemaTypes.String, required: true },
+    channels: { type: SchemaTypes.Array },
+})
+
+export const PojDB = model<Poj>('pojDB', SchemaPoj)
 export const antiRF = model<UserData>('AntiRF', AntiRFSchema)
 export const Guild = model<GuildDataFirst>('Guild', guildsSchema);

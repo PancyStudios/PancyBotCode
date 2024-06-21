@@ -108,6 +108,7 @@ export class ExtendedClient extends Client {
             const command: CommandTypeMsg = await this.importFile(filePath)
             if(forceDisableCommandsMsg.some(x => x === command.name)) {
                 logs.warn(`Comando Msg deshabilitado: ${command.name}`)
+                return;
             }
             if(!command.name) return;
             logs.log(command as unknown as string)

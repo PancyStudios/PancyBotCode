@@ -1,6 +1,11 @@
 import { Event } from "../../Structure/Events";
 import { client, logs, utils } from '../..';
 import { botStaff } from '../../Database/Local/variables.json';
+import { GuildDataFirst } from "../../Database/Type/Security";
+import { Document } from "mongoose";
+import { Guild } from "../../Database/BotDataBase";
+let prefix: string
+let guildDb: Document<unknown, {}, GuildDataFirst>
 const mayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export default new Event('messageCreate', async msg => {
@@ -10,8 +15,6 @@ export default new Event('messageCreate', async msg => {
     if(!guild) return logs.log('No is guild');
     if(!guild.available) return logs.log('Guild unavilable');
     
-    var prefix = 'pan!'
-
     logs.log(prefix)
     const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const prefixRegex = new RegExp(
@@ -20,7 +23,6 @@ export default new Event('messageCreate', async msg => {
     
     if (!prefixRegex.test(msg.content)) return;
     if(msg.author.bot) return msg.reply({ content: 'Los bots no tienen permitidos los comandos' })
-
     
     const [, matchedPrefix] = msg.content.match(prefixRegex);
 
@@ -43,6 +45,8 @@ export default new Event('messageCreate', async msg => {
           args,
           client,
           message: msg,
+          prefix,
+          guilddb: guildDb,
         })
       } else  if (command.database) {
         const DBStatus = utils.getStatusDB().isOnline
@@ -53,12 +57,16 @@ export default new Event('messageCreate', async msg => {
             args,
             client,
             message: msg,
+            prefix,
+            guilddb: guildDb,
         })
       } else {
         command.run({
           args,
           client,
           message: msg,
+          prefix,
+          guilddb: guildDb,
         })
       }
     } else {

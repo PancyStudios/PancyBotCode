@@ -3,18 +3,27 @@ import { client, utils, logs } from '../..';
 import { Event } from "../../Structure/Events";
 import { ExtendedInteraction } from "../../Types/CommandSlash";
 import { botStaff, forceDisableCommandsSlash } from '../../Database/Local/variables.json'
+import { GuildDataFirst } from "../../Database/Type/Security";
+import { Document } from "mongoose";
+import { Guild } from "../../Database/BotDataBase";
+let prefix: string
+let guildDb: Document<unknown, {}, GuildDataFirst>
+
 
 export default new Event("interactionCreate", async (interaction) => {
-    console.log(interaction.id)
     if (interaction.isCommand()) {
-        console.log(interaction.isRepliable())
         if(forceDisableCommandsSlash.some(x => x === interaction.commandName)) {
             return interaction.reply({ content: 'El comando se encuenta deshabilitado', ephemeral: true})
         }
+        const status = utils.getStatusDB()
+        if(status) {
+            guildDb = await Guild.findOne({ id: interaction.guild.id })
+        }
+
         await interaction.deferReply();
         const command = client.commands.get(interaction.commandName);
         if (!command)
-            return interaction.followUp("You have used a non existent command");
+            return interaction.followUp("Este comando no existe!");
             let userPermissions = command.userPermissions;
             let botPermissions = command.botPermissions;
             if(!interaction.guild.members.cache.get(interaction.user.id).permissions.has(userPermissions || [])) return interaction.followUp(`No tienes permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof userPermissions === 'string' ? userPermissions : userPermissions.join(', ')}\``)
@@ -25,6 +34,8 @@ export default new Event("interactionCreate", async (interaction) => {
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
+                prefix,
+                guilddb: guildDb,
             });
         } else if (command.database) {
             const DBStatus = utils.getStatusDB().isOnline
@@ -35,12 +46,16 @@ export default new Event("interactionCreate", async (interaction) => {
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
+                prefix,
+                guilddb: guildDb,
             });
         } else {
             command.run({
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
+                prefix,
+                guilddb: guildDb,
             });
         }
     }

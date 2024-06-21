@@ -6,6 +6,8 @@ import {
     PermissionResolvable
 } from 'discord.js';
 import { ExtendedClient } from '../Structure/Client';
+import { GuildDataFirst } from '../Database/Type/Security';
+import { Document } from 'mongoose';
 
 /**
  * {
@@ -24,6 +26,8 @@ interface RunOptions {
     client: ExtendedClient;
     interaction: ExtendedInteraction;
     args: CommandInteractionOptionResolver;
+    prefix: string;
+    guilddb: Document<unknown, {}, GuildDataFirst>;
 }
 
 type RunFunction = (options: RunOptions) => any;

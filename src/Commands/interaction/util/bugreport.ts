@@ -1,5 +1,5 @@
 import { Command } from "../../../Structure/CommandSlash";
-import { EmbedBuilder, WebhookClient } from "discord.js";
+import { EmbedBuilder, WebhookClient, ButtonBuilder, ButtonStyle, ActionRowBuilder, ButtonComponent, MessageActionRowComponentData, MessageActionRowComponentBuilder } from "discord.js";
 import { version } from "../../../../package.json";
 
 const Webhook = new WebhookClient({ url: process.env.bugsWebhook })
@@ -12,7 +12,8 @@ export default new Command({
             name: "bug",
             description: "Describe el bug",
             type: 3,
-            required: true
+            required: true,
+            min_length: 15,
         }, 
         {
             name: "image",
@@ -29,22 +30,33 @@ export default new Command({
             .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
             .setTitle("Bug Report")
             .setDescription(`
-                    Se a reportado un bug desde el servidor ${interaction.guild.name} (${interaction.guild.id})
-                    El bug reportado es el siguiente: ${bug}
-                    Archivo adjunto: ${attachment.url}
+                    > # Se a reportado un bug desde el servidor: 
+                    > ${interaction.guild.name} (${interaction.guild.id})
+
+                    > El bug reportado es el siguiente: ${bug}
+
+                    > Archivo adjunto: ${attachment.url}
                 `)
-            .setImage(attachment.url)
             .setColor("Red")
             .setTimestamp()
             .setFooter({ text: `PancyBot ${version}`, iconURL: client.user.displayAvatarURL() })
-        await Webhook.sendSlackMessage({ embeds: [Embed] })
+        await Webhook.send({ embeds: [Embed] })
 
         const EmbedReply = new EmbedBuilder()
             .setTitle("Bug Report")
-            .setDescription("Tu bug reportado ha sido enviado con exito")
+            .setDescription("Tu bug reportado ha sido enviado con exito\n\nPara un mejor seguimiento del bug recomendamos que lo reportes en el github del bot")
             .setColor("Green")
             .setTimestamp()
 
+        const ButtonGithub = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setLabel("Github")
+            .setURL("https://github.com/PancyBot/PancyBotCode/issues/new")
+            .setEmoji(":PB_github:1254325934396411935")
 
+        const ActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>()
+            .addComponents(ButtonGithub)
+
+        return interaction.followUp({ embeds: [EmbedReply], components: [ActionRow],ephemeral: true})
     }
 })

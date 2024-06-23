@@ -18,7 +18,7 @@ export default new Event("guildCreate", async guild => {
 
             Dueño: ${guild.members.cache.get(guild.ownerId).user.tag} (${guild.ownerId})
             Miembros: ${guild.memberCount}
-            Canales: ${guild.channels.cache.size}
+            Canales: ${guild.channels.cache.size} 
             Roles: ${guild.roles.cache.size}
             Creado el: ${guild.createdAt}
             `)

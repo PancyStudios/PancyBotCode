@@ -2,6 +2,7 @@ import { Command } from '../../../Structure/CommandMsg';
 import { transpile } from 'typescript';
 import { inspect } from 'util';
 import { EmbedBuilder } from 'discord.js';
+import { logs } from '../../..';
 
 export default new Command({
     name: 'eval',
@@ -22,10 +23,10 @@ export default new Command({
 
         message.reply({ embeds: [FirstEmbed] }).then(async msg => {
             code = transpile(code);
-            console.debug('[DEBUG] Transpiled code to JS:', code);
+            logs.debug('[DEBUG] Transpiled code to JS:' + code);
             try {
                 const result = await eval(code);
-                console.debug('[DEBUG] Evaluated code:', result);
+                logs.debug('[DEBUG] Evaluated code:' + result);
                 const end = Date.now();
                 const time = end - start;
                 const evaluated = inspect(result, { depth: 0 });
@@ -48,7 +49,7 @@ export default new Command({
 
             } catch (err) {
                 
-                console.error('[ERROR] Evaluated code:', err);
+                logs.error('[ERROR] Evaluated code:' + err);
                 const end = Date.now();
                 const time = end - start;
                 const SecondEmbed = new EmbedBuilder()

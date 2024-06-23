@@ -1,1 +1,3 @@
-yarn && yarn audit 
+git pull && yarn && yarn audit
+
+yarn start

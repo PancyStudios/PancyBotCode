@@ -2,6 +2,7 @@ import { Command } from "../../../Structure/CommandMsg";
 import { version } from '../../../../package.json'
 import { EmbedBuilder, Colors, WebhookClient } from "discord.js";
 import { logs, Server } from '../../..';
+import { exec } from 'child_process';
 
 const Webhook = new WebhookClient({ url: 'https://discord.com/api/webhooks/990077896498483260/tATJeJMEF03sfW0G3YwUCCrmGd7znIimQuFpwG-5tMs8DGQsMwoTFPMdL60bt8cf0_vJ'})
 
@@ -80,6 +81,18 @@ export default new Command({
                     Server.close()
                     await msg.react('✅')
                 })
+            })
+        } else if(args[0] === "update") {
+            exec('git pull', async (err, stdout, stderr) => {
+                if (err) {
+                    logs.error(err as unknown as string)
+                    return
+                }
+                if (stderr) {
+                    logs.error(stderr)
+                    return
+                }
+                logs.info(stdout);
             })
         }
         else {

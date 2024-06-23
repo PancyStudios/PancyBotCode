@@ -15,7 +15,7 @@ export default new Command({
             .setTitle("Este es el prefix actual")
             .setColor("Blue")
             .setDescription(`\`${prefix}\``)
-            .setFooter({ text: "Powered by CacheSystem", iconURL: message.author.displayAvatarURL() });
+            .setFooter({ text: "Powered by PancyStudio", iconURL: message.author.displayAvatarURL() });
 
         message.reply({ embeds: [embed] });
     }

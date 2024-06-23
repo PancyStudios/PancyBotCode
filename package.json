@@ -1,16 +1,14 @@
 {
   "name": "pancybot",
-  "version": "0.0.1-prealpha",
+  "version": "0.0.2-prealpha",
   "description": "Un bot de discord multifuncional",
   "main": "src/index.ts",
   "author": "ImTurbis",
   "license": "MIT",
   "privatebot": true,
   "scripts": {
-    "start": "node build/src/index.js",
-    "poststart": "ts-node .",
-    "dev": "ts-node-dev src/index.ts",
-    "tsc": "tsc"
+    "start": "ts-node .",
+    "dev": "ts-node-dev src/index.ts"
   },
   "dependencies": {
     "@top-gg/sdk": "3.1.6",

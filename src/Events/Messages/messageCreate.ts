@@ -13,18 +13,12 @@ const mayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 export default new Event('messageCreate', async msg => {
     if(msg.author.bot) return
     if(msg.webhookId) return
-    const {guild } = msg
+    const { guild } = msg
 
     if(!guild) return logs.log('No is guild');
     if(!guild.available) return logs.log('Guild unavilable');
     
     logs.log(prefix)
-    const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const prefixRegex = new RegExp(
-        `^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
-      );
-    
-    if (!prefixRegex.test(msg.content)) return;
         
     const status = utils.getStatusDB()
     if(status) {
@@ -34,6 +28,12 @@ export default new Event('messageCreate', async msg => {
     } else { 
       prefix = 'pan!'
     }
+    const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const prefixRegex = new RegExp(
+        `^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
+      );
+      if (!prefixRegex.test(msg.content)) return;
+    
 
     
     const [, matchedPrefix] = msg.content.match(prefixRegex);

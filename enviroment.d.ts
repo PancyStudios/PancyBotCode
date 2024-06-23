@@ -7,6 +7,7 @@ declare global {
             errorWebhook: string;
             logsWebhook: string;
             guildsWebhook: string;
+            bugsWebhook: string;
             enviroment: "dev" | "prod" | "debug";
             PORT: number;
             PasswordApi: string;

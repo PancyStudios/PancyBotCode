@@ -1,4 +1,4 @@
-import { CommandInteractionOptionResolver, GuildMember } from "discord.js";
+import { CommandInteractionOptionResolver } from "discord.js";
 import { client, logs } from '../..';
 import { Event } from "../../Structure/Events";
 import { ExtendedInteraction } from "../../Types/CommandSlash";
@@ -19,14 +19,14 @@ export default new Event("interactionCreate", async (interaction) => {
             if(!interaction.guild.members.cache.get(client.user.id).permissions.has(botPermissions || [])) return interaction.followUp(`No tengo permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof botPermissions === 'string' ? botPermissions : botPermissions.join(', ')}\``)
         if(command.isDev) {
             if(exclusiveUsers.some(x => x.id === interaction.user.id && x.devPermissions === true)) {
-                await command.run({
+                return await command.run({
                     args: interaction.options as CommandInteractionOptionResolver,
                     client,
                     interaction: interaction as ExtendedInteraction,
                     prefix,
                     guilddb: guildDb,
                 });
-            } else return interaction.followUp("Solo los desarrolladores pueden usar este comando")
+            } else return interaction.followUp("Solo los desarrolladores pueden usar este comando ")
         }
 
         logs.error('Comando de desarollador con fallo en la configuracion: isDev: true es necesario en caso contrario este comando se cargo de manera incorrecta en esta coleccion')

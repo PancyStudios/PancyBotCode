@@ -1,5 +1,5 @@
 import { Command } from "../../../Structure/CommandSlash";
-import { EmbedBuilder, WebhookClient, ButtonBuilder, ButtonStyle, ActionRowBuilder, ButtonComponent, MessageActionRowComponentData, MessageActionRowComponentBuilder } from "discord.js";
+import { EmbedBuilder, WebhookClient, ButtonBuilder, ButtonStyle, ActionRowBuilder, ApplicationCommandOptionType, MessageActionRowComponentBuilder } from "discord.js";
 import { version } from "../../../../package.json";
 
 const Webhook = new WebhookClient({ url: process.env.bugsWebhook })
@@ -7,18 +7,19 @@ const Webhook = new WebhookClient({ url: process.env.bugsWebhook })
 export default new Command({
     name: "bugreport",
     description: "Reporta un bug",
+    category: 'util',
     options: [
         {
             name: "bug",
             description: "Describe el bug",
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             required: true,
             min_length: 15,
         }, 
         {
             name: "image",
             description: "Sube una imagen / video del bug",
-            type: 11,
+            type: ApplicationCommandOptionType.Attachment,
             required: true,
         }
     ],

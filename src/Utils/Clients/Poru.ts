@@ -29,6 +29,7 @@ export class PoruClient extends Poru {
         this.on('nodeError', async (err) => { 
             logs.error(`[CRITICAL] Error al conectar con el servidor local de lavalink: ${err.name}`)
             logs.warn('[CRITICAL] Intentando reconectar...')
+            
             logs.log(err as unknown as string)
             await errorHandler.report({
                 error: 'Lavalink 401',

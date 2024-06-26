@@ -21,7 +21,10 @@ const globPromise = promisify(glob);
 
 export class ExtendedClient extends Client {
     commands: Collection<string, CommandType> = new Collection();
+    commandsDev: Collection<string, CommandType> = new Collection();
     commandsMsg: Collection<string, CommandTypeMsg> = new Collection();
+    commandsIntegratedUser: Collection<string, CommandType> = new Collection();
+    commandsIntegratedMessage: Collection<string, CommandType> = new Collection();
     player: Poru;
 
     constructor() {
@@ -65,39 +68,55 @@ export class ExtendedClient extends Client {
         return (await import(filePath))?.default;
     }
 
-    async registerCommands({ commands, guildId }: RegisterCommandsOptions) {
+    async registerCommands({ commands, guildId, userId }: RegisterCommandsOptions) {
         if (guildId) {
-            this.guilds.cache.get(guildId)?.commands.set(commands);
+            await this.guilds.cache.get(guildId)?.commands.set(commands);
             logs.log(`Registering commands to ${guildId}`);
-        } else {
-            this.application?.commands.set(commands);
-            logs.log("Registering global commands");
         }
+        else {
+            await this.application?.commands.set(commands);
+            logs.log("Registering global commands");
+        }              
     }
 
     async registerModules() {
         // Commands
         const slashCommands: ApplicationCommandDataResolvable[] = [];
+        const slashCommandsDev: ApplicationCommandDataResolvable[] = [];
+        const integratedCommandsU: ApplicationCommandDataResolvable[] = [];
+        const integratedCommandsM: ApplicationCommandDataResolvable[] = [];
+
         const commandFiles = await globPromise(
             `${process.cwd()}/src/Commands/interaction/*/*{.ts,.js}`
         );
-       
+
+        const integratedCommandsFilesUser = await globPromise(
+            `${process.cwd()}/src/Commands/integrate/user/*/*{.ts,.js}`
+        );
+
+        const integratedCommandsFilesMessage = await globPromise(
+            `${process.cwd()}/src/Commands/integrate/message/*/*{.ts,.js}`
+        );
         commandFiles.forEach(async (filePath) => {
             const command: CommandType = await this.importFile(filePath);
             if (!command.name) return;
             logs.log(command as unknown as string);
 
-            this.commands.set(command.name, command);
-            slashCommands.push(command);
+            if (command.isDev) {
+                this.commandsDev.set(command.name, command);
+                slashCommandsDev.push(command);
+            } else {
+                this.commands.set(command.name, command);
+                slashCommands.push(command);
+            }
         });
 
-        this.on("ready", (final) => {
-            this.registerCommands({
-                commands: slashCommands,
-                guildId: null
-            });
+        this.on("ready", async (final) => {
+            this.player = new PoruClient(final as ExtendedClient)
+            this.registerCommands({ commands: slashCommands })
+            this.registerCommands({ commands: slashCommandsDev, guildId: '763801211384102962' })
             logs.debug("[DEBUG] Client.ts is ready")
-            this.player = new PoruClient(this)
+
         });
         //Message Commands
 
@@ -106,6 +125,7 @@ export class ExtendedClient extends Client {
         )
         commandFilesMsg.forEach(async (filePath) => {
             const command: CommandTypeMsg = await this.importFile(filePath)
+            logs.log(filePath)
             if(forceDisableCommandsMsg.some(x => x === command.name)) {
                 logs.warn(`Comando Msg deshabilitado: ${command.name}`)
                 return;
@@ -126,10 +146,10 @@ export class ExtendedClient extends Client {
             const event: Event<keyof ClientEvents> = await this.importFile(
                 filePath
             );
+
+            if(!event.event) return
             logs.log(event.event)
             this.on(event.event, event.run);
         });
-        logs.log(`/../events`)
-        logs.log(`${path.join(__dirname, "../../")}src\\events`)
     }
 }

@@ -7,7 +7,6 @@ import {
 } from 'discord.js';
 import { ExtendedClient } from '../Structure/Client';
 import { GuildDataFirst } from '../Database/Type/Security';
-import { Document } from 'mongoose';
 
 /**
  * {
@@ -37,6 +36,8 @@ export type CommandType = {
     botPermissions?: PermissionResolvable[];
     isDev?: boolean;
     inVoiceChannel?: boolean;
+    category: string;
     run: RunFunction;
     database?: boolean;
+
 } & ChatInputApplicationCommandData;

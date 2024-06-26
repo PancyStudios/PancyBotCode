@@ -1,4 +1,4 @@
-import { CommandTypeMsg } from "../Types/CommandMsg";
+import { CommandTypeMsg } from "../Types/CommandMsg"; 
 
 export class Command {
     constructor(commandOptions: CommandTypeMsg) {

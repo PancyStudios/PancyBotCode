@@ -1,6 +1,6 @@
 {
   "name": "pancybot",
-  "version": "0.0.2-prealpha",
+  "version": "0.0.3-prealpha",
   "description": "Un bot de discord multifuncional",
   "main": "src/index.ts",
   "author": "ImTurbis",

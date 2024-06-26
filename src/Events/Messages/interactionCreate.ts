@@ -26,10 +26,16 @@ export default new Event("interactionCreate", async (interaction) => {
         }
 
 
-        await interaction.deferReply();
         const command = client.commands.get(interaction.commandName);
-        if (!command)
-            return interaction.followUp("Este comando no existe!");
+        if (!command){
+            const devCommand = client.commandsDev.get(interaction.commandName);
+            if(devCommand) {
+                return
+            } else {
+                return interaction.reply({content: "Este comando no existe!", ephemeral: true});
+            }
+        }
+            await interaction.deferReply();
             let userPermissions = command.userPermissions;
             let botPermissions = command.botPermissions;
             if(!interaction.guild.members.cache.get(interaction.user.id).permissions.has(userPermissions || [])) return interaction.followUp(`No tienes permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof userPermissions === 'string' ? userPermissions : userPermissions.join(', ')}\``)

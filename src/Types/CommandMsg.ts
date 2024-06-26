@@ -5,7 +5,6 @@ import {
 } from 'discord.js';
 import { ExtendedClient } from '../Structure/Client';
 import { GuildDataFirst } from '../Database/Type/Security';
-import { Document } from 'mongoose';
 
 /**
  * {

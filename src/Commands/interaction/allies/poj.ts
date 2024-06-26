@@ -5,6 +5,7 @@ import { PojDB } from '../../../Database/BotDataBase'
 export default new Command({
     name: "poj",
     description: "Menciona a los usuarios cada que se unen en diferentes canales",
+    category: 'allies',
     options: [
         {
             name: "add",
@@ -47,7 +48,6 @@ export default new Command({
         const command = args.getSubcommand()
         const channel = args.getChannel("channel") as TextChannel
         if(channel.type !== ChannelType.GuildText) return;
-
         let GuildBase = await PojDB.findOne({ guildId: interaction.guild.id })
         switch (command) {
             case 'add':

@@ -4,6 +4,7 @@ import { Command } from "../../../Structure/CommandSlash";
 export default new Command({
     name: "antibots",
     description: "Evita que se unan bots segun su tipo",
+    category: 'security',
     options: [
         {
             name: "type",

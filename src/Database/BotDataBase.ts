@@ -7,7 +7,6 @@ import { UserData } from './Type/User';
 const guildsSchema = new Schema({
     id: SchemaTypes.String,
     ownerId: SchemaTypes.String,
-
     protection: {
         antiraid: {
             enable: SchemaTypes.Boolean,

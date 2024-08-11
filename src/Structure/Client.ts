@@ -15,7 +15,6 @@ import { RegisterCommandsOptions } from "../Types/Client";
 import { Event } from "./Events"; 
 import { Poru } from "poru";
 import { PoruClient } from "../Utils/Clients/Poru";
-import { logs } from "..";
 import { forceDisableCommandsMsg } from '../Database/Local/variables.json'
 const globPromise = promisify(glob);
 
@@ -55,7 +54,7 @@ export class ExtendedClient extends Client {
             }
 
         });
-        logs.warn('Iniciando cliente')
+        console.warn('Iniciando cliente', 'Client')
     }
     
 
@@ -71,11 +70,11 @@ export class ExtendedClient extends Client {
     async registerCommands({ commands, guildId, userId }: RegisterCommandsOptions) {
         if (guildId) {
             await this.guilds.cache.get(guildId)?.commands.set(commands);
-            logs.log(`Registering commands to ${guildId}`);
+            console.log(`Registering commands to ${guildId}`, 'API DC');
         }
         else {
             await this.application?.commands.set(commands);
-            logs.log("Registering global commands");
+            console.log("Registering global commands", 'API DC');
         }              
     }
 
@@ -100,7 +99,7 @@ export class ExtendedClient extends Client {
         commandFiles.forEach(async (filePath) => {
             const command: CommandType = await this.importFile(filePath);
             if (!command.name) return;
-            logs.log(command as unknown as string);
+            console.log(command, 'Loading');
 
             if (command.isDev) {
                 this.commandsDev.set(command.name, command);
@@ -115,8 +114,7 @@ export class ExtendedClient extends Client {
             this.player = new PoruClient(final as ExtendedClient)
             this.registerCommands({ commands: slashCommands })
             this.registerCommands({ commands: slashCommandsDev, guildId: '763801211384102962' })
-            logs.debug("[DEBUG] Client.ts is ready")
-
+            console.debug("Client.ts is ready")
         });
         //Message Commands
 
@@ -125,30 +123,27 @@ export class ExtendedClient extends Client {
         )
         commandFilesMsg.forEach(async (filePath) => {
             const command: CommandTypeMsg = await this.importFile(filePath)
-            logs.log(filePath)
+            console.log(filePath, 'Loading')
             if(forceDisableCommandsMsg.some(x => x === command.name)) {
-                logs.warn(`Comando Msg deshabilitado: ${command.name}`)
+                console.warn(`Comando Msg deshabilitado: ${command.name}`)
                 return;
             }
             if(!command.name) return;
-            logs.log(command as unknown as string)
+            console.log(command, 'Loading')
             this.commandsMsg.set(command.name, command)
         })
-
-        
 
         // Event
         const eventFiles = await globPromise(
             `${process.cwd()}/src/Events/*/*{.ts,.js}`
         );
         eventFiles.forEach(async (filePath) => {
-            
             const event: Event<keyof ClientEvents> = await this.importFile(
                 filePath
             );
 
             if(!event.event) return
-            logs.log(event.event)
+            console.log(event.event, 'Loading')
             this.on(event.event, event.run);
         });
     }

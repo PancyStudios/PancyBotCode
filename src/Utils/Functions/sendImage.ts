@@ -2,7 +2,6 @@ import fs from 'fs';
 import axios from 'axios';
 import { Readable } from 'stream';
 import FormData from "form-data";
-import { logs } from '../..';
 
 export async function sendImage(imagePath: string, apiUrl: string, fileName: string, authBase64: string) {
   // Leer el archivo de imagen
@@ -26,8 +25,8 @@ export async function sendImage(imagePath: string, apiUrl: string, fileName: str
   });
 
   if (status === 200 || status === 201 || status === 204) {
-    logs.log(`[API] Se subió con éxito la imagen: ${statusText}` + fileName);
+    console.log(`Se subió con éxito la imagen: ${statusText}` + fileName, 'API');
   } else {
-    logs.warn(`[API] No se pudo conectar con la API: ${statusText}`)
+    console.warn(`No se pudo conectar con la API: ${statusText}`, 'API');
   }
 }

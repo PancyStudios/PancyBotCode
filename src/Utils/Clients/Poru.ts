@@ -1,7 +1,6 @@
 import { EmbedBuilder, ButtonStyle, ButtonBuilder, ActionRowBuilder, TextChannel, ButtonInteraction, GuildMember} from 'discord.js'
 import { Poru } from 'poru'
 import { ExtendedClient } from '../../Structure/Client'
-import { logs } from '../..'
 import { errorHandler } from '../..'
 import ms from 'ms'
 
@@ -21,27 +20,27 @@ export class PoruClient extends Poru {
             library: "discord.js",
         })
         this.on('nodeConnect', async (node) => {
-            logs.log('[DEBUG] Conectado con lavalink server')
+            console.info('Conectado con lavalink server', 'Poru')
         })
         this.on('socketClose', async player => {
-            logs.log(`[WARN] Socket closed ${player.guildId}`)
+            console.warn(`Socket closed ${player.guildId}`, 'Poru')
         })
         this.on('nodeError', async (err) => { 
-            logs.error(`[CRITICAL] Error al conectar con el servidor local de lavalink: ${err.name}`)
-            logs.warn('[CRITICAL] Intentando reconectar...')
+            console.error(`Error al conectar con el servidor local de lavalink: ${err.name}`, 'Poru')
+            console.warn('Intentando reconectar...', 'Poru')
             
-            logs.log(err as unknown as string)
+            console.error(err, 'Poru')
             await errorHandler.report({
                 error: 'Lavalink 401',
                 message: `Error al conectar con el servidor local de lavalink: ${err.name}`
             })
-            logs.log(process.platform)
-            logs.log(err.ws.readyState as unknown as string)
+            console.log(process.platform, 'Poru')
+            console.log(err.ws.readyState, 'Poru')
             err.reconnect()
             reconnectIntents++;
             if (reconnectIntents >= 3) {
-                logs.log(`${err}`)
-                logs.log('[CRITICAL] No se puede conectar con lavalink...')
+                console.error(err, 'Poru')
+                console.error('No se puede conectar con lavalink...', 'Poru')
         //process.abort()
             }
         })
@@ -185,7 +184,7 @@ export class PoruClient extends Poru {
                 await MESSAGE.edit({ embeds: [embed3], components: [row1]});
             })
         })
-        this.on('trackEnd', (player, track, _lavalink) => {
+        this.on('trackEnd', (player, _track, _lavalink) => {
             const guild = client.guilds.cache.get(player.guildId);
             (guild.channels.cache.get(player.textChannel) as TextChannel).send({content:`Queue has ended!`});
             player.destroy();

@@ -6,4 +6,4 @@ ApiRouter.all("/*", (_, res) => {
     res.status(503).json({ error: 'En desarrollo' })
 })
 
-console.debug('[WEB] ApiRouter is loading')
+console.debug('ApiRouter is loading', 'WEB')

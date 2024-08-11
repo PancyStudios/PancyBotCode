@@ -1,17 +1,8 @@
 import { WebhookClient, EmbedBuilder } from 'discord.js'
 import { existsSync, mkdirSync, writeFileSync} from 'fs'
 import { version } from '../../../../package.json'
-import { client, logs } from '../../..'
-import winston from 'winston'
+import { client } from '../../..'
 import { ReportErrorOptions } from '../../../Types/Error'
-
-const logger = winston.createLogger({
-    level: 'error',
-    format: winston.format.json(),
-    transports: [
-      new winston.transports.File({ filename: 'error.log' }),
-    ],
-  });
 
 const Webhook = new WebhookClient({ url: process.env.errorWebhook })
 
@@ -29,66 +20,35 @@ export class ErrorHandler {
         const autoKill = setInterval(() => {
             if(errors > 15) {
                 const time = Date.now()
-                logs.warn("[CRITICAL] Se detecto un numero demaciado alto de errores")
-                logs.warn("[CRITICAL] Apagando...")
+                console.warn("Se detecto un numero demaciado alto de errores", 'CRITICAL')
+                console.warn("Apagando...", 'CRITICAL')
                 this.report({ error: "Critical Error", message: "Numero inusual de errores. Apagando..."})
                 clearInterval(clearErrorMax)
                 client.destroy()
                 const finalTime = Date.now() - time
-                logs.warn("[CRITICAL] Finalizando proceso... Tiempo total: "+finalTime+"")
+                console.warn("Finalizando proceso... Tiempo total: "+finalTime+"", 'CRITICAL')
                 process.abort()
             }   
         }, 1000)
 
-        process.on('unhandledRejection', async (err, reason, p,) => {
+        process.on('unhandledRejection', async (err: Error) => {
             errors++;
-            logs.log(`${errors}`)
-            logs.log(' [antiCrash] :: Unhandled Rejection/Catch');
-            logs.log(reason as unknown as string);
-            logger.error(`unhandled Rejection: ${err.message}`)
-            const data = `${reason} ${p}`
-            if (!existsSync(`${process.cwd()}/ErrorLogs`)) {
-                mkdirSync(`${process.cwd()}/ErrorLogs`, { recursive: true});
-            }
-            
-            writeFileSync(""+process.cwd()+"/ErrorLogs/unhandledRejection_"+Date.now()+".log", data);
-
-            const Embed = new EmbedBuilder()
-            .setAuthor({ name: 'CrashReport'})
-            .setDescription(`CrashError: ${reason} ${p}`)
-            .setColor('Red')
-            .setFooter({ text: `Pancybot v${version}` })
-
-            const message = await Webhook.send({
-                embeds: [
-                    Embed
-                ],
-            })
-
-            logs.warn(`[AntiCrash] :: Sent CrashError to Webhook, Type: ${message.type}`);
+            console.log(`${errors}`)
+            console.debug('Unhandled Rejection/Catch', 'AntiCrash');
+            console.log(err);
             
         });
         process.on("uncaughtException", (err, origin) => {
-            logs.log(' [antiCrash] :: Uncaught Exception/Catch');
-            logs.log(`${err} ${origin}`);
-            logger.error(`uncaught Exception: ${err.message}`)
-            const data = `${err + origin}`
-            if (!existsSync(`${process.cwd()}/ErrorLogs`)) {
-                mkdirSync(`${process.cwd()}/ErrorLogs`, { recursive: true});
-            }
-            writeFileSync(""+process.cwd()+"/ErrorLogs/uncaughtException_"+Date.now()+".log", data);
+            console.debug('Uncaught Exception/Catch', 'AntiCrash');
+            console.log(err);
+            console.log(origin);
             errors++;
-            logs.log(`${errors}`)
+            console.log(`${errors}`)
         });
         process.on('uncaughtExceptionMonitor', (err, origin) => {
-            logs.log(' [antiCrash] :: Uncaught Exception/Catch (MONITOR)');
-            logs.log(`${err} ${origin}`);
-            const data = `${err + origin}`
-            if (!existsSync(`${process.cwd()}/ErrorLogs`)) {
-                mkdirSync(`${process.cwd()}/ErrorLogs`, { recursive: true});
-            }
-    
-            writeFileSync(""+process.cwd()+"/ErrorLogs/uncaughtExceptionMonitor_"+Date.now()+".log", data);
+            console.debug('Uncaught Exception/Catch (MONITOR)', 'AntiCrash');
+            console.log(err);
+            console.log(origin);
             errors++;
         });
     }
@@ -107,7 +67,6 @@ export class ErrorHandler {
             ],
         })
 
-        logs.warn(`[AntiCrash] :: Sent ErrorReport to Webhook, Type: ${message.type}`);
-
+        console.warn(`Sent ErrorReport to Webhook, Type: ${message.type}`, 'AntiCrash');
     }
 }

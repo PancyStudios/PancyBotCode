@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { logs, utils } from "../../../../../index";
+import { utils } from "../../../../../index";
 import { client } from "../../../../../index";
 import ms from "ms";
 
@@ -44,4 +44,4 @@ StatusRouter.get("/bot", (req, res) => {
         error: "NotFound / NotAcces",
     })
 })
-if(logs) logs.log("[WEB] StatusRouter is loading")
+console.log("StatusRouter is loading", 'WEB')

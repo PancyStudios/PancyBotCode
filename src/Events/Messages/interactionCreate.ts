@@ -1,5 +1,5 @@
 import { CommandInteractionOptionResolver, GuildMember } from "discord.js";
-import { client, utils, logs } from '../..';
+import { client, utils } from '../..';
 import { Event } from "../../Structure/Events";
 import { ExtendedInteraction } from "../../Types/CommandSlash";
 import { botStaff, forceDisableCommandsSlash } from '../../Database/Local/variables.json'

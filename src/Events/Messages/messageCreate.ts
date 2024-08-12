@@ -1,5 +1,5 @@
 import { Event } from "../../Structure/Events";
-import { client, logs, utils } from '../..';
+import { client, utils } from '../..';
 import { botStaff } from '../../Database/Local/variables.json';
 import { GuildDataFirst } from "../../Database/Type/Security";
 import { Document } from "mongoose";
@@ -15,10 +15,10 @@ export default new Event('messageCreate', async msg => {
     if(msg.webhookId) return
     const { guild } = msg
 
-    if(!guild) return logs.log('No is guild');
-    if(!guild.available) return logs.log('Guild unavilable');
+    if(!guild) return console.log('No is guild');
+    if(!guild.available) return console.log('Guild unavilable');
     
-    logs.log(prefix)
+    console.log(prefix)
         
     const status = utils.getStatusDB()
     if(status) {
@@ -33,8 +33,6 @@ export default new Event('messageCreate', async msg => {
         `^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
       );
       if (!prefixRegex.test(msg.content)) return;
-    
-
     
     const [, matchedPrefix] = msg.content.match(prefixRegex);
 
@@ -82,7 +80,7 @@ export default new Event('messageCreate', async msg => {
         })
       }
     } else {
-      logs.log('No existe el comando:' + cmd)
+      console.log('No existe el comando:' + cmd)
     }
   }
 )

@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { DateTime } from "luxon";
 import { WebhookClient, Colors, EmbedBuilder } from "discord.js";
+import { version } from '../../../../package.json'
 
 const loggerWebhook = process.env.loggerlogWebhook ? new WebhookClient({ url: process.env.loggerlogWebhook }) : null;
 const errorWebhook = process.env.loggerErrorWebhook ? new WebhookClient({ url: process.env.loggerErrorWebhook }) : null;
@@ -70,7 +71,7 @@ function discordLogger(type: string, message: string, prefix: string) {
                 .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
                 .setDescription(`\`\`\`bash\n${typeof message === 'string' ? message : 'ErrorTextInput'}\`\`\``)
                 .setTimestamp()
-                .setFooter({ text: `💫 - By PancyStudios`, });
+                .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${loggerWebhook?.rest.globalRemaining}`, });
 
             loggerWebhook?.send({ embeds: [embed] }).catch(err => {
                 const error = err as Error
@@ -85,7 +86,7 @@ function discordLogger(type: string, message: string, prefix: string) {
                 .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
                 .setDescription(`\`\`\`bash\n${message}\`\`\``)
                 .setTimestamp()
-                .setFooter({ text: `💫 - By PancyStudios`, });
+                .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${errorWebhook?.rest.globalRemaining}`, });
 
             errorWebhook?.send({ embeds: [errorEmbed] }).catch(err => {
                 const error = err as Error
@@ -101,7 +102,7 @@ function discordLogger(type: string, message: string, prefix: string) {
                 .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
                 .setDescription(message + '\n' + 'Por seguridad el sistema se detendra en 5 segundos, ya que se dectecto un gran autemto de errores')
                 .setTimestamp()
-                .setFooter({ text: `💫 - By PancyStudios`, });
+                .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${errorWebhook?.rest.globalRemaining}`, });
 
             setTimeout(async() => {
                 await errorWebhook?.send({ embeds: [criticalEmbed] }).catch(err => {

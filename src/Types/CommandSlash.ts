@@ -31,6 +31,8 @@ interface RunOptions {
 
 type RunFunction = (options: RunOptions) => any;
 
+
+
 export type CommandType = {
     userPermissions?: PermissionResolvable[];
     botPermissions?: PermissionResolvable[];

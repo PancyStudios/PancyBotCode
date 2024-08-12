@@ -7,8 +7,6 @@ import {
     GatewayIntentBits,
 } from "discord.js";
 import { CommandType } from "../Types/CommandSlash";
-import path from "path"
-import { CommandTypeMsg } from "../Types/CommandMsg";
 import glob from "glob";
 import { promisify } from "util";
 import { RegisterCommandsOptions } from "../Types/Client";
@@ -21,7 +19,6 @@ const globPromise = promisify(glob);
 export class ExtendedClient extends Client {
     commands: Collection<string, CommandType> = new Collection();
     commandsDev: Collection<string, CommandType> = new Collection();
-    commandsMsg: Collection<string, CommandTypeMsg> = new Collection();
     commandsIntegratedUser: Collection<string, CommandType> = new Collection();
     commandsIntegratedMessage: Collection<string, CommandType> = new Collection();
     player: Poru;
@@ -116,22 +113,6 @@ export class ExtendedClient extends Client {
             this.registerCommands({ commands: slashCommandsDev, guildId: '763801211384102962' })
             console.debug("Client.ts is ready")
         });
-        //Message Commands
-
-        const commandFilesMsg = await globPromise(
-            `${process.cwd()}/src/Commands/message/*/*{.js,.ts}`
-        )
-        commandFilesMsg.forEach(async (filePath) => {
-            const command: CommandTypeMsg = await this.importFile(filePath)
-            console.log(filePath, 'Loading')
-            if(forceDisableCommandsMsg.some(x => x === command.name)) {
-                console.warn(`Comando Msg deshabilitado: ${command.name}`)
-                return;
-            }
-            if(!command.name) return;
-            console.log(command, 'Loading')
-            this.commandsMsg.set(command.name, command)
-        })
 
         // Event
         const eventFiles = await globPromise(

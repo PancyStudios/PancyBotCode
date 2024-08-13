@@ -1,9 +1,10 @@
 import {
     ChatInputApplicationCommandData,
-    ChatInputCommandInteraction,
+    CommandInteraction,
     CommandInteractionOptionResolver,
     GuildMember,
-    PermissionResolvable
+    PermissionResolvable,
+    UserApplicationCommandData
 } from 'discord.js';
 import { ExtendedClient } from '../Structure/Client';
 import { GuildDataFirst } from '../Database/Type/Security';
@@ -17,13 +18,10 @@ import { GuildDataFirst } from '../Database/Type/Security';
  * }
  * }
  */
-export interface ExtendedInteraction extends ChatInputCommandInteraction {
-    member: GuildMember;
-}
 
 interface RunOptions {
     client: ExtendedClient;
-    interaction: ExtendedInteraction;
+    interaction: CommandInteraction;
     args: CommandInteractionOptionResolver;
     prefix: string;
     guilddb: GuildDataFirst;
@@ -32,12 +30,9 @@ interface RunOptions {
 type RunFunction = (options: RunOptions) => any;
 
 export type CommandType = {
-    userPermissions?: PermissionResolvable[];
-    botPermissions?: PermissionResolvable[];
     isDev?: boolean;
-    inVoiceChannel?: boolean;
     category: string;
     run: RunFunction;
     database?: boolean;
 
-} & ChatInputApplicationCommandData;
+} & UserApplicationCommandData;

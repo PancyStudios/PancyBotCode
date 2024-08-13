@@ -11,7 +11,7 @@ let guildDb: GuildDataFirst
 
 
 export default new Event("interactionCreate", async (interaction) => {
-    if (interaction.isCommand()) {
+    if (interaction.isChatInputCommand()) {
         if(forceDisableCommandsSlash.some(x => x === interaction.commandName)) {
             return interaction.reply({ content: 'El comando se encuenta deshabilitado', ephemeral: true})
         }
@@ -70,5 +70,7 @@ export default new Event("interactionCreate", async (interaction) => {
                 guilddb: guildDb,
             });
         }
+    } else if(interaction.isCommand()) {
+
     }
 });

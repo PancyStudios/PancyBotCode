@@ -1,5 +1,5 @@
 import { CommandInteractionOptionResolver } from "discord.js";
-import { client, logs } from '../..';
+import { client } from '../..';
 import { Event } from "../../Structure/Events";
 import { ExtendedInteraction } from "../../Types/CommandSlash";
 import { exclusiveUsers } from '../../Database/Local/variables.json'
@@ -10,7 +10,7 @@ let guildDb: GuildDataFirst
 
 export default new Event("interactionCreate", async (interaction) => {
     if (interaction.isCommand()) {
-        if(!interaction.isRepliable) return logs.error('No se puede responder a esta interaccion')
+        if(!interaction.isRepliable) return console.error('No se puede responder a esta interaccion')
 
         const command = client.commandsDev.get(interaction.commandName);
             let userPermissions = command.userPermissions;
@@ -29,8 +29,8 @@ export default new Event("interactionCreate", async (interaction) => {
             } else return interaction.followUp("Solo los desarrolladores pueden usar este comando ")
         }
 
-        logs.error('Comando de desarollador con fallo en la configuracion: isDev: true es necesario en caso contrario este comando se cargo de manera incorrecta en esta coleccion')
-        logs.info(`Comando: ${command.name} - ${command.description}`)
+        console.error('Comando de desarollador con fallo en la configuracion: isDev: true es necesario en caso contrario este comando se cargo de manera incorrecta en esta coleccion')
+        console.info(`Comando: ${command.name} - ${command.description}`)
         return interaction.reply({content: "Esto no deberia ocurrir, revisar si fue construido correctamente el comando", ephemeral: true});
     }
 });

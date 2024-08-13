@@ -86,13 +86,15 @@ export class ExtendedClient extends Client {
             `${process.cwd()}/src/Commands/interaction/*/*{.ts,.js}`
         );
 
-        const integratedCommandsFilesUser = await globPromise(
-            `${process.cwd()}/src/Commands/integrate/user/*/*{.ts,.js}`
+        const integratedCommandsDirUser = await globPromise(
+            `${process.cwd()}/src/commands/Users/*`
         );
 
-        const integratedCommandsFilesMessage = await globPromise(
-            `${process.cwd()}/src/Commands/integrate/message/*/*{.ts,.js}`
+        const integratedCommandsDirGuild = await globPromise(
+            `${process.cwd()}/src/commands/Guilds/*`
         );
+
+        
         commandFiles.forEach(async (filePath) => {
             const command: CommandType = await this.importFile(filePath);
             if (!command.name) return;

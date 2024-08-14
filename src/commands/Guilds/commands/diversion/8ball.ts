@@ -1,18 +1,25 @@
-import { Command } from '../../../Structure/CommandMsg'
-import { utils } from '../../..'
+import { Command } from '../../../../Structure/CommandSlash'
+import { utils } from '../../../..'
 import { EmbedBuilder, Colors } from 'discord.js'
 const prefix = 'pan!'
 
 export default new Command({
     name: '8ball',
     description: "Preguntale algo al bot",
-    use: '[Pregunta]',
     category: "diversion",
+    options: [
+        {
+            name: 'pregunta',
+            description: 'Pregunta que quieres hacerle al bot',
+            required: true,
+            type: 3
+        }
+    ],
 
-    async run({ message, args }) {
+    async run({ interaction, args }) {
         const responses = ['Si', 'No', 'Tal vez', 'Probablemente', 'Probablemente no', 'No se', 'Tu que piensas?']
         const random = responses[Math.floor(Math.random() * responses.length)]
-        const question = (args as Array<string>).join(' ')
+        const question = args.getString('pregunta')
 
         if(!question) return utils.dataRequired(`No se escribio una pregunta\n\n${prefix}8ball <Pregunta>`)
         
@@ -28,10 +35,10 @@ export default new Command({
                 value: random
             }
         ])
-        .setFooter({ text: `${message.author.tag}`, iconURL: `${message.author.displayAvatarURL()}` })
+        .setFooter({ text: `${interaction.user.tag}`, iconURL: `${interaction.user.displayAvatarURL()}` })
         .setTimestamp()
         .setColor(Colors.Blurple)
 
-        message.reply({ embeds: [EmbedQuest] })
+        interaction.reply({ embeds: [EmbedQuest] })
     }
 })

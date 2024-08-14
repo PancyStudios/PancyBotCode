@@ -1,6 +1,6 @@
-import { Command } from "../../../Structure/CommandSlash";
+import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder, WebhookClient, ButtonBuilder, ButtonStyle, ActionRowBuilder, ApplicationCommandOptionType, MessageActionRowComponentBuilder } from "discord.js";
-import { version } from "../../../../package.json";
+import { version } from "../../../../../package.json";
 
 const Webhook = new WebhookClient({ url: process.env.bugsWebhook })
 

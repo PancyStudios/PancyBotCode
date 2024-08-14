@@ -3,6 +3,7 @@ declare global {
         interface ProcessEnv {
             botToken: string;
             mongodbUrl: string;
+            mongodbPass: string;
             topggPassword: string;
             errorWebhook: string;
             logsWebhook: string;

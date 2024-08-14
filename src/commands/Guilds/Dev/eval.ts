@@ -2,7 +2,6 @@ import { Command } from '../../../Structure/CommandSlash';
 import { transpile } from 'typescript';
 import { inspect } from 'util';
 import { EmbedBuilder, ActionRowBuilder, ModalBuilder, TextInputStyle, TextInputBuilder } from 'discord.js';
-import { logs } from '../../..';
 
 export default new Command({
     name: 'eval',
@@ -45,10 +44,10 @@ export default new Command({
 
         Modal.reply({ embeds: [FirstEmbed] }).then(async msg => {
             const code = transpile(codeMain);
-            logs.debug('[DEBUG] Transpiled code to JS:' + codeMain);
+            console.debug('Transpiled code to JS:' + codeMain);
             try {
                 const result = await eval(code);
-                logs.debug('[DEBUG] Evaluated code:' + result);
+                console.debug('Evaluated code:' + result);
                 const end = Date.now();
                 const time = end - start;
                 const evaluated = inspect(result, { depth: 0 });
@@ -71,7 +70,8 @@ export default new Command({
 
             } catch (err) {
                 
-                logs.error('[ERROR] Evaluated code:' + err);
+                console.error('Evaluated code: ');
+                console.error(err);
                 const end = Date.now();
                 const time = end - start;
                 const SecondEmbed = new EmbedBuilder()

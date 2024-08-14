@@ -1,5 +1,5 @@
-import { sendImage } from "../../../Utils/Functions/sendImage";
-import { craiyon, errorHandler, utils, logs } from '../../..';
+import { sendImage } from "../../../../Utils/Functions/sendImage";
+import { craiyon, errorHandler, utils, logs } from '../../../..';
 import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder, AttachmentBuilder, Colors } from "discord.js";
 import path from "path"

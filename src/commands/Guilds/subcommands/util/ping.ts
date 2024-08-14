@@ -1,5 +1,5 @@
 import { Command } from "../../../Structure/CommandMsg";
-import { Guild } from "../../../Database/BotDataBase";
+import { Guild } from "../../../../Database/BotDataBase";
 import ms from "ms";
 
 export default new Command({

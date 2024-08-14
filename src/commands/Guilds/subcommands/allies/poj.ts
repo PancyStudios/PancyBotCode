@@ -1,6 +1,6 @@
-import { Command } from "../../../Structure/CommandSlash";
+import { Command } from "../../../../Structure/CommandSlash";
 import { ApplicationCommandOptionType, ChannelType, TextChannel, EmbedBuilder } from "discord.js";
-import { PojDB } from '../../../Database/BotDataBase'
+import { PojDB } from '../../../../Database/BotDataBase'
 
 export default new Command({
     name: "poj",
@@ -43,6 +43,7 @@ export default new Command({
     ],
     botPermissions: ['SendMessages', 'EmbedLinks'],
     userPermissions: ['ManageGuild'],
+    database: true,
 
     run: async ({ interaction, args }) => {
         const command = args.getSubcommand()

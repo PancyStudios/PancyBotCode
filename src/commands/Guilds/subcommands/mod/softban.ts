@@ -1,6 +1,6 @@
 import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder } from "discord.js";
-import { utils } from "../../..";
+import { utils } from "../../../..";
 
 const prefix = "pan!"
 

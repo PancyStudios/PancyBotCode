@@ -2,7 +2,7 @@ import { Guild, antiRF } from '../../../Database/BotDataBase'
 import { version, privatebot } from '../../../../package.json'
 import discord from 'discord.js'
 import { ExtendedClient } from '../../../Structure/Client';
-
+import { connect } from 'mongoose'
 
 export async function install_commands(client: ExtendedClient, guild: discord.Guild) {
 	try {
@@ -184,3 +184,14 @@ export async function install_commands(client: ExtendedClient, guild: discord.Gu
 	} catch (error) {console.error(error)}
 }
 
+export class DatabaseHandler {
+	
+
+	connect() {
+		connect(process.env.mongodbUrl, {
+			dbName: 'PancyBot',
+			user: 'admin',
+			pass: process.env.mongodbPass,
+		})
+	}
+}

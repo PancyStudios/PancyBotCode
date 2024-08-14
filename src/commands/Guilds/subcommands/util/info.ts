@@ -1,6 +1,6 @@
 import { Command } from "../../../Structure/CommandMsg";
 import { EmbedBuilder } from "discord.js";
-import { version, dependencies } from "../../../../package.json";
+import { version, dependencies } from "../../../../../package.json";
 import moment from "moment";
 import "moment-duration-format";
 

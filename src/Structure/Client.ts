@@ -21,6 +21,7 @@ export class ExtendedClient extends Client {
     commands: Collection<string, CommandType> = new Collection();
     subcommands: Collection<string, string> = new Collection();
     subcommandsGroup: Collection<string, string> = new Collection();
+    subcommandsCategory: Collection<string, string> = new Collection();
     commandsDev: Collection<string, CommandType> = new Collection();
     player: Poru;
 
@@ -90,10 +91,11 @@ export class ExtendedClient extends Client {
         );
 
         for(const dir of integratedCommandsDirGuild) {
-            switch(dir.split("/").pop()) {
+            const nameDir = path.basename(dir);
+            switch(nameDir) {
                 case 'commands': 
                     const commandFiles = await globPromise(
-                        `${dir}/*{.js,.ts}`
+                        `${dir}/*/*{.js,.ts}`
                     );
         
                     for (const filePath of commandFiles) {
@@ -106,7 +108,7 @@ export class ExtendedClient extends Client {
                     break;
                 case 'subcommands':
                     const commandSubCategories = await globPromise(
-                        `${process.cwd()}/src/commands/subcommands/*`
+                        `${dir}/*`
                     );
 
                     for (const categoryPath of commandSubCategories) {
@@ -136,10 +138,156 @@ export class ExtendedClient extends Client {
                     }
                     break;
                 case 'subcommandsgroup':
-
+                    const commandGroupSubCategories = await globPromise(
+                        `${process.cwd()}/src/commands/subcommand_group/*`
+                    );
+            
+                    for (const subGroupcommandsPath of commandGroupSubCategories) {
+                        // Obtener los archivos de subcomandos dentro de la categoría
+                        const categoryGroup = path.basename(subGroupcommandsPath);
+                        const subGroupCommands = await globPromise(
+                            `${subGroupcommandsPath}/*`
+                        );
+            
+                        this.subcommandsGroup.set(categoryGroup, categoryGroup)
+            
+                        let categoryGroupCommand = {
+                            name: categoryGroup,
+                            type: 1,
+                            description: `${categoryGroup} commands (Si ves esta descripcion, no ejecutar el comando)`,
+                            options: [],
+                        };
+            
+                        for (const categoryPath of subGroupCommands) {
+                            // Obtener los archivos de subcomandos dentro de la categoría
+                            const categoryName = path.basename(categoryPath);
+                            const commandFiles = await globPromise(
+                                `${categoryPath}/*`
+                            );
+            
+                            let subCommand = {
+                                name: categoryName,
+                                type: 1,
+                                description: `${categoryName} commands (Si ves esta descripcion, no ejecutar el comando)`,
+                                options: [],
+                            };
+                
+                            this.subcommandsCategory.set(categoryName, categoryName)
+                
+                            for (const filePath of commandFiles) {
+                                const command: CommandType = await this.importFile(filePath);
+                                if (!command?.name) continue
+                                subCommand.options.push(command)
+                                this.commands.set(`${categoryGroup}.${categoryName}.${command.name}`, command)
+                            }
+            
+                            categoryGroupCommand.options.push(subCommand)
+                        }
+                        slashCommands.push(categoryGroupCommand);
+                    }            
                     break;
                 case 'Dev':
-
+                    const integratedCommandsDirGuildDev = await globPromise(
+                        `${process.cwd()}/src/commands/Guilds/*`
+                    );
+                    for(const dirDev of integratedCommandsDirGuildDev) {
+                        const nameDirDev = path.basename(dirDev);   
+                        switch(nameDirDev) {
+                            case 'commands': 
+                                const commandFiles = await globPromise(
+                                    `${dir}/*/*{.js,.ts}`
+                                );
+                    
+                                for (const filePath of commandFiles) {
+                                    const command: CommandType = await this.importFile(filePath);
+                                    if (!command?.name) continue;
+                        
+                                    this.commands.set(command.name, command)
+                                    slashCommands.push(command);
+                                }
+                                break;
+                            case 'subcommands':
+                                const commandSubCategories = await globPromise(
+                                    `${dir}/*`
+                                );
+            
+                                for (const categoryPath of commandSubCategories) {
+                                    // Obtener los archivos de subcomandos dentro de la categoría
+                                    const categoryName = path.basename(categoryPath);
+                                    const commandFiles = await globPromise(
+                                        `${categoryPath}/*{.js,.ts}`
+                                    );
+            
+                                    this.subcommands.set(categoryName, categoryName)
+                                    
+                                    let categoryCommand = {
+                                        name: categoryName,
+                                        type: 1,
+                                        description: `${categoryName} commands (Si ves esta descripcion, no ejecutar el comando)`,
+                                        options: [],
+                                    };
+            
+                                    for (const filePath of commandFiles) {
+                                        const command: CommandType = await this.importFile(filePath);
+                                        if (!command?.name) continue
+                                        categoryCommand.options.push(command)
+                                        this.commands.set(`${categoryName}.${command.name}`, command)
+                                    }
+            
+                                    slashCommands.push(categoryCommand);
+                                }
+                                break;
+                            case 'subcommandsgroup':
+                                const commandGroupSubCategories = await globPromise(
+                                    `${process.cwd()}/src/commands/subcommand_group/*`
+                                );
+                        
+                                for (const subGroupcommandsPath of commandGroupSubCategories) {
+                                    // Obtener los archivos de subcomandos dentro de la categoría
+                                    const categoryGroup = path.basename(subGroupcommandsPath);
+                                    const subGroupCommands = await globPromise(
+                                        `${subGroupcommandsPath}/*`
+                                    );
+                        
+                                    this.subcommandsGroup.set(categoryGroup, categoryGroup)
+                        
+                                    let categoryGroupCommand = {
+                                        name: categoryGroup,
+                                        type: 1,
+                                        description: `${categoryGroup} commands (Si ves esta descripcion, no ejecutar el comando)`,
+                                        options: [],
+                                    };
+                        
+                                    for (const categoryPath of subGroupCommands) {
+                                        // Obtener los archivos de subcomandos dentro de la categoría
+                                        const categoryName = path.basename(categoryPath);
+                                        const commandFiles = await globPromise(
+                                            `${categoryPath}/*`
+                                        );
+                        
+                                        let subCommand = {
+                                            name: categoryName,
+                                            type: 1,
+                                            description: `${categoryName} commands (Si ves esta descripcion, no ejecutar el comando)`,
+                                            options: [],
+                                        };
+                            
+                                        this.subcommandsCategory.set(categoryName, categoryName)
+                            
+                                        for (const filePath of commandFiles) {
+                                            const command: CommandType = await this.importFile(filePath);
+                                            if (!command?.name) continue
+                                            subCommand.options.push(command)
+                                            this.commands.set(`${categoryGroup}.${categoryName}.${command.name}`, command)
+                                        }
+                        
+                                        categoryGroupCommand.options.push(subCommand)
+                                    }
+                                    slashCommands.push(categoryGroupCommand);
+                                }            
+                                break;
+                        }
+                    }
                     break;
             }
         }

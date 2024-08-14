@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from "discord.js";
-import { Command } from "../../../Structure/CommandSlash";
+import { Command } from "../../../../Structure/CommandSlash";
 
 export default new Command({
     name: "antibots",

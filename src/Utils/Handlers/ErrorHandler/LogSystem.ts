@@ -3,8 +3,8 @@ import { DateTime } from "luxon";
 import { WebhookClient, Colors, EmbedBuilder } from "discord.js";
 import { version } from '../../../../package.json'
 
-const loggerWebhook = process.env.loggerlogWebhook ? new WebhookClient({ url: process.env.loggerlogWebhook }) : null;
-const errorWebhook = process.env.loggerErrorWebhook ? new WebhookClient({ url: process.env.loggerErrorWebhook }) : null;
+const loggerWebhook = process.env.logsWebhook ? new WebhookClient({ url: process.env.logsWebhook }) : null;
+const errorWebhook = process.env.errorWebhook ? new WebhookClient({ url: process.env.errorWebhook }) : null;
 
 const originalConsoleLog = console.log;
 const originalConsoleError = console.error;
@@ -66,20 +66,24 @@ function discordLogger(type: string, message: string, prefix: string) {
         case 'Warn':
         case 'Info':
         case 'Debug':
-            const embed = new EmbedBuilder()
-                .setColor(color(type))
-                .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
-                .setDescription(`\`\`\`bash\n${typeof message === 'string' ? message : 'ErrorTextInput'}\`\`\``)
-                .setTimestamp()
-                .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${loggerWebhook?.rest.globalRemaining}`, });
+            if(message.length >= 3500) {
 
-            loggerWebhook?.send({ embeds: [embed] }).catch(err => {
-                const error = err as Error
-                const date = DateTime.now().setZone('America/Mexico_City');
-                originalConsoleLog('[' + chalk.blue(`${prefix ? prefix : 'SYS'} | LOGGER`) + '] : [' + chalk.red('CRITICAL') + '] ' + chalk.bold(chalk.grey(`${date.hour}:${date.minute}:${date.second}`)) + ' : ', error.name ? error.name : 'Unkown error');    
-                errors++;
-            });
-            break;
+            } else {
+                const embed = new EmbedBuilder()
+                    .setColor(color(type))
+                    .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
+                    .setDescription(`\`\`\`bash\n${typeof message === 'string' ? message : 'ErrorTextInput'}\`\`\``)
+                    .setTimestamp()
+                    .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${loggerWebhook?.rest.globalRemaining}`, });
+    
+                loggerWebhook?.send({ embeds: [embed] }).catch(err => {
+                    const error = err as Error
+                    const date = DateTime.now().setZone('America/Mexico_City');
+                    originalConsoleLog('[' + chalk.blue(`${prefix ? prefix : 'SYS'} | LOGGER`) + '] : [' + chalk.red('CRITICAL') + '] ' + chalk.bold(chalk.grey(`${date.hour}:${date.minute}:${date.second}`)) + ' : ', error.name ? error.name : 'Unkown error');    
+                    errors++;
+                });
+                break;
+            }
         case 'Error':
             const errorEmbed = new EmbedBuilder()
                 .setColor(color(type))

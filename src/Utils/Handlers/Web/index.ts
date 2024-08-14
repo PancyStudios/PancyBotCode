@@ -4,7 +4,7 @@ import { RouterVotos } from '../../../Events/Client/Top.gg'
 import { StatusRouter } from "./Routes/Status";
 import { ApiRouter } from "./Routes/Api";
 import { config } from "dotenv";
-
+import '../ErrorHandler/LogSystem'
 config()
 
 export const app = express()
@@ -14,6 +14,3 @@ app.use(urlencoded({ extended: true }));
 app.use('/votos', RouterVotos);
 app.use('/status', StatusRouter);
 app.use('/api', ApiRouter);
-
-
-

@@ -1,22 +1,20 @@
-import { Command } from "../../../Structure/CommandMsg";
+import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder } from "discord.js";
-const prefix = 'pan!'
-
 export default new Command({
     name: "prefix",
     description: "Muestra el prefijo actual",
     category: "util",
-    use: "",
     isDev: false,
     botPermissions: ["EmbedLinks"],
 
-    async run({ message }) {
-        let embed = new EmbedBuilder()
-            .setTitle("Este es el prefix actual")
-            .setColor("Blue")
-            .setDescription(`\`${prefix}\``)
-            .setFooter({ text: "Powered by PancyStudio", iconURL: message.author.displayAvatarURL() });
+    async run({ interaction }) {
+        const embed = new EmbedBuilder()
+        .setTitle('Comando Deshabilitado')
+        .setColor('Red')
+        .setDescription(`Este comando ha sido deshabilitado temporalmente\n
+            proximamente los comandos por mensaje seran reactivados`)
+        .setFooter({ text: `💫 - PancyStudios | ${interaction.guild.name}`, iconURL: interaction.user.displayAvatarURL() });
 
-        message.reply({ embeds: [embed] });
+        interaction.reply({ embeds: [embed], ephemeral: true });
     }
 })

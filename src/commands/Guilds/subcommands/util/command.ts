@@ -5,26 +5,24 @@ import {
   Colors,
   ComponentType
 } from "discord.js";
-import { Command } from "../../../Structure/CommandMsg";
+import { Command } from "../../../../Structure/CommandSlash";
 
 export default new Command({
     name: "commands",
-    aliases: ["cmds", "cmd"],
-    use: "<Command>",
     description: "Muestra la lista de comandos",
     category: "util",
     isDev: false,
     botPermissions: ["EmbedLinks"],
 
-    async run({ message, client }) {
+    async run({ interaction, client }) {
         const directories = [
-            ...new Set(client.commandsMsg.map((cmd) => cmd.category)),
+            ...new Set(client.commands.map((cmd) => cmd.category)),
         ]
 
         const formatString = (str: string) =>  `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`
 
         const categories = directories.map((dir) => {
-            const getCommands = client.commandsMsg
+            const getCommands = client.commands
               .filter((cmd) => cmd.category === dir)
               .map((cmd) => {
                 return {
@@ -41,7 +39,7 @@ export default new Command({
 
     const embed = new EmbedBuilder().setDescription(
         "Seleciona una categoria"
-      ).setColor("Yellow").setFooter({ text: message.author.tag, iconURL: message.author.avatarURL()}).setTimestamp();
+      ).setColor("Yellow").setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL()}).setTimestamp();
       
       const adw = new ActionRowBuilder<StringSelectMenuBuilder>()
 
@@ -63,15 +61,15 @@ export default new Command({
 
         ])
       ];
-      const initalMessage = await message.reply({
+      const initalinteraction = await interaction.reply({
         embeds: [embed],
         components: components(false),
       });
   
-      const filter = (interaction) => interaction.user.id === message.author.id;
+      const filter = (interaction) => interaction.user.id === interaction.author.id;
   
-      const collector = message.channel.createMessageComponentCollector({
-        filter,
+      const collector = initalinteraction.createMessageComponentCollector({
+        filter: i => i.user.id === interaction.user.id,
         componentType: ComponentType.StringSelect,
       });
   
@@ -105,7 +103,7 @@ export default new Command({
       });
   
       collector.on("end", () => {
-        initalMessage.edit({ components: components(true) });
+        initalinteraction.edit({ components: components(true) });
       });
     }
 })

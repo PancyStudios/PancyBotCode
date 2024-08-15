@@ -1,14 +1,14 @@
-import { Command } from "../../../Structure/CommandMsg";
+
+import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
 export default new Command({
     name: "invite",
     description: "Invitacion del bot",
     category: "util",
-    use: "",
     isDev: false,
     botPermissions: ["EmbedLinks"],
-    async run({ message, client }) {
+    async run({ interaction, client }) {
         const row = new ActionRowBuilder<ButtonBuilder>()
         .addComponents(
             new ButtonBuilder()
@@ -21,8 +21,8 @@ export default new Command({
             .setTitle("Invitacion del bot")
             .setColor("Blurple")
             .setDescription(`Puedes apoyarme invitandome a tu servidor con el boton de abajo`)
-            .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL() });
+            .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL() });
 
-        message.reply({ embeds: [embed], components: [row] });
+        interaction.reply({ embeds: [embed], components: [row] });
     }   
 })

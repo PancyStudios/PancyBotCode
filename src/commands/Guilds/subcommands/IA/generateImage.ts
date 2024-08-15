@@ -1,6 +1,6 @@
 import { sendImage } from "../../../../Utils/Functions/sendImage";
-import { craiyon, errorHandler, utils, logs } from '../../../..';
-import { Command } from "../../../Structure/CommandMsg";
+import { craiyon, errorHandler, utils } from '../../../..';
+import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder, AttachmentBuilder, Colors } from "discord.js";
 import path from "path"
 import fs from "fs"
@@ -13,14 +13,12 @@ export default new Command({
     isDev: false,
     category: "ia",
     botPermissions: ["EmbedLinks"],
-    use: "<Descripcion de la imagen>",
 
-    async run({ message, args }) {
+    async run({ interaction, args }) {
         const text = args[0]
         if(!text) return utils.dataRequired("Necesitas dar una descripcion sobre la imagen que quieres generar "+prefix+"createImage <Depcription>")
         try {
-            logs.log(1 as unknown as string)
-            message.reply("Generando...").then(async msg => {
+            interaction.reply("Generando...").then(async msg => {
                 const firstTime = Date.now()
                 await craiyon.generate({
                     prompt: `${text}`,
@@ -48,22 +46,22 @@ export default new Command({
                     try {
                         await sendImage(path.join(__dirname, '../../../', '/temp', '/images', name), `${process.env.imageDbUrl}upload`, name, authBase64)
                     } catch {
-                        logs.warn('[API] No se pudo cargar la imagen')
+                        console.warn('No se pudo cargar la imagen')
                     }
-                }).catch(err => console.log(err))
+                }).catch(err => console.error(err))
                 .finally(() => console.log("done"))
             })
         } catch (error) {
-                const ErrorMessage = new EmbedBuilder()
+                const Errorinteraction = new EmbedBuilder()
                 .setTitle("Craiyon Error")
                 .setDescription(`Error: ${error}`)
                 .setColor(Colors.Red)
                 .setTimestamp()
 
-                message.reply({ embeds: [ErrorMessage] })
+                interaction.reply({ embeds: [Errorinteraction] })
 
                 errorHandler.report({ error: "Craiyon", message: error })
-                logs.log(error)
+                console.log(error)
         }
     }
 })

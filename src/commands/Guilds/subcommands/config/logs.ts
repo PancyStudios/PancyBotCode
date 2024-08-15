@@ -1,15 +1,14 @@
-import { Command } from "../../../Structure/CommandMsg";
+import { Command } from "../../../../Structure/CommandSlash";
 
 export default new Command({
     name: "logs",
     description: "Establece el canal de Logs",
-    use: "{enable <channelMention>, disable}",
     category: "config",
     userPermissions: ["ManageGuild"],
     botPermissions: ["ViewChannel"],
     isDev: false,
 
-    async run ({ client, message, args }) {
-        message.reply({content: 'Comando en re escritura' })
+    async run ({ interaction, args }) {
+        interaction.reply({content: 'Comando en re escritura' })
     }
 })

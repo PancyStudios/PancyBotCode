@@ -1,15 +1,36 @@
 import { EmbedBuilder, Colors } from "discord.js";
-import { Command } from "../../../Structure/CommandMsg";
+import { Command } from "../../../../Structure/CommandSlash";
 
 export default new Command({
   name: `ppt`,
   category: "diversion",
-  use: "[piedra | papel | tijera]",
   description: `juega piedra papel o tijeras`,
-  botPermissions: ["EmbedLinks"],
+  options: [
+    {
+      name: "move",
+      description: "Elige una opcion",
+      type: 3,
+      required: true,
+      choices: [
+        {
+          name: "Piedra",
+          value: "piedra",
+        },
+        {
+          name: "Papel",
+          value: "papel",
+        },
+        {
+          name: "Tijera",
+          value: "tijera",
+        },
+      ],
+    },
+  ],
 
-  async run({ client, message, args }) {
+  async run({ client, interaction, args }) {
     const moves = { piedra: 0, papel: 1, tijera: 2 };
+    const action = args.getString("move");
 
     function wrapIndex(i, i_max) {
       return ((i % i_max) + i_max) % i_max;
@@ -26,24 +47,24 @@ export default new Command({
       return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
 
-    if (!args[0])
-      return message.reply("Eliga una entre piedra, papel o tijera.");
+    if (!action)
+      return interaction.reply("Eliga una entre piedra, papel o tijera.");
 
-    const move = args[0] as string;
+    const move = action as string;
 
     if (((!move as any) in moves) as any)
-      return message.reply("Elige una opcion valida");
+      return interaction.reply("Elige una opcion valida");
 
     let machineInput = Object.keys(moves)[Math.floor(Math.random() * 3)];
 
-    let winner = determine_win([args[0], machineInput]);
+    let winner = determine_win([action, machineInput]);
 
     const embed = new EmbedBuilder()
       .setTitle("Piedra, papel o tijera.")
       .addFields([
         {
-          name: `${message.author.username} eligió`,
-          value: uppercase_first(args[0]),
+          name: `${interaction.user.username} eligió`,
+          value: uppercase_first(action),
           inline: true,
         },
         {
@@ -52,23 +73,23 @@ export default new Command({
           inline: true,
         }
       ])
-      .setColor(message.guild.members.cache.get(client.user.id).displayColor)
+      .setColor(interaction.guild.members.cache.get(client.user.id)?.displayColor)
       .setFooter({
-        text: "El Turbinas#09921",
-        iconURL: "https://cdn.discordapp.com/avatars/337638270861049857/0ae0087039cfcf65f3d1bd5d42b12696.png?size=2048"
+        text: interaction.member.displayName,
+        iconURL: interaction.member.displayAvatarURL(),
       });
 
     if (winner == 0) {
       embed.setDescription("¡Vaya, hubo un empate!");
-      return message.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed] });
     } else if (winner == 1) {
       embed.setDescription("¡Has ganado, felicidades!");
-      return message.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed] });
     } else if (winner == 2) {
       embed.setDescription(
         "¡La computadora ha ganado, suerte para la proxima!"
       );
-      return message.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed] });
     }
   },
 });

@@ -1,4 +1,4 @@
-import { Command } from "../../../Structure/CommandMsg";
+import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder } from "discord.js";
 import { version, dependencies } from "../../../../../package.json";
 import moment from "moment";
@@ -8,9 +8,8 @@ export default new Command({
   name: "info",
   description: "Command info",
   category: "util",
-  use: "",
 
-  async run({ message, args, client }) {
+  async run({ interaction, args, client }) {
     const actividad = moment
       .duration(client.uptime)
       .format(" D [dias], H [hrs], m [mins], s [secs]");
@@ -87,6 +86,6 @@ export default new Command({
         iconURL: client.user.avatarURL(),
       });
 
-    message.reply({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
   },
 });

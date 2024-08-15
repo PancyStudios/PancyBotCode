@@ -1,28 +1,25 @@
-import { Command } from "../../../Structure/CommandMsg";
+import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder, Colors } from "discord.js";
-const prefix = 'pan!'
 
 export default new Command({
     name: "help",
     description: "Comando de ayuda",
     category: "util",
-    use: "",
     isDev: false,
     botPermissions: ["EmbedLinks"],
-    async run({ client, message }) {
+    async run({ client, interaction }) {
         const HelpEmbed = new EmbedBuilder()
         .setTitle(client.user.username)
-        .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
+        .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
         .setColor(Colors.Blurple)
         .setDescription(`
             **📚 | Comandos de ayuda**
-            \`\`\`${prefix}help\`\`\` Muestra los comandos basicos
-            \`\`\`${prefix}invite\`\`\` Muestra la invitacion del bot
-            \`\`\`${prefix}commands\`\`\` Muestra la lista de comandos
-            \`\`\`${prefix}commands [Command]\`\`\` Muestra informacion sobre un comando
-            \`\`\`<BotMention> prefix\`\`\` Muestra el prefijo actual
+            \`\`\`/help\`\`\` Muestra los comandos basicos
+            \`\`\`/node_modulesinvite\`\`\` Muestra la invitacion del bot
+            \`\`\`/node_modulescommands\`\`\` Muestra la lista de comandos
+            \`\`\`/commands [Command]\`\`\` Muestra informacion sobre un comando
         `)
-        message.reply({ embeds: [HelpEmbed] });
+        interaction.reply({ embeds: [HelpEmbed] });
     }
 })
     

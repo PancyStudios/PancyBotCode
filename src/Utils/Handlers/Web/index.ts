@@ -14,3 +14,6 @@ app.use(urlencoded({ extended: true }));
 app.use('/votos', RouterVotos);
 app.use('/status', StatusRouter);
 app.use('/api', ApiRouter);
+app.all('*', (req, res) => {
+    res.json({ message: 'Not Found' }).status(404)
+})

@@ -289,6 +289,7 @@ export class ExtendedClient extends Client {
                             
                                         for (const filePath of commandFiles) {
                                             const command: CommandType = await this.importFile(filePath);
+                                            
                                             if (!command?.name) continue
                                             subCommand.options.push(command)
                                             this.commands.set(`${categoryGroup}.${categoryName}.${command.name}`, command)

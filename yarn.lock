@@ -954,6 +954,13 @@ hasown@^2.0.0:
   dependencies:
     function-bind "^1.1.2"
 
+hastebin-gen@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/hastebin-gen/-/hastebin-gen-2.0.5.tgz#8f4f11d5c4890280e2dbd34217e6ff06d053fe68"
+  integrity sha512-At1LaKtcqh2jiP8xfE2sDGT9IshIki6FqsgLwn2y7FzAvlFJRtpUsSPh3yWjWIQIvxi/GPF07IBqSI8WhPL/gQ==
+  dependencies:
+    node-fetch "^2.6.0"
+
 http-errors@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-2.0.0.tgz#b7774a1486ef73cf7667ac9ae0858c012c57b9d3"

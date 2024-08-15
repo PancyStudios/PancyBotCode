@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { DateTime } from "luxon";
 import { WebhookClient, Colors, EmbedBuilder } from "discord.js";
 import { version } from '../../../../package.json'
+import hastebin from "hastebin-gen";
 
 const loggerWebhook = process.env.logsWebhook ? new WebhookClient({ url: process.env.logsWebhook }) : null;
 const errorWebhook = process.env.errorWebhook ? new WebhookClient({ url: process.env.errorWebhook }) : null;
@@ -67,7 +68,21 @@ function discordLogger(type: string, message: string, prefix: string) {
         case 'Info':
         case 'Debug':
             if(message.length >= 3500) {
-
+                hastebin(message, { url: process.env.hasteServer }).then((url) => {
+                    const embed = new EmbedBuilder()
+                        .setColor(color(type))
+                        .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
+                        .setDescription(`\`\`\`bash\n${url}\`\`\``)
+                        .setTimestamp()
+                        .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${loggerWebhook?.rest.globalRemaining}`, });
+        
+                    loggerWebhook?.send({ embeds: [embed] }).catch(err => {
+                        const error = err as Error
+                        const date = DateTime.now().setZone('America/Mexico_City');
+                        originalConsoleLog('[' + chalk.blue(`${prefix ? prefix : 'SYS'} | LOGGER`) + '] : [' + chalk.red('CRITICAL') + '] ' + chalk.bold(chalk.grey(`${date.hour}:${date.minute}:${date.second}`)) + ' : ', error.name ? error.name : 'Unkown error');    
+                        errors++;
+                    });
+                });
             } else {
                 const embed = new EmbedBuilder()
                     .setColor(color(type))
@@ -84,27 +99,47 @@ function discordLogger(type: string, message: string, prefix: string) {
                 });
                 break;
             }
+            break;
         case 'Error':
-            const errorEmbed = new EmbedBuilder()
-                .setColor(color(type))
-                .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
-                .setDescription(`\`\`\`bash\n${message}\`\`\``)
-                .setTimestamp()
-                .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${errorWebhook?.rest.globalRemaining}`, });
-
-            errorWebhook?.send({ embeds: [errorEmbed] }).catch(err => {
-                const error = err as Error
-                const date = DateTime.now().setZone('America/Mexico_City');
-                originalConsoleLog('[' + chalk.blue(`${prefix ? prefix : 'SYS'} | LOGGER`) + '] : [' + chalk.red('CRITICAL') + '] ' + chalk.bold(chalk.grey(`${date.hour}:${date.minute}:${date.second}`)) + ' : ', error.name ? error.name : 'Unkown error');    
-                errors++;
-            });
+            if(message.length >= 3500) {
+                hastebin(message, { url: process.env.hasteServer }).then((url) => {
+                    const errorEmbed = new EmbedBuilder()
+                        .setColor(color(type))
+                        .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
+                        .setDescription(`\`\`\`bash\n${url}\`\`\``)
+                        .setTimestamp()
+                        .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${errorWebhook?.rest.globalRemaining}`, });
+        
+                    errorWebhook?.send({ embeds: [errorEmbed] }).catch(err => {
+                        const error = err as Error
+                        const date = DateTime.now().setZone('America/Mexico_City');
+                        originalConsoleLog('[' + chalk.blue(`${prefix ? prefix : 'SYS'} | LOGGER`) + '] : [' + chalk.red('CRITICAL') + '] ' + chalk.bold(chalk.grey(`${date.hour}:${date.minute}:${date.second}`)) + ' : ', error.name ? error.name : 'Unkown error');    
+                        errors++;
+                    });
+                });
+            } else {
+                const errorEmbed = new EmbedBuilder()
+                    .setColor(color(type))
+                    .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
+                    .setDescription(`\`\`\`bash\n${message}\`\`\``)
+                    .setTimestamp()
+                    .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${errorWebhook?.rest.globalRemaining}`, });
+    
+                errorWebhook?.send({ embeds: [errorEmbed] }).catch(err => {
+                    const error = err as Error
+                    const date = DateTime.now().setZone('America/Mexico_City');
+                    originalConsoleLog('[' + chalk.blue(`${prefix ? prefix : 'SYS'} | LOGGER`) + '] : [' + chalk.red('CRITICAL') + '] ' + chalk.bold(chalk.grey(`${date.hour}:${date.minute}:${date.second}`)) + ' : ', error.name ? error.name : 'Unkown error');    
+                    errors++;
+                });
+                break;
+            }
             break;
         case 'Critical':
             const dateCritical = DateTime.now().setZone('America/Mexico_City');
             const criticalEmbed = new EmbedBuilder()
                 .setColor(Colors.Red)
                 .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
-                .setDescription(message + '\n' + 'Por seguridad el sistema se detendra en 5 segundos, ya que se dectecto un gran autemto de errores')
+                .setDescription(`\`\`\`bash\n${message}\`\`\`\n\nEl sistema a detectado una gran cantidad de errores\nPor seguridad el sistema se detendra en 5 segundos`)
                 .setTimestamp()
                 .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${errorWebhook?.rest.globalRemaining}`, });
 

@@ -6,6 +6,7 @@ import {
     Partials,
     GatewayIntentBits,
     ChatInputApplicationCommandData,
+    ApplicationCommandOptionType,
 } from "discord.js";
 import { CommandType } from "../Types/CommandSlash";
 import glob from "glob";
@@ -130,7 +131,13 @@ export class ExtendedClient extends Client {
                         for (const filePath of commandFiles) {
                             const command: CommandType = await this.importFile(filePath);
                             if (!command?.name) continue
-                            categoryCommand.options.push(command)
+                            const subCommand = {
+                                name: command.name,
+                                type: 1,
+                                description: command.description,
+                                options: command.options
+                            }
+                            categoryCommand.options.push(subCommand)
                             this.commands.set(`${categoryName}.${command.name}`, command)
                         }
 
@@ -167,7 +174,7 @@ export class ExtendedClient extends Client {
             
                             let subCommand = {
                                 name: categoryName,
-                                type: 1,
+                                type: ApplicationCommandOptionType.SubcommandGroup,
                                 description: `${categoryName} commands (Si ves esta descripcion, no ejecutar el comando)`,
                                 options: [],
                             };
@@ -177,7 +184,13 @@ export class ExtendedClient extends Client {
                             for (const filePath of commandFiles) {
                                 const command: CommandType = await this.importFile(filePath);
                                 if (!command?.name) continue
-                                subCommand.options.push(command)
+                                let otherCommand = {
+                                    name: command.name, 
+                                    description: command.description,
+                                    type: ApplicationCommandOptionType.Subcommand,
+                                    options: command.options
+                                }
+                                subCommand.options.push(otherCommand)
                                 this.commands.set(`${categoryGroup}.${categoryName}.${command.name}`, command)
                             }
             
@@ -203,7 +216,7 @@ export class ExtendedClient extends Client {
                                     if (!command?.name) continue;
                         
                                     this.commands.set(command.name, command)
-                                    slashCommands.push(command);
+                                    slashCommandsDev.push(command);
                                 }
                                 break;
                             case 'subcommands':
@@ -234,7 +247,7 @@ export class ExtendedClient extends Client {
                                         this.commands.set(`${categoryName}.${command.name}`, command)
                                     }
             
-                                    slashCommands.push(categoryCommand);
+                                    slashCommandsDev.push(categoryCommand);
                                 }
                                 break;
                             case 'subcommandsgroup':
@@ -283,7 +296,7 @@ export class ExtendedClient extends Client {
                         
                                         categoryGroupCommand.options.push(subCommand)
                                     }
-                                    slashCommands.push(categoryGroupCommand);
+                                    slashCommandsDev.push(categoryGroupCommand);
                                 }            
                                 break;
                         }
@@ -292,10 +305,12 @@ export class ExtendedClient extends Client {
             }
         }
 
-        this.on("ready", async (final) => {
-            this.player = new PoruClient(final as ExtendedClient)
+        this.on("ready", async (_) => {
+            this.player = new PoruClient(this)
             this.registerCommands({ commands: slashCommands })
             this.registerCommands({ commands: slashCommandsDev, guildId: '763801211384102962' })
+            console.debug(slashCommands)
+            console.debug(slashCommandsDev)
             console.debug("Client.ts is ready")
         });
 

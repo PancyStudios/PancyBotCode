@@ -18,7 +18,7 @@ export default new Command({
             content: `:globe_with_meridians: Mensajes/ms: ${ping} \n:robot: Websocket/Discord Api: ${client.ws.ping}`,
           }).then(async (x) => {
             let timestamp = Date.now();
-            Guild.findOne({ id: interaction.guild.id })
+            await Guild.findOne({ id: interaction.guild.id })
             let now = Date.now();
             timestamp = now - timestamp;
             ping = ping - timestamp;

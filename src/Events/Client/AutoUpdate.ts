@@ -1,19 +1,18 @@
 import { Event } from "../../Structure/Events";
 import { exec } from 'child_process';
-import { logs } from "../..";
 
 export default new Event('ready', async (_) => {
     setTimeout(() =>{
         exec('git pull', async (err, stdout, stderr) => {
             if (err) {
-                logs.error(err as unknown as string)
+                console.error(err)
                 return
             }
             if (stderr) {
-                logs.error(stderr)
+                console.error(stderr)
                 return
             }
-            logs.info(stdout);
+            console.info(stdout);
         })
     }, 3000)
 })

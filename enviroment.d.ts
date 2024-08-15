@@ -20,6 +20,7 @@ declare global {
             linkErrorTracker: string;
             spotifyClientId: string;
             spotifyClientSecret: string;
+            hasteServer: string;
         }
     }
 }

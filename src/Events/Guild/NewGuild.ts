@@ -1,15 +1,14 @@
-import { client, logs } from "../..";
+import { client } from "../..";
 import { Event } from "../../Structure/Events";
 import { EmbedBuilder, ButtonBuilder, Colors, WebhookClient, ButtonStyle } from "discord.js";
 import { install_commands } from "../../Utils/Handlers/DatabaseHandler";
 
-//todas las sugerencias que hagas hazlas en español, ya que el proyecto es en español
-const Webhook = new WebhookClient({ url: process.env.guildsWebhook })
-
 export default new Event("guildCreate", async guild => {
-    logs.warn(`He sido añadido a un nuevo servidor: ${guild.name} (${guild.id})`)
+    //todas las sugerencias que hagas hazlas en español, ya que el proyecto es en español
+    const Webhook = new WebhookClient({ url: process.env.guildsWebhook })
+    console.warn(`He sido añadido a un nuevo servidor: ${guild.name} (${guild.id})`, 'NewGuild')
 
-    if(!guild.available) return logs.info(`El servidor ${guild.name} no esta disponible, por lo que no podemos dar mas informacion.`)
+    if(!guild.available) return console.info(`El servidor ${guild.name} no esta disponible, por lo que no podemos dar mas informacion.`, 'NewGuild')
 
     const NewGuildEmbed = new EmbedBuilder()
         .setTitle("Nuevo servidor")
@@ -28,5 +27,5 @@ export default new Event("guildCreate", async guild => {
     Webhook.send({ embeds: [NewGuildEmbed] })
 
     await install_commands(client, guild)
-    logs.info(`Datos por defecto subidas a la base de datos ${guild.name} (${guild.id})`)
+    console.info(`Datos por defecto subidas a la base de datos ${guild.name} (${guild.id})`, 'NewGuild')
 })

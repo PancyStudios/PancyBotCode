@@ -1,4 +1,4 @@
-import { TempbanOptions } from "./Type/Tempan";
+import { TempbanOptions } from "../Type/Temban";
 import { Schema, SchemaTypes, model } from "mongoose";
 
 const TempBanSchema = new Schema<TempbanOptions>({

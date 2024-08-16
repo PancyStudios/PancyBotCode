@@ -1,7 +1,7 @@
-import { GuildDataFirst } from './Type/Security';
-import { Poj } from './Type/Poj';
+import { GuildDataFirst } from '../Type/Security';
+import { Poj } from '../Type/Poj';
 import { Schema, model, SchemaTypes } from 'mongoose'
-import { UserData } from './Type/User';
+import { UserData } from '../Type/User';
 
 
 const guildsSchema = new Schema({

@@ -1,6 +1,7 @@
 import { Command } from "../../../../Structure/CommandSlash";
-import { Guild } from "../../../../Database/BotDataBase";
+import { Guild } from "../../../../Database/Schemas/BotDataBase";
 import ms from "ms";
+import { database } from "../../../..";
 
 export default new Command({
   name: "ping",
@@ -18,7 +19,7 @@ export default new Command({
             content: `:globe_with_meridians: Mensajes/ms: ${ping} \n:robot: Websocket/Discord Api: ${client.ws.ping}`,
           }).then(async (x) => {
             let timestamp = Date.now();
-            await Guild.findOne({ id: interaction.guild.id })
+            const pingDb = await database.ping()
             let now = Date.now();
             timestamp = now - timestamp;
             ping = ping - timestamp;
@@ -27,7 +28,7 @@ export default new Command({
               content: `:globe_with_meridians: Mensajes: ${ms(
                 ping
               )}\n:robot: Discord Api: ${ms(client.ws.ping)}\n📚 Database: ${ms(
-                timestamp
+                pingDb
               )}`,
             });
           });

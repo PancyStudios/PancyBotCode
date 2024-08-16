@@ -4,7 +4,7 @@ import { Event } from "../../Structure/Events";
 import { ExtendedInteraction } from "../../Types/CommandSlash";
 import { botStaff, forceDisableCommandsSlash } from '../../Database/Local/variables.json'
 import { GuildDataFirst } from "../../Database/Type/Security";
-import { Guild } from "../../Database/BotDataBase";
+import { Guild } from "../../Database/Schemas/BotDataBase";
 import { install_commands } from "../../Utils/Handlers/DatabaseHandler";
 let prefix: string
 let guildDb: GuildDataFirst

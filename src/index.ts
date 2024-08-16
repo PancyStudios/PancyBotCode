@@ -1,5 +1,7 @@
 import { config } from 'dotenv'
 config()
+import '../src/Utils/Handlers/ErrorHandler/LogSystem'
+import { Database } from './Database'
 import { ExtendedClient } from './Structure/Client'
 import { PancyBotUtils } from './Utils/Functions/BaseUtilsBot'
 import { ErrorHandler } from './Utils/Handlers/ErrorHandler/ErrorManageSystem'
@@ -12,6 +14,7 @@ export const craiyon = new Craiyon()
 export var Server = app.listen(process.env.PORT, () => {
     process.env.PORT ? console.log(`Server running on port ${process.env.PORT}`) : console.log('Server running on port 3000')
 })
+export const database = new Database()
 
 client.start()
 

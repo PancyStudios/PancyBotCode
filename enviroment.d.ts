@@ -4,6 +4,7 @@ declare global {
             botToken: string;
             mongodbUrl: string;
             mongodbPass: string;
+            mongodbUser: string;
             topggPassword: string;
             errorWebhook: string;
             logsWebhook: string;

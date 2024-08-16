@@ -7,8 +7,6 @@ import ms from 'ms'
 export class PoruClient extends Poru {
     constructor(client: ExtendedClient) {
         let reconnectIntents = 0
-        console.log(process.env.linkserver, 'Poru')
-        console.log(process.env.linkpassword, 'Poru')
         super(client, [{         
             name: "PancyBeta",
             host: process.env.linkserver,

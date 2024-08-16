@@ -1,4 +1,4 @@
-import { Guild, antiRF } from '../../../Database/BotDataBase'
+import { Guild, antiRF } from '../../../Database/Schemas/BotDataBase'
 import { version, privatebot } from '../../../../package.json'
 import discord from 'discord.js'
 import { ExtendedClient } from '../../../Structure/Client';
@@ -182,16 +182,4 @@ export async function install_commands(client: ExtendedClient, guild: discord.Gu
 			}
 		}
 	} catch (error) {console.error(error)}
-}
-
-export class DatabaseHandler {
-	
-
-	connect() {
-		connect(process.env.mongodbUrl, {
-			dbName: 'PancyBot',
-			user: 'admin',
-			pass: process.env.mongodbPass,
-		})
-	}
 }

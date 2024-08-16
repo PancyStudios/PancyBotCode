@@ -1,7 +1,7 @@
 import { connection } from "mongoose";
 import { Message, EmbedBuilder } from "discord.js";
-import { warns } from "../../Database/Warns";
-import { Timers } from "../../Database/Timers";
+import { warns } from "../../Database/Schemas/Warns";
+import { Timers } from "../../Database/Schemas/Timers";
 import { client } from "../.."
 const usersWithCooldown = new Map();
 const cooldown = new Map();

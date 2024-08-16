@@ -1,8 +1,8 @@
 
 import { Schema, SchemaTypes, model } from "mongoose";
-import { Warns } from "./Type/Warns";
+import { Warns } from "../Type/Warns";
 
-interface WarnsInterface {
+export interface WarnsInterface {
     guildId: string;
     userId: string;
     warns: Array<Warns>;

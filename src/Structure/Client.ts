@@ -208,7 +208,7 @@ export class ExtendedClient extends Client {
                         switch(nameDirDev) {
                             case 'commands': 
                                 const commandFiles = await globPromise(
-                                    `${dir}/*/*{.js,.ts}`
+                                    `${dir}/commands/*/*{.js,.ts}`
                                 );
                     
                                 for (const filePath of commandFiles) {
@@ -221,7 +221,7 @@ export class ExtendedClient extends Client {
                                 break;
                             case 'subcommands':
                                 const commandSubCategories = await globPromise(
-                                    `${dir}/*`
+                                    `${dir}/subcommands/*`
                                 );
             
                                 for (const categoryPath of commandSubCategories) {

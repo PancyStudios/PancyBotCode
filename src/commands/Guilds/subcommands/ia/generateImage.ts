@@ -1,11 +1,9 @@
 import { sendImage } from "../../../../Utils/Functions/sendImage";
-import { craiyon, errorHandler, utils } from '../../../..';
+import { craiyon, errorHandler } from '../../../..';
 import { Command } from "../../../../Structure/CommandSlash";
-import { EmbedBuilder, AttachmentBuilder, Colors } from "discord.js";
+import { EmbedBuilder, AttachmentBuilder, Colors, ApplicationCommandOptionType } from "discord.js";
 import path from "path"
 import fs from "fs"
-
-const prefix = "pan!"
 
 export default new Command({
     name: "createimage",
@@ -13,10 +11,17 @@ export default new Command({
     isDev: false,
     category: "ia",
     botPermissions: ["EmbedLinks"],
+    options: [
+        {
+            name: 'prompt',
+            type: ApplicationCommandOptionType.String,
+            description: 'Describe la imagen que quieres generar',
+            required: true
+        }
+    ],
 
     async run({ interaction, args }) {
-        const text = args[0]
-        if(!text) return utils.dataRequired("Necesitas dar una descripcion sobre la imagen que quieres generar "+prefix+"createImage <Depcription>")
+        const text = args.getString('prompt')
         try {
             interaction.reply("Generando...").then(async msg => {
                 const firstTime = Date.now()
@@ -58,7 +63,7 @@ export default new Command({
                 .setColor(Colors.Red)
                 .setTimestamp()
 
-                interaction.reply({ embeds: [Errorinteraction] })
+                interaction.editReply({ embeds: [Errorinteraction] })
 
                 errorHandler.report({ error: "Craiyon", message: error })
                 console.log(error)

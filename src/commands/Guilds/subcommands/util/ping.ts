@@ -1,5 +1,4 @@
 import { Command } from "../../../../Structure/CommandSlash";
-import { Guild } from "../../../../Database/Schemas/BotDataBase";
 import ms from "ms";
 import { database } from "../../../..";
 

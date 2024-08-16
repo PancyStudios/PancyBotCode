@@ -1,43 +1,54 @@
-import { Command } from "../../../Structure/CommandMsg";
-import { EmbedBuilder, Colors } from "discord.js";
+import { Command } from "../../../../../Structure/CommandSlash";
+import { EmbedBuilder, Colors, ApplicationCommandOptionType } from "discord.js";
 
 
 export default new Command({
     name: "seticon",
     description: "Establece el icono del bot",
     category: "dev",
-    use: "[URL_IMAGE]",
+    options: [{
+        name: "icon",
+        description: 'Avatar del bot',
+        required: true,
+        type: ApplicationCommandOptionType.Attachment,
+    }],
     isDev: true,
     botPermissions: ["EmbedLinks"],
-    async run({ message, args, client }) {
-        if (!args[0]) return message.reply("Debes especificar una imagen");
+    async run({ interaction, args, client }) {
+        const image = args.getAttachment("icon").url;
+        if (!image) return interaction.reply("Debes especificar una imagen");
         let embed = new EmbedBuilder()
             .setTitle("Estableciendo icono del bot")
             .setColor(Colors.Yellow)
             .setDescription(`Estableciendo icono del bot...`)
-            .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL() });
+            .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL() });
+
+        const initial = Date.now();
         try {
-            message.reply({ embeds: [embed] }).then(async msg => {
-                client.user.setAvatar((args[0] as string));
-                embed.setDescription(`Icono establecido, reiniciando cliente...`);
+            interaction.reply({ embeds: [embed] }).then(async msg => {
+                await client.user.setAvatar(image);
+                const postAvatar = Date.now();
+                embed.setDescription(`${embed.data.description}\nIcono establecido en \`${postAvatar - initial}ms\``);
                 embed.setColor(Colors.Green);
                 await msg.edit({ embeds: [embed] });
                 const RestartClientEmbed = new EmbedBuilder()
                     .setTitle("Reiniciando cliente")
                     .setColor(Colors.Orange)
-                    .setDescription(`Reiniciando cliente...`)
+                    .setDescription(`${embed.data.description}\nReiniciando cliente...`)
                     .setTimestamp()
-                    .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL() });
+                    .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL() });
                 
-                    await message.channel.send({ embeds: [RestartClientEmbed] });
-                client.destroy();
+                await interaction.channel.send({ embeds: [RestartClientEmbed] });
+                const ie = Date.now();
+                await client.destroy();
                 await client.start();
-                embed.setDescription(`Cliente reiniciado, reiniciando servidor...`);
+                embed.setDescription(`${embed.data.description}\nCliente reiniciado en \`${Date.now() - ie}ms\``);
                 embed.setColor(Colors.Yellow);
                 await msg.edit({ embeds: [embed] })
+                
             })
         } catch (e) {
-            embed.setDescription(`Error: ${e.message}`);
+            embed.setDescription(`Error: ${e.interaction}`);
         }
     }
 })

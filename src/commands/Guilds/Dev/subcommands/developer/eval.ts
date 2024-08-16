@@ -1,4 +1,4 @@
-import { Command } from '../../../Structure/CommandSlash';
+import { Command } from '../../../../../Structure/CommandSlash';
 import { transpile } from 'typescript';
 import { inspect } from 'util';
 import { EmbedBuilder, ActionRowBuilder, ModalBuilder, TextInputStyle, TextInputBuilder } from 'discord.js';

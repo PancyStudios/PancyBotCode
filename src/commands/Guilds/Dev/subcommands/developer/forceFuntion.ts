@@ -1,7 +1,7 @@
-import { Command } from "../../../Structure/CommandSlash";
-import { version } from '../../../../package.json'
+import { Command } from "../../../../../Structure/CommandSlash";
+import { version } from '../../../../../../package.json'
 import { EmbedBuilder, Colors, ApplicationCommandOptionType, Message } from "discord.js";
-import { Server } from '../../..';
+import { Server } from '../../../../..';
 import { exec } from 'child_process';
 
 export default new Command({

@@ -1,4 +1,4 @@
-import { Command } from "../../../Structure/CommandSlash";
+import { Command } from "../../../../../Structure/CommandSlash";
 import {ApplicationCommandOptionType} from 'discord.js'
 
 export default new Command({

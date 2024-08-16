@@ -4,7 +4,7 @@ import { warns, WarnsInterface } from './Schemas/Warns';
 import { Premium, PremiumGuild } from './Type/Premium';
 import { TempbanModel } from './Schemas/Tempbans';
 import { GuildDataFirst } from './Type/Security';
-import { TempbanOptions } from './Type/Temban';
+import { TempbanOptions } from './Type/Tempan';
 import { Guild } from './Schemas/BotDataBase';
 
 export class Database {
@@ -30,14 +30,16 @@ export class Database {
 
     private async connect() {
         try {   
+            console.log('Conectando a la base de datos', 'DB')
             await connect(process.env.mongodbUrl, { 
                 user: process.env.mongodbUser,
                 pass: process.env.mongodbPass,
                 tls: false,
                 dbName: 'PancyBot',
             })
+            console.log(`Conectado a la base de datos`, 'DB')
         } catch (err) {
-            console.warn('Se a detectado un error al conectar la base de datos')
+            console.warn('Se a detectado un error al conectar la base de datos', 'DB')
             console.error(err)
         }
     }

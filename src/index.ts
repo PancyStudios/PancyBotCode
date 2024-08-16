@@ -10,7 +10,7 @@ import { Client as Craiyon } from 'craiyon'
 export const errorHandler = new ErrorHandler()
 export const client = new ExtendedClient()
 export const utils = new PancyBotUtils()
-export const craiyon = new Craiyon()
+export const craiyon = new Craiyon().withApiToken(process.env.craiyonToken)
 export var Server = app.listen(process.env.PORT, () => {
     process.env.PORT ? console.log(`Server running on port ${process.env.PORT}`) : console.log('Server running on port 3000')
 })

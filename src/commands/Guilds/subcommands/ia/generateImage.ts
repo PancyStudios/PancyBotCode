@@ -27,6 +27,7 @@ export default new Command({
                 const firstTime = Date.now()
                 await craiyon.generate({
                     prompt: `${text}`,
+                    maxRetries: 1,
                 }).then(async x => {
 
                     // Leer el contenido del archivo

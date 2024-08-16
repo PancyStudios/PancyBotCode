@@ -22,6 +22,7 @@ declare global {
             spotifyClientId: string;
             spotifyClientSecret: string;
             hasteServer: string;
+            craiyonToken: string;
         }
     }
 }

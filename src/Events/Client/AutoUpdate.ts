@@ -3,7 +3,7 @@ import { exec } from 'child_process';
 
 export default new Event('ready', async (_) => {
     setTimeout(() =>{
-        exec('git pull', async (err, stdout, stderr) => {
+        exec('git pull origin update', async (err, stdout, stderr) => {
             if (err) {
                 console.error(err)
                 return

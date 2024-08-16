@@ -108,6 +108,7 @@ const guildsSchema = new Schema({
         prefix: SchemaTypes.String,
         whitelist: SchemaTypes.Array,
         logs: SchemaTypes.Array,
+        logsChannel: SchemaTypes.String,
         language: SchemaTypes.String,
         ignoreChannels: SchemaTypes.Array,
         password: {

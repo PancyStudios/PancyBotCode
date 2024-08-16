@@ -8,7 +8,7 @@ export default new Command({
     botPermissions: ["ViewChannel"],
     isDev: false,
 
-    async run ({ interaction, args }) {
-        interaction.reply({content: 'Comando en re escritura' })
+    async run ({ interaction }) {
+        
     }
 })

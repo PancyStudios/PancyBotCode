@@ -1,3 +1,5 @@
+import { AuditLogEvent } from "discord.js"
+
 export interface GuildDataFirst {
     // SERVER ID
     id: string
@@ -155,7 +157,8 @@ export interface GuildDataFirst {
         _version: string
         prefix: string
         whitelist: Array<any>
-        logs: Array<any>
+        logs: Array<AuditLogEvent>
+        logsChannel: string
         language: string
         ignoreChannels: Array<any>
         password: {

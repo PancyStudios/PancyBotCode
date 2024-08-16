@@ -26,6 +26,7 @@ export default new Command({
     run: async ({ interaction, args, client }) => {
         const bug = args.getString("bug")
         const attachment = args.getAttachment("image")
+        await interaction.deferReply({ ephemeral: true })
 
         const Embed = new EmbedBuilder()
             .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
@@ -58,6 +59,6 @@ export default new Command({
         const ActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>()
             .addComponents(ButtonGithub)
 
-        return interaction.followUp({ embeds: [EmbedReply], components: [ActionRow],ephemeral: true})
+        return interaction.followUp({ embeds: [EmbedReply], components: [ActionRow], ephemeral: true})
     }
 })

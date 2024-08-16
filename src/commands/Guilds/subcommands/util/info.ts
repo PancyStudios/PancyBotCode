@@ -6,10 +6,10 @@ import "moment-duration-format";
 
 export default new Command({
   name: "info",
-  description: "Command info",
+  description: "Informacion del bot",
   category: "util",
 
-  async run({ interaction, args, client }) {
+  async run({ interaction, client }) {
     const actividad = moment
       .duration(client.uptime)
       .format(" D [dias], H [hrs], m [mins], s [secs]");
@@ -82,7 +82,7 @@ export default new Command({
       .setColor("Yellow")
       .setThumbnail(client.user.avatarURL())
       .setFooter({
-        text: "Lenguaje: TypeScript",
+        text: "Lenguaje: TypeScript | PancyStudios",
         iconURL: client.user.avatarURL(),
       });
 

@@ -54,7 +54,8 @@ export default new Command({
                     } catch {
                         console.warn('No se pudo cargar la imagen')
                     }
-                }).catch(err => console.error(err))
+                })
+                .catch(err => console.error(err))
                 .finally(() => console.log("done"))
             })
         } catch (error) {
@@ -67,7 +68,7 @@ export default new Command({
                 interaction.editReply({ embeds: [Errorinteraction] })
 
                 errorHandler.report({ error: "Craiyon", message: error })
-                console.log(error)
+                throw new Error(error)
         }
     }
 })

@@ -25,7 +25,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
         if(req.method === 'GET') {
             const Embed = new EmbedBuilder()
             .setTitle(`Logs server - Nueva solicitud GET`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${req.query}\n> **Headers:** ${req.headers}\n> **Body:** ${req.body}`)
+            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
             .setColor('Green')
             .setTimestamp()
             .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
@@ -39,7 +39,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
                     
                     const Embed = new EmbedBuilder()
                     .setTitle(`Logs server - Nueva solicitud POST`)
-                    .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${req.query}\n> **Headers:** ${req.headers}\n> **Body:** ${url}`)
+                    .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${url}`)
                     .setColor('Green')
                     .setTimestamp()
                     .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
@@ -49,7 +49,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
             } else {
                 const Embed = new EmbedBuilder()
                 .setTitle(`Logs server - Nueva solicitud POST`)
-                .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${req.query}\n> **Headers:** ${req.headers}\n> **Body:** ${req.body}`)
+                .setDescription(`> **IP:** ${req.ip}\n> **Route:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
                 .setColor('Green')
                 .setTimestamp()
                 .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
@@ -59,7 +59,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
         } else if(req.method === 'PUT') {
             const Embed = new EmbedBuilder()
             .setTitle(`Logs server - Nueva solicitud PUT`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${req.query}\n> **Headers:** ${req.headers}\n> **Body:** ${req.body}`)
+            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
             .setColor('Green')
             .setTimestamp()
             .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
@@ -68,7 +68,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
         } else if(req.method === 'DELETE') {
             const Embed = new EmbedBuilder()
             .setTitle(`Logs server - Nueva solicitud DELETE`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${req.query}\n> **Headers:** ${req.headers}\n> **Body:** ${req.body}`)
+            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
             .setColor('Green')
             .setTimestamp()
             .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
@@ -77,7 +77,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
         } else if(req.method === 'PATCH') {
             const Embed = new EmbedBuilder()
             .setTitle(`Logs server - Nueva solicitud PATCH`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${req.query}\n> **Headers:** ${req.headers}\n> **Body:** ${req.body}`)
+            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
             .setColor('Green')
             .setTimestamp()
             .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
@@ -92,7 +92,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-app.set('trust proxy', 1);
+app.set('trust proxy', 2);
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use('/votos', RouterVotos);

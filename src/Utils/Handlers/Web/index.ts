@@ -92,7 +92,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-app.set('trust proxy', true);
+app.set('trust proxy', 1);
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use('/votos', RouterVotos);

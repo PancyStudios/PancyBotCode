@@ -74,7 +74,8 @@ export default new Command({
                     const responseData = await response.json() as CraiyonResponse;
                     return responseData;
                 } catch (err) {
-                    originalConsoleError(err)
+                    console.error(err)
+                    
                 }
             }, { text, negativeText, model });
 

@@ -3,7 +3,7 @@ import { errorHandler } from '../../../..';
 import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder, Colors, ApplicationCommandOptionType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from "discord.js";
 import tougt from 'tough-cookie'
-import axioscookiejar from 'axios-cookiejar-support'
+import { wrapper } from 'axios-cookiejar-support'
 import path from "path"
 import fs from "fs"
 import axios from "axios";
@@ -49,7 +49,7 @@ export default new Command({
         try {
             await interaction.reply("Generando (Espere 1min aprox)...")
             const firstTime = Date.now()
-            const axio = axioscookiejar.wrapper(axios)
+            const axio = wrapper(axios)
 
             const { data } = await axio.post<CraiyonResponse>("https://api.craiyon.com/v3", {
                 prompt: text,

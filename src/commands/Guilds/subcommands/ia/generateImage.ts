@@ -56,21 +56,25 @@ export default new Command({
 
             
             const response = await page.evaluate(async (params) => {
-                const response = await fetch("https://api.craiyon.com/v3", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        prompt: params.text,
-                        negative_prompt: params.negativeText,
-                        model: params.model
-                    }),
-                    credentials: 'include' // Incluir cookies
-                });
-                const responseData = await response.json() as CraiyonResponse;
-                return responseData;
+                try {
+                    const response = await fetch("https://api.craiyon.com/v3", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            prompt: params.text,
+                            negative_prompt: params.negativeText,
+                            model: params.model
+                        }),
+                        credentials: 'include' // Incluir cookies
+                    });
+                    const responseData = await response.json() as CraiyonResponse;
+                    return responseData;
+                } catch (err) {
+                    console.error(err)
+                }
             }, { text, negativeText, model });
 
             console.log(response)

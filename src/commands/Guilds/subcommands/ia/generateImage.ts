@@ -55,7 +55,7 @@ export default new Command({
             const firstTime = Date.now()
 
             
-            const response = await page.evaluate(async () => {
+            const response = await page.evaluate(async (params) => {
                 const response = await fetch("https://api.craiyon.com/v3", {
                     method: 'POST',
                     headers: {
@@ -63,9 +63,9 @@ export default new Command({
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        prompt: text,
-                        negative_prompt: negativeText,
-                        model: model
+                        prompt: params.text,
+                        negative_prompt: params.negativeText,
+                        model: params.model
                     }),
                     credentials: 'include' // Incluir cookies
                 });
@@ -74,6 +74,8 @@ export default new Command({
             }, { text, negativeText, model });
 
             console.log(response)
+
+            await browser.close()
 
             await interaction.editReply({ content: null, embeds: [
                 new EmbedBuilder()

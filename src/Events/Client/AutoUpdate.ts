@@ -4,7 +4,7 @@ import { exec, spawn } from 'child_process';
 export default new Event('ready', async (_) => {
     exec('git add .')
     exec('git commit -m "Local Changes"')
-    const installProcess = spawn(`yarn playwright install`)
+    const installProcess = spawn(`npm playwright install`)
     installProcess.on('message', (message) => { 
         console.log(message, 'PLAYWRIGHT INSTALL')
     })

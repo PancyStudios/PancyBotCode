@@ -1,7 +1,9 @@
 import { sendImage } from "../../../../Utils/Functions/sendImage";
 import { errorHandler } from '../../../..';
 import { Command } from "../../../../Structure/CommandSlash";
-import { EmbedBuilder, Colors, ApplicationCommandOptionType, SelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from "discord.js";
+import { EmbedBuilder, Colors, ApplicationCommandOptionType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from "discord.js";
+import tougt from 'tough-cookie'
+import axioscookiejar from 'axios-cookiejar-support'
 import path from "path"
 import fs from "fs"
 import axios from "axios";
@@ -47,15 +49,17 @@ export default new Command({
         try {
             await interaction.reply("Generando (Espere 1min aprox)...")
             const firstTime = Date.now()
+            const axio = axioscookiejar.wrapper(axios)
 
-            const { data } = await axios.post<CraiyonResponse>("https://api.craiyon.com/v3", {
+            const { data } = await axio.post<CraiyonResponse>("https://api.craiyon.com/v3", {
                 prompt: text,
                 negative_prompt: negativeText,
                 model: model,
-                token: process.env.craiyonToken,
                 version: "c4ue22fb7kb6wlac",
             }, {
                 withCredentials: true,
+                jar: new tougt.CookieJar(),
+
             })
 
             await interaction.editReply({ content: null, embeds: [
@@ -70,7 +74,11 @@ export default new Command({
             if(!data.images) return await interaction.editReply({ content: "La api no entrego ninguna imagen, intentelo de nuevo", embeds: [] })
             let ids: string[] = []
             for(const image of data.images) {
-                const { data } = await axios.get<ArrayBuffer>("https://img.craiyon.com/" + image, { responseType: 'arraybuffer', withCredentials: true })
+                const { data } = await axio.get<ArrayBuffer>("https://img.craiyon.com/" + image, { 
+                    responseType: 'arraybuffer', 
+                    withCredentials: true, 
+                    jar: new tougt.CookieJar(),
+                })
                 
                 const authString = `${process.env.username}:${process.env.password}`;
                 const authBuffer = Buffer.from(authString, 'utf-8');

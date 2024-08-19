@@ -13,12 +13,12 @@ export default new Command({
             name: 'id',
             description: 'ID de la imagen',
             required: true,
-            type: ApplicationCommandOptionType.Number
+            type: ApplicationCommandOptionType.String
         }
     ],
 
     run: async ({ interaction, args }) =>{
-        const id = args.getNumber('id')
+        const id = args.getString('id')
         try {  
             const {status} = await axios.get(process.env.imageDbUrl + "image/craiyon/craiyon"+id+".png")
             if(status === 200 || status === 201 || status === 204 || status === 304) {

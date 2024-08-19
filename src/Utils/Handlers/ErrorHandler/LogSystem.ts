@@ -8,7 +8,7 @@ const loggerWebhook = process.env.logsWebhook ? new WebhookClient({ url: process
 const errorWebhook = process.env.errorWebhook ? new WebhookClient({ url: process.env.errorWebhook }) : null;
 
 const originalConsoleLog = console.log;
-const originalConsoleError = console.error;
+export const originalConsoleError = console.error;
 
 let errors = 0;
 
@@ -67,7 +67,24 @@ function discordLogger(type: string, message: string, prefix: string) {
         case 'Warn':
         case 'Info':
         case 'Debug':
-            if(message.length >= 3500) {
+            if(!message) {
+                hastebin(message, { url: process.env.hasteServer }).then((url) => {
+                    const embed = new EmbedBuilder()
+                        .setColor(color(type))
+                        .setTitle(`${type} | ${prefix ? prefix : 'SYS'}`)
+                        .setDescription(`\`\`\`bash\n${url}\`\`\``)
+                        .setTimestamp()
+                        .setFooter({ text: `💫 PancyBot v${version} | Rate Limit ${loggerWebhook?.rest.globalRemaining}`, });
+        
+                    loggerWebhook?.send({ embeds: [embed] }).catch(err => {
+                        const error = err as Error
+                        const date = DateTime.now().setZone('America/Mexico_City');
+                        originalConsoleLog('[' + chalk.blue(`${prefix ? prefix : 'SYS'} | LOGGER`) + '] : [' + chalk.red('CRITICAL') + '] ' + chalk.bold(chalk.grey(`${date.hour}:${date.minute}:${date.second}`)) + ' : ', error.name ? error.name : 'Unkown error');    
+                        errors++;
+                    });
+                });
+            }
+            if(message?.length >= 3500) {
                 hastebin(message, { url: process.env.hasteServer }).then((url) => {
                     const embed = new EmbedBuilder()
                         .setColor(color(type))

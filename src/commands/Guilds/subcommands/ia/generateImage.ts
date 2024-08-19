@@ -7,6 +7,7 @@ import fs from "fs"
 import axios from "axios";
 import { CraiyonResponse } from "../../../../Types/Craiyon";
 import { firefox, Browser, Page } from 'playwright'
+import { originalConsoleError } from "../../../../Utils/Handlers/ErrorHandler/LogSystem";
 
 export default new Command({
     name: "createimage",
@@ -73,7 +74,7 @@ export default new Command({
                     const responseData = await response.json() as CraiyonResponse;
                     return responseData;
                 } catch (err) {
-                    console.error(err)
+                    originalConsoleError(err)
                 }
             }, { text, negativeText, model });
 

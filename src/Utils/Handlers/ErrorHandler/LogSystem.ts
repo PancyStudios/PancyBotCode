@@ -14,7 +14,7 @@ let errors = 0;
 
 function securityText(message: string): string {
     let messageStr = typeof message === 'string' ? message : JSON.stringify(message, null, 2);
-    messageStr = messageStr.replace(process.env.botToken, '[Secret Token]');
+    messageStr = messageStr?.replace(process.env.botToken, '[Secret Token]');
     return messageStr;
 }
 

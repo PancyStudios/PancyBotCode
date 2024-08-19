@@ -2,13 +2,11 @@ import { sendImage } from "../../../../Utils/Functions/sendImage";
 import { errorHandler } from '../../../..';
 import { Command } from "../../../../Structure/CommandSlash";
 import { EmbedBuilder, Colors, ApplicationCommandOptionType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } from "discord.js";
-import tougt from 'tough-cookie'
-import { wrapper } from 'axios-cookiejar-support'
 import path from "path"
 import fs from "fs"
 import axios from "axios";
-import request from 'request-promise-native'
 import { CraiyonResponse } from "../../../../Types/Craiyon";
+import { firefox, Browser, Page } from 'playwright'
 
 export default new Command({
     name: "createimage",
@@ -48,30 +46,34 @@ export default new Command({
         const negativeText = args.getString('negative_prompt') || ''
         const model = args.getString('model') || 'art'
         try {
-            await interaction.reply("Generando (Espere 1min aprox)...")
+            await interaction.reply("Generando (Espere 2min aprox)...")
+            const browser = await firefox.launch()
+            const context = await browser.newContext()
+            const page: Page = await context.newPage();
+
 
             const firstTime = Date.now()
-            const axio = wrapper(axios)
 
-            const jar = new tougt.CookieJar()
-            const { data } = await request('https://api.craiyon.com/v3', {
-                method: 'POST',
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    prompt: text,
-                    negative_prompt: negativeText,
-                    model: model,
-                    token: process.env.craiyonToken
-                },
-                jar: true,
-                json: true
-            })
+            
+            const response = await page.evaluate(async () => {
+                const response = await fetch("https://api.craiyon.com/v3", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prompt: text,
+                        negative_prompt: negativeText,
+                        model: model
+                    }),
+                    credentials: 'include' // Incluir cookies
+                });
+                const responseData = await response.json() as CraiyonResponse;
+                return responseData;
+            });
 
-            console.log(data)
+            console.log(response)
 
             await interaction.editReply({ content: null, embeds: [
                 new EmbedBuilder()
@@ -82,13 +84,12 @@ export default new Command({
                 Espere un momento se estan descargando las imagenes generadas y subiendo a la api`)
             ]})
 
-            if(!data.images) return await interaction.editReply({ content: "La api no entrego ninguna imagen, intentelo de nuevo", embeds: [] })
+            if(!response.images) return await interaction.editReply({ content: "La api no entrego ninguna imagen, intentelo de nuevo", embeds: [] })
             let ids: string[] = []
-            for(const image of data.images) {
-                const { data } = await axio.get<ArrayBuffer>("https://img.craiyon.com/" + image, { 
+            for(const image of response.images) {
+                const { data } = await axios.get<ArrayBuffer>("https://img.craiyon.com/" + image, { 
                     responseType: 'arraybuffer', 
                     withCredentials: true, 
-                    jar: new tougt.CookieJar(),
                 })
                 
                 const authString = `${process.env.username}:${process.env.password}`;
@@ -107,7 +108,7 @@ export default new Command({
             }
             const Embed = new EmbedBuilder()
             .setTitle('Imagen generada')
-            .setImage(`https://img.craiyon.com/${data.images[0]}`)
+            .setImage(`https://img.craiyon.com/${response.images[0]}`)
             .setColor(Colors.Green)
             .setDescription(`💫 - Powered by CraiyonAPI | PancyStudios`)
 
@@ -118,47 +119,47 @@ export default new Command({
                 [
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 1')
-                    .setValue(data.images[0])
+                    .setValue(response.images[0])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 2')
-                    .setValue(data.images[1])
+                    .setValue(response.images[1])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 3')
-                    .setValue(data.images[2])
+                    .setValue(response.images[2])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 4')
-                    .setValue(data.images[3])
+                    .setValue(response.images[3])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 5')
-                    .setValue(data.images[4])
+                    .setValue(response.images[4])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 6')
-                    .setValue(data.images[5])
+                    .setValue(response.images[5])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 7')
-                    .setValue(data.images[6])
+                    .setValue(response.images[6])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 8')
-                    .setValue(data.images[7])
+                    .setValue(response.images[7])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                     new StringSelectMenuOptionBuilder()
                     .setLabel('Imagen 9')
-                    .setValue(data.images[8])
+                    .setValue(response.images[8])
                     .setDescription('Imagen generada')
                     .setEmoji('🖼️'),
                 ]

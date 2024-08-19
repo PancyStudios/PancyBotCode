@@ -71,7 +71,7 @@ export default new Command({
                 });
                 const responseData = await response.json() as CraiyonResponse;
                 return responseData;
-            });
+            }, { text, negativeText, model });
 
             console.log(response)
 

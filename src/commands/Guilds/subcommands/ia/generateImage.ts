@@ -7,6 +7,7 @@ import { wrapper } from 'axios-cookiejar-support'
 import path from "path"
 import fs from "fs"
 import axios from "axios";
+import request from 'request-promise-native'
 import { CraiyonResponse } from "../../../../Types/Craiyon";
 
 export default new Command({
@@ -48,19 +49,29 @@ export default new Command({
         const model = args.getString('model') || 'art'
         try {
             await interaction.reply("Generando (Espere 1min aprox)...")
+
             const firstTime = Date.now()
             const axio = wrapper(axios)
 
-            const { data } = await axio.post<CraiyonResponse>("https://api.craiyon.com/v3", {
-                prompt: text,
-                negative_prompt: negativeText,
-                model: model,
-                version: "c4ue22fb7kb6wlac",
-            }, {
-                withCredentials: true,
-                jar: new tougt.CookieJar(),
-
+            const jar = new tougt.CookieJar()
+            const { data } = await request('https://api.craiyon.com/v3', {
+                method: 'POST',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                    prompt: text,
+                    negative_prompt: negativeText,
+                    model: model,
+                    token: process.env.craiyonToken
+                },
+                jar: true,
+                json: true
             })
+
+            console.log(data)
 
             await interaction.editReply({ content: null, embeds: [
                 new EmbedBuilder()

@@ -6,5 +6,5 @@ export default new Event('ready', async (_) => {
     exec('git commit -m "Local Changes"')
     setInterval(() =>{
         exec('git pull origin update --no-rebase', async (err, stdout, stderr) => {})
-    }, 3000)
+    }, 1000 * 60)
 })

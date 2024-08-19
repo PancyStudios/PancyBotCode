@@ -127,310 +127,443 @@ export default new Command({
             )
 
             let firstWhile = true
-            do { 
-                const firstEmbed = new EmbedBuilder()
-                .setTitle(`${guild.name} | Embeds`)
-                .setDescription(`A continuacion se te pedira que ingreses los datos del embed, si deseas cancelar la creacion del embed selecciona la opcion cancelar (No se guardara ningun dato)\n
-                    # Embed Data
-                    > Nombre: ${tempData.name ?? 'No definido'} [Obligatorio']
-                    > Titulo: ${tempData.embed?.title ?? 'No definido'} [Opcional*']
-                    > Author Name: ${tempData.embed?.author?.name ?? 'No definido'} [Opcional*']
-                    > Author Icon: ${tempData.embed?.author?.icon_url ?? 'No definido'} [Opcional']
-                    > Descripcion: ${tempData.embed?.description ?? 'No definido'} [Opcional*']
-                    > Color: ${tempData.embed?.color ?? 'No definido'} [Opcional]
-                    > Footer Text: ${tempData.embed?.footer?.text ?? 'No definido'} [Opcional*']
-                    > Footer Icon: ${tempData.embed?.footer?.icon_url ?? 'No definido'} [Opcional']
-                    > Imagen: ${tempData.embed?.image?.url ?? 'No definido'} [Opcional*']
-                    > Thumbnail: ${tempData.embed?.thumbnail?.url ?? 'No definido'} [Opcional*']
-
-                    > ⌚ | Tiempo restante para responder: <t:${Math.floor(Date.now() / 1000) + 120}:R>
-                    
-                    \`\`\`\n* Almenos se debe definir uno de estos campos\n' En caso de precionar cancelar en el formulario favor de esperar 2 minutos a que acabe el tiempo de espera (8 mins en caso de la descripcion)\`\`\``)
-                .setColor('Blurple')
-                .setTimestamp()
-                .setFooter({ text: member.displayName ?? member.user.tag, iconURL: client.user.displayAvatarURL() })
-                const reply1 = await interaction.editReply({ embeds: [firstEmbed], components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(MenuSelectFirst)] })
-                const menuReply1 = await reply1.awaitMessageComponent({ componentType: ComponentType.StringSelect, time: 120_000, })
-                if(!menuReply1) {
-                    await interaction.editReply({ embeds: [
-                        new EmbedBuilder()
-                        .setTitle(`${guild.name} | Embeds`)
-                        .setDescription(`El tiempo de espera fue excedido, la creacion del embed fue cancelada\n\nSe enviara un mensaje privado con los datos del embed, en caso de que desees continuar la creacion del embed\n\n\`\`\`Importante: Si tienes el MD desactivado la informacion sera eliminada en su totalidad sin posibilidad de recuperacion\`\`\``)
-                        .setColor(`Orange`)
-                    ], components: [] })
-                    
-                    await member.send({ embeds: [
-                        new EmbedBuilder()
-                        .setTitle(`Embeds | ${guild.name}`)
-                        .setDescription(`La creacion del embed fue cancelada por exceder el tiempo de espera
-                            
-                            A continuacion se te mostrara los datos del embed que se iba a crear
-                            \`\`\`json\n${JSON.stringify(tempData, null, 2)}\`\`\``)
-                        .setColor('Red')
-                    ] }).catch(() => {})
-                    firstWhile = false
-                    return;
-                }
-
-                const menuReplyValue = menuReply1.values[0]
-                switch (menuReplyValue) {
-                    case 'name': 
-                        const nameModalField = new TextInputBuilder()
-                        .setCustomId('name')
-                        .setPlaceholder('Nombre del embed')
-                        .setMinLength(3)
-                        .setMaxLength(50)
-                        .setRequired(true)
-                        .setLabel('Nombre del embed')
-                        .setStyle(TextInputStyle.Short)
-
-                        const nameModal = new ModalBuilder()
-                        .setTitle(`Embeds | ${guild.name}`)
-                        .setCustomId('name_modal' + member.id)
-                        .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(nameModalField)])
+            try {
+                do { 
+                    const firstEmbed = new EmbedBuilder()
+                    .setTitle(`${guild.name} | Embeds`)
+                    .setDescription(`A continuacion se te pedira que ingreses los datos del embed, si deseas cancelar la creacion del embed selecciona la opcion cancelar (No se guardara ningun dato)\n
+                        # Embed Data
+                        > Nombre: ${tempData.name ?? 'No definido'} [Obligatorio']
+                        > Titulo: ${tempData.embed?.title ?? 'No definido'} [Opcional*']
+                        > Author Name: ${tempData.embed?.author?.name ?? 'No definido'} [Opcional*']
+                        > Author Icon: ${tempData.embed?.author?.icon_url ?? 'No definido'} [Opcional']
+                        > Descripcion: ${tempData.embed?.description ?? 'No definido'} [Opcional*']
+                        > Color: ${tempData.embed?.color ?? 'No definido'} [Opcional]
+                        > Footer Text: ${tempData.embed?.footer?.text ?? 'No definido'} [Opcional*']
+                        > Footer Icon: ${tempData.embed?.footer?.icon_url ?? 'No definido'} [Opcional']
+                        > Imagen: ${tempData.embed?.image?.url ?? 'No definido'} [Opcional*']
+                        > Thumbnail: ${tempData.embed?.thumbnail?.url ?? 'No definido'} [Opcional*']
+    
+                        > ⌚ | Tiempo restante para responder: <t:${Math.floor(Date.now() / 1000) + 120}:R>
                         
-                        await menuReply1.showModal(nameModal)
-                        const modalName = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
-                        if(!modalName) return;
-                        tempData.name = modalName.fields.getField('name').value
-                        await modalName.deferUpdate()
-                        break;
-                    case 'title':
-                        const titleModalField = new TextInputBuilder()
-                        .setCustomId('title')
-                        .setPlaceholder('Titulo del embed')
-                        .setMinLength(3)
-                        .setMaxLength(50)
-                        .setRequired(true)
-                        .setLabel('Titulo del embed')
-                        .setStyle(TextInputStyle.Short)
-
-                        const titleModal = new ModalBuilder()
-                        .setTitle(`Embeds | ${guild.name}`)
-                        .setCustomId('name_modal' + member.id)
-                        .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(titleModalField)])
+                        \`\`\`\n* Almenos se debe definir uno de estos campos\n' En caso de precionar cancelar en el formulario favor de esperar 2 minutos a que acabe el tiempo de espera (8 mins en caso de la descripcion)\`\`\``)
+                    .setColor('Blurple')
+                    .setTimestamp()
+                    .setFooter({ text: member.displayName ?? member.user.tag, iconURL: client.user.displayAvatarURL() })
+                    const reply1 = await interaction.editReply({ embeds: [firstEmbed], components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(MenuSelectFirst)] })
+                    const menuReply1 = await reply1.awaitMessageComponent({ componentType: ComponentType.StringSelect, time: 120_000, })
+                    if(!menuReply1) {
+                        await interaction.editReply({ embeds: [
+                            new EmbedBuilder()
+                            .setTitle(`${guild.name} | Embeds`)
+                            .setDescription(`El tiempo de espera fue excedido, la creacion del embed fue cancelada\n\nSe enviara un mensaje privado con los datos del embed, en caso de que desees continuar la creacion del embed\n\n\`\`\`Importante: Si tienes el MD desactivado la informacion sera eliminada en su totalidad sin posibilidad de recuperacion\`\`\``)
+                            .setColor(`Orange`)
+                        ], components: [] })
                         
-                        await menuReply1.showModal(titleModal)
-                        const modalTitle = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
-                        if(!modalTitle) return;
-                        tempData.name = modalTitle.fields.getField('title').value
-                        await modalTitle.deferUpdate()
-                        break;
-                    case 'author_name':
-                        const authorNameModalField = new TextInputBuilder()
-                        .setCustomId('author_name')
-                        .setPlaceholder('Nombre del autor del embed')
-                        .setMinLength(3)
-                        .setMaxLength(50)
-                        .setRequired(true)
-                        .setLabel('Nombre del autor del embed')
-                        .setStyle(TextInputStyle.Short)
-
-                        const authorNameModal = new ModalBuilder()
-                        .setTitle(`Embeds | ${guild.name}`)
-                        .setCustomId('name_modal' + member.id)
-                        .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(authorNameModalField)])
-
-                        await menuReply1.showModal(authorNameModal)
-                        const modalAuthorName = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
-                        if(!modalAuthorName) return;
-
-                        if(tempData.embed.author) {
-                            tempData.embed.author.name = modalAuthorName.fields.getField('author_name').value
-                        } else {
-                            tempData.embed.author = {
-                                icon_url: null,
-                                name: modalAuthorName.fields.getField('author_name').value
-                            }
-                        }
-                        await modalAuthorName.deferUpdate()
-                        break;
-                    case 'author_icon':
-                        const authorIconModalField = new TextInputBuilder()
-                        .setCustomId('author_icon')
-                        .setPlaceholder('Icono del autor del embed')
-                        .setMinLength(10)
-                        //En todos los que sean URL no se debe de poner un maximo de caracteres
-                        .setRequired(true)
-                        .setLabel('Icono del autor del embed')
-                        .setStyle(TextInputStyle.Short)
-
-                        const authorIconModal = new ModalBuilder()
-                        .setTitle(`Embeds | ${guild.name}`)
-                        .setCustomId('name_modal' + member.id)
-                        .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(authorIconModalField)])
-
-                        await menuReply1.showModal(authorIconModal)
-                        const modalAuthorIcon = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
-                        if(!modalAuthorIcon) return;
-
-                        if(tempData.embed.author) {
-                            tempData.embed.author.icon_url = modalAuthorIcon.fields.getField('author_icon').value
-                        } else {
-                            tempData.embed.author = {
-                                name: null,
-                                icon_url: modalAuthorIcon.fields.getField('author_icon').value
-                            }
-                        }
-                        break;
-                    case 'description':
-                        const descriptionModalField = new TextInputBuilder()
-                        .setCustomId('description')
-                        .setPlaceholder('Descripcion del embed')
-                        .setMinLength(10)
-                        .setMaxLength(3500)
-                        .setRequired(true)
-                        .setLabel('Descripcion del embed')
-                        .setStyle(TextInputStyle.Paragraph)
-
-                        const descriptionModal = new ModalBuilder()
-                        .setTitle(`Embeds | ${guild.name}`)
-                        .setCustomId('name_modal' + member.id)
-                        .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(descriptionModalField)])
-
-                        await menuReply1.showModal(descriptionModal)
-                        const modalDescription = await menuReply1.awaitModalSubmit({ time: 480_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
-                        if(!modalDescription) return;
-
-                        tempData.embed.description = modalDescription.fields.getField('description').value
-                        await modalDescription.deferUpdate()
-                        break;  
-                    case 'color':
-                        await menuReply1.deferUpdate()
-                        const colorSelect = new StringSelectMenuBuilder()
-                        .setCustomId('color')
-                        .setPlaceholder('Selecciona un color')
-                        .setMaxValues(1)
-                        .addOptions([
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('HexColor')
-                            .setValue('Hexcode')
-                            .setDescription('Selecciona un color por medio de un hexcode'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Rojo')
-                            .setValue('Red')
-                            .setDescription('Selecciona el color rojo')
-                            .setEmoji('🔴'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Azul')
-                            .setValue('Blue')
-                            .setDescription('Selecciona el color azul')
-                            .setEmoji('🔵'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Verde')
-                            .setValue('Green')
-                            .setDescription('Selecciona el color verde')
-                            .setEmoji('🟢'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Amarillo')
-                            .setValue('Yellow')
-                            .setDescription('Selecciona el color amarillo')
-                            .setEmoji('🟡'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Morado')
-                            .setValue('Purple')
-                            .setDescription('Selecciona el color morado')
-                            .setEmoji('🟣'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Rosa')
-                            .setValue('LuminousVividPink')
-                            .setDescription('Selecciona el color rosa')
-                            .setEmoji('💖'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Naranja')
-                            .setValue('Orange')
-                            .setDescription('Selecciona el color naranja')
-                            .setEmoji('🟠'),
-                            new StringSelectMenuOptionBuilder()
-                            .setLabel('Blanco')
-                            .setValue('White')
-                            .setDescription('Selecciona el color blanco')
-                            .setEmoji('⚪'),
-                        ])
-
-                        const colorEmbed = new EmbedBuilder()
-                        .setTitle(`Embeds | ${guild.name}`)
-                        .setDescription(`Selecciona un color para el embed`)
-                        .setColor('Blurple')
-                        .setTimestamp()
-                        .setFooter({ text: member.displayName ?? member.user.tag, iconURL: client.user.displayAvatarURL() })
-
-                        const colorActionRow = new ActionRowBuilder<StringSelectMenuBuilder>()
-
-                        const reply2 = await interaction.editReply({ embeds: [colorEmbed], components: [colorActionRow.addComponents(colorSelect)] })
-                        const menuReply2 = await reply2.awaitMessageComponent({ componentType: ComponentType.StringSelect, time: 120_000, })
-                        if(!menuReply2) return;
-
-                        const colorValue = menuReply2.values[0]
-                        if(colorValue === 'Hexcode') {
-                            const colorModalField = new TextInputBuilder()
-                            .setCustomId('color_hex')
-                            .setPlaceholder('Hexcode del color')
-                            .setMinLength(6)
-                            .setMaxLength(7)
+                        await member.send({ embeds: [
+                            new EmbedBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setDescription(`La creacion del embed fue cancelada por exceder el tiempo de espera
+                                
+                                A continuacion se te mostrara los datos del embed que se iba a crear
+                                \`\`\`json\n${JSON.stringify(tempData, null, 2)}\`\`\``)
+                            .setColor('Red')
+                        ] }).catch(() => {})
+                        firstWhile = false
+                        return;
+                    }
+    
+                    const menuReplyValue = menuReply1.values[0]
+                    switch (menuReplyValue) {
+                        case 'name': 
+                            const nameModalField = new TextInputBuilder()
+                            .setCustomId('name')
+                            .setPlaceholder('Nombre del embed')
+                            .setMinLength(3)
+                            .setMaxLength(50)
                             .setRequired(true)
-                            .setLabel('Hexcode del color')
+                            .setLabel('Nombre del embed')
                             .setStyle(TextInputStyle.Short)
-
-                            const colorModal = new ModalBuilder()
+    
+                            const nameModal = new ModalBuilder()
                             .setTitle(`Embeds | ${guild.name}`)
                             .setCustomId('name_modal' + member.id)
-                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(colorModalField)])
-
-                            await menuReply2.showModal(colorModal)
-                            const modalColor = await menuReply2.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
-                            if(!modalColor) return;
-                            let noError: boolean = true
-                            let color: ColorResolvable | number
-                            const isHex = /^#[0-9A-F]{6}$/i.test(modalColor.fields.getField('color_hex').value)
-                            if(isHex) {
-                                color = modalColor.fields.getField('color_hex').value as ColorResolvable
-                                try {   
-                                    color = resolveColor(color)
-                                } catch {
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(nameModalField)])
+                            
+                            await menuReply1.showModal(nameModal)
+                            const modalName = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                            if(!modalName) return;
+                            tempData.name = modalName.fields.getField('name').value
+                            await modalName.deferUpdate()
+                            break;
+                        case 'title':
+                            const titleModalField = new TextInputBuilder()
+                            .setCustomId('title')
+                            .setPlaceholder('Titulo del embed')
+                            .setMinLength(3)
+                            .setMaxLength(50)
+                            .setRequired(true)
+                            .setLabel('Titulo del embed')
+                            .setStyle(TextInputStyle.Short)
+    
+                            const titleModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(titleModalField)])
+                            
+                            await menuReply1.showModal(titleModal)
+                            const modalTitle = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                            if(!modalTitle) return;
+                            tempData.name = modalTitle.fields.getField('title').value
+                            await modalTitle.deferUpdate()
+                            break;
+                        case 'author_name':
+                            const authorNameModalField = new TextInputBuilder()
+                            .setCustomId('author_name')
+                            .setPlaceholder('Nombre del autor del embed')
+                            .setMinLength(3)
+                            .setMaxLength(50)
+                            .setRequired(true)
+                            .setLabel('Nombre del autor del embed')
+                            .setStyle(TextInputStyle.Short)
+    
+                            const authorNameModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(authorNameModalField)])
+    
+                            await menuReply1.showModal(authorNameModal)
+                            const modalAuthorName = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                            if(!modalAuthorName) return;
+    
+                            if(tempData.embed.author) {
+                                tempData.embed.author.name = modalAuthorName.fields.getField('author_name').value
+                            } else {
+                                tempData.embed.author = {
+                                    icon_url: null,
+                                    name: modalAuthorName.fields.getField('author_name').value
+                                }
+                            }
+                            await modalAuthorName.deferUpdate()
+                            break;
+                        case 'author_icon':
+                            const authorIconModalField = new TextInputBuilder()
+                            .setCustomId('author_icon')
+                            .setPlaceholder('Icono del autor del embed')
+                            .setMinLength(10)
+                            //En todos los que sean URL no se debe de poner un maximo de caracteres
+                            .setRequired(true)
+                            .setLabel('Icono del autor del embed')
+                            .setStyle(TextInputStyle.Short)
+    
+                            const authorIconModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(authorIconModalField)])
+    
+                            await menuReply1.showModal(authorIconModal)
+                            const modalAuthorIcon = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                            if(!modalAuthorIcon) return;
+    
+                            if(tempData.embed.author) {
+                                tempData.embed.author.icon_url = modalAuthorIcon.fields.getField('author_icon').value
+                            } else {
+                                tempData.embed.author = {
+                                    name: null,
+                                    icon_url: modalAuthorIcon.fields.getField('author_icon').value
+                                }
+                            }
+                            break;
+                        case 'description':
+                            const descriptionModalField = new TextInputBuilder()
+                            .setCustomId('description')
+                            .setPlaceholder('Descripcion del embed')
+                            .setMinLength(10)
+                            .setMaxLength(3500)
+                            .setRequired(true)
+                            .setLabel('Descripcion del embed')
+                            .setStyle(TextInputStyle.Paragraph)
+    
+                            const descriptionModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(descriptionModalField)])
+    
+                            await menuReply1.showModal(descriptionModal)
+                            const modalDescription = await menuReply1.awaitModalSubmit({ time: 480_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                            if(!modalDescription) return;
+    
+                            tempData.embed.description = modalDescription.fields.getField('description').value
+                            await modalDescription.deferUpdate()
+                            break;  
+                        case 'color':
+                            await menuReply1.deferUpdate()
+                            const colorSelect = new StringSelectMenuBuilder()
+                            .setCustomId('color')
+                            .setPlaceholder('Selecciona un color')
+                            .setMaxValues(1)
+                            .addOptions([
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('HexColor')
+                                .setValue('Hexcode')
+                                .setDescription('Selecciona un color por medio de un hexcode'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Rojo')
+                                .setValue('Red')
+                                .setDescription('Selecciona el color rojo')
+                                .setEmoji('🔴'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Azul')
+                                .setValue('Blue')
+                                .setDescription('Selecciona el color azul')
+                                .setEmoji('🔵'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Verde')
+                                .setValue('Green')
+                                .setDescription('Selecciona el color verde')
+                                .setEmoji('🟢'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Amarillo')
+                                .setValue('Yellow')
+                                .setDescription('Selecciona el color amarillo')
+                                .setEmoji('🟡'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Morado')
+                                .setValue('Purple')
+                                .setDescription('Selecciona el color morado')
+                                .setEmoji('🟣'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Rosa')
+                                .setValue('LuminousVividPink')
+                                .setDescription('Selecciona el color rosa')
+                                .setEmoji('💖'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Naranja')
+                                .setValue('Orange')
+                                .setDescription('Selecciona el color naranja')
+                                .setEmoji('🟠'),
+                                new StringSelectMenuOptionBuilder()
+                                .setLabel('Blanco')
+                                .setValue('White')
+                                .setDescription('Selecciona el color blanco')
+                                .setEmoji('⚪'),
+                            ])
+    
+                            const colorEmbed = new EmbedBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setDescription(`Selecciona un color para el embed`)
+                            .setColor('Blurple')
+                            .setTimestamp()
+                            .setFooter({ text: member.displayName ?? member.user.tag, iconURL: client.user.displayAvatarURL() })
+    
+                            const colorActionRow = new ActionRowBuilder<StringSelectMenuBuilder>()
+    
+                            const reply2 = await interaction.editReply({ embeds: [colorEmbed], components: [colorActionRow.addComponents(colorSelect)] })
+                            const menuReply2 = await reply2.awaitMessageComponent({ componentType: ComponentType.StringSelect, time: 120_000, })
+                            if(!menuReply2) return;
+    
+                            const colorValue = menuReply2.values[0]
+                            if(colorValue === 'Hexcode') {
+                                const colorModalField = new TextInputBuilder()
+                                .setCustomId('color_hex')
+                                .setPlaceholder('Hexcode del color')
+                                .setMinLength(6)
+                                .setMaxLength(7)
+                                .setRequired(true)
+                                .setLabel('Hexcode del color')
+                                .setStyle(TextInputStyle.Short)
+    
+                                const colorModal = new ModalBuilder()
+                                .setTitle(`Embeds | ${guild.name}`)
+                                .setCustomId('name_modal' + member.id)
+                                .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(colorModalField)])
+    
+                                await menuReply2.showModal(colorModal)
+                                const modalColor = await menuReply2.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                                if(!modalColor) return;
+                                let noError: boolean = true
+                                let color: ColorResolvable | number
+                                const isHex = /^#[0-9A-F]{6}$/i.test(modalColor.fields.getField('color_hex').value)
+                                if(isHex) {
+                                    color = modalColor.fields.getField('color_hex').value as ColorResolvable
+                                    try {   
+                                        color = resolveColor(color)
+                                    } catch {
+                                        noError = false
+                                    }
+                                } else {
                                     noError = false
                                 }
-                            } else {
-                                noError = false
-                            }
-                            if(!noError) return modalColor.reply({ content: `El hexcode ingresado no es valido, intenta de nuevo`, ephemeral: true })
-                            
-                            tempData.embed.color = color as number 
-                            await modalColor.deferUpdate()
-                        } else {
-                            const color = resolveColor(colorValue as ColorResolvable)
-                            tempData.embed.color = color
-                        }
-                        break;
-                    case 'footer_text':
+                                if(!noError) return modalColor.reply({ content: `El hexcode ingresado no es valido, intenta de nuevo`, ephemeral: true })
                                 
-                        break;
-                    case 'footer_icon':
-
-                        break;
-                    case 'image':
+                                tempData.embed.color = color as number 
+                                await modalColor.deferUpdate()
+                            } else {
+                                const color = resolveColor(colorValue as ColorResolvable)
+                                tempData.embed.color = color
+                            }
+                            break;
+                        case 'footer_text':
+                            const footerTextModalField = new TextInputBuilder()
+                            .setCustomId('footer_text')
+                            .setPlaceholder('Texto del footer del embed')
+                            .setMinLength(3)
+                            .setMaxLength(50)
+                            .setRequired(true)
+                            .setLabel('Texto del footer del embed')
+                            .setStyle(TextInputStyle.Short)
+    
+                            const footerTextModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(footerTextModalField)])
                             
-                        break;
-                    case 'thumbnail':
-
-                        break;
-                    case 'public':
-
-                        break;
-                    case 'global':
-
-                        break;
-                    case 'preview':
-
-                        break;
-                    case 'cancel':
-
-                        break;
-                    case 'save':
-
-                        break;
-                }
-            } while (firstWhile)
+                            await menuReply1.showModal(footerTextModal)
+                            const modalFooterText = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                            if(!modalFooterText) return;
+    
+                            if(tempData.embed.footer) {
+                                tempData.embed.footer.text = modalFooterText.fields.getField('footer_text').value
+                            } else {
+                                tempData.embed.footer = {
+                                    icon_url: null,
+                                    text: modalFooterText.fields.getField('footer_text').value
+                                }
+                            }
+                            break;
+                        case 'footer_icon':
+                            const footerIconModalField = new TextInputBuilder()
+                            .setCustomId('footer_icon')
+                            .setPlaceholder('Icono del footer del embed')
+                            .setMinLength(10)
+                            //En todos los que sean URL no se debe de poner un maximo de caracteres
+                            .setRequired(true)
+                            .setLabel('Icono del footer del embed')
+                            .setStyle(TextInputStyle.Short)
+                            
+                            const footerIconModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(footerIconModalField)])
+                            
+                            await menuReply1.showModal(footerIconModal)
+                            const modalFooterIcon = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+    
+                            if(!modalFooterIcon) return;
+    
+                            if(tempData.embed.footer) {
+                                tempData.embed.footer.icon_url = modalFooterIcon.fields.getField('footer_icon').value
+                            } else {
+                                tempData.embed.footer = {
+                                    text: null,
+                                    icon_url: modalFooterIcon.fields.getField('footer_icon').value
+                                }
+                            }
+                            break;
+                        case 'image':
+                            const imageModalField = new TextInputBuilder()
+                            .setCustomId('image')
+                            .setPlaceholder('Imagen del embed')
+                            .setMinLength(10)
+                            //En todos los que sean URL no se debe de poner un maximo de caracteres
+                            .setRequired(true)
+                            .setLabel('Imagen del embed')
+                            .setStyle(TextInputStyle.Short)
+    
+                            const imageModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(imageModalField)])
+    
+                            await menuReply1.showModal(imageModal)
+                            const modalImage = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+                            if(!modalImage) return;
+    
+                            if(tempData.embed.image) {
+                                tempData.embed.image.url = modalImage.fields.getField('image').value
+                            } else {
+                                tempData.embed.image = {
+                                    url: modalImage.fields.getField('image').value
+                                }
+                            }
+                            break;
+                        case 'thumbnail':
+                            const thumbnailModalField = new TextInputBuilder()
+                            .setCustomId('thumbnail')
+                            .setPlaceholder('Thumbnail del embed')
+                            .setMinLength(10)
+                            //En todos los que sean URL no se debe de poner un maximo de caracteres
+                            .setRequired(true)
+                            .setLabel('Thumbnail del embed')
+                            .setStyle(TextInputStyle.Short)
+    
+                            const thumbnailModal = new ModalBuilder()
+                            .setTitle(`Embeds | ${guild.name}`)
+                            .setCustomId('name_modal' + member.id)
+                            .setComponents([new ActionRowBuilder<TextInputBuilder>().setComponents(thumbnailModalField)])
+    
+                            await menuReply1.showModal(thumbnailModal)
+                            const modalThumbnail = await menuReply1.awaitModalSubmit({ time: 120_000, filter: (x) => x.customId === `name_modal${member.id}` }).catch(() => {})
+    
+                            if(!modalThumbnail) return;
+    
+                            if(tempData.embed.thumbnail) {
+                                tempData.embed.thumbnail.url = modalThumbnail.fields.getField('thumbnail').value
+                            } else {
+                                tempData.embed.thumbnail = {
+                                    url: modalThumbnail.fields.getField('thumbnail').value
+                                }
+                            }
+                            break;
+                        case 'public':
+                            if(tempData.isPublic) {
+                                tempData.isPublic = false
+                                menuReply1.reply({ content: `El embed ahora es privado`, ephemeral: true })
+                            } else {
+                                tempData.isPublic = true
+                                menuReply1.reply({ content: `El embed ahora es publico\n\nPodra ser editado por cualquiera que pueda gestionar mensajes en este servidor (Aunque sea global no puede ser editado en otros servidores)`, ephemeral: true })
+                            }
+                            break;
+                        case 'global':
+                            if(tempData.isGlobal) {
+                                tempData.isGlobal = false
+                                menuReply1.reply({ content: `El embed ahora es local`, ephemeral: true })
+                            } else {
+                                tempData.isGlobal = true
+                                menuReply1.reply({ content: `El embed ahora es global\n\nPodras usarlo en cualquier servidor donde este agregado el bot (Si tienes permiso de gestionar mensajes)`, ephemeral: true })
+                            }
+                            break;
+                        case 'preview':
+                            if(!tempData.embed.title || !tempData.embed.description || !tempData.embed.footer?.text || !tempData.embed.author?.name ) return menuReply1.reply({ content: `Para previsualizar el embed se necesita que almenos se defina algunos de los siguientes campos: titulo, descripcion, texto del footer y nombre del autor`, ephemeral: true })
+                            const previewEmbed = new EmbedBuilder(tempData.embed)
+                            await menuReply1.reply({ embeds: [previewEmbed], ephemeral: true })
+                            break;
+                        case 'cancel':
+                            await menuReply1.reply({ content: `La creacion del embed fue cancelada`, ephemeral: true })
+                            firstWhile = false
+                            interaction.editReply({ content: `La creacion del embed fue cancelada`, embeds: [], components: [] })
+                            break;
+                        case 'save':
+                            await menuReply1.reply({ content: `El embed fue creado con exito`, ephemeral: true })
+                            firstWhile = false
+                            interaction.editReply({ })
+                            break;
+                    }
+                } while (firstWhile)
+            } catch (error) {
+                console.error(error)
+                firstWhile = false
+                await interaction.editReply({ 
+                    embeds: [
+                        new EmbedBuilder()
+                        .setTitle(`${guild.name} | Embeds`)
+                        .setDescription(`Hubo un error al crear el embed, intenta de nuevo mas tarde\n\m\`\`\`json\n${JSON.stringify(error, null, 2)}\`\`\``)
+                        .setColor('Red')
+                    ], 
+                    components: [],
+                    content: null,
+                })
+            }
         } else {
             await interaction.reply({ content: `En este momento la base de datos no se encuentra activa, intenta de nuevo mas tarde`, ephemeral: true })
         }

@@ -25,7 +25,7 @@ export default new Command({
         try {
             interaction.reply("Generando...").then(async msg => {
                 const firstTime = Date.now()
-                await craiyon.generate({
+                await craiyon.withApiToken(process.env.craiyonToken).generate({
                     prompt: `${text}`,
                     maxRetries: 1,
                 }).then(async x => {
@@ -55,7 +55,6 @@ export default new Command({
                         console.warn('No se pudo cargar la imagen')
                     }
                 })
-                .catch(err => console.error(err))
                 .finally(() => console.log("done"))
             })
         } catch (error) {

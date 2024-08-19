@@ -3,7 +3,7 @@ import { client, database } from "../../../../..";
 import { version } from "../../../../../../package.json";
 export var ApiRouter = Router();
 
-ApiRouter.get("/bot/stats", (req, res) => {
+ApiRouter.get("/bot/stats", (_, res) => {
     if(client.isReady()) {
         res.status(201).json({
             guilds: client.guilds.cache.size,

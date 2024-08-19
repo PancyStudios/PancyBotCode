@@ -169,6 +169,7 @@ export default new Command({
 
             } while(whileT)
         } catch (error) {
+            console.error(error)
                 const Errorinteraction = new EmbedBuilder()
                 .setTitle("Craiyon Error")
                 .setDescription(`Error: ${error}`)
@@ -178,7 +179,6 @@ export default new Command({
                 interaction.editReply({ embeds: [Errorinteraction] })
 
                 errorHandler.report({ error: "Craiyon", message: error })
-                throw new Error(error)
         }
     }
 })

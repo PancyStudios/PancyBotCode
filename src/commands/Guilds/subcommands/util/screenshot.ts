@@ -1,6 +1,6 @@
 import { firefox, Browser, Page } from "playwright";
 import { Command } from "../../../../Structure/CommandSlash";
-import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
+import { ApplicationCommandOptionType, channelLink, ChannelType, EmbedBuilder } from "discord.js";
 
 export default new Command({
     name: "screenshot",
@@ -21,15 +21,54 @@ export default new Command({
         const url = interaction.options.getString("url", true);
         await interaction.deferReply();
         const browser: Browser = await firefox.launch();
-        const context = await browser.newContext({
-            proxy: {
-                server: 'http://localhost:3128', // Puerto por defecto de Squid
+        if(interaction.channel.type === ChannelType.GuildText) {
+            if(interaction.channel.nsfw) {
+                try {
+                    const context = await browser.newContext();
+                    const page: Page = await context.newPage();
+                    await page.goto(url);
+                    const buffer = await page.screenshot({ fullPage: true });
+                    await interaction.followUp({ embeds: [new EmbedBuilder().setImage("attachment://screenshot.png")], files: [{ attachment: buffer, name: "screenshot.png" }] });
+                    await browser.close()
+                } catch (err) {
+                    await interaction.followUp({ 
+                        embeds: [
+                            new EmbedBuilder()
+                            .setTitle('Firefox | Error al tomar captura de pantalla')
+                            .setDescription(`Ocurrio un error al intentar acceder a la pagina web, ${err}\n\nIntenta mas tarde`)
+                            .setColor("Red")
+                            .setFooter({ text: `Cloudflare dns | Squid Proxy | PancyProxy` })
+                        ],
+                        ephemeral: true
+                    }); 
+                    browser.close()
+                }
+            } else {
+                try {
+                    const context = await browser.newContext({
+                        proxy: {
+                            server: 'http://localhost:3128', // Puerto por defecto de Squid
+                        }
+                    });
+                    const page: Page = await context.newPage();
+                    await page.goto(url);
+                    const buffer = await page.screenshot();
+                    await interaction.followUp({ embeds: [new EmbedBuilder().setImage("attachment://screenshot.png")], files: [{ attachment: buffer, name: "screenshot.png" }], ephemeral: true });
+                    await browser.close()
+                } catch (err) {
+                    await interaction.followUp({ 
+                        embeds: [
+                            new EmbedBuilder()
+                            .setTitle('PancyProxy | Solicitud bloqueada')
+                            .setDescription(`Es probable que la solicitud haya sido bloqueada por el proxy local, intenta en un canal de nsfw o intenta mas tarde`)
+                            .setColor("Red")
+                            .setFooter({ text: `Cloudflare dns | Squid Proxy | PancyProxy` })
+                        ],
+                        ephemeral: true
+                    }); 
+                    browser.close()
+                }
             }
-        });
-        const page: Page = await context.newPage();
-        await page.goto(url);
-        const buffer = await page.screenshot();
-        await interaction.followUp({ embeds: [new EmbedBuilder().setImage("attachment://screenshot.png")], files: [{ attachment: buffer, name: "screenshot.png" }] });
-        await browser.close()
+        }
     }
 })

@@ -60,7 +60,7 @@ export default new Command({
                         embeds: [
                             new EmbedBuilder()
                             .setTitle('PancyProxy | Solicitud bloqueada')
-                            .setDescription(`Es probable que la solicitud haya sido bloqueada por el proxy local, intenta en un canal de nsfw o intenta mas tarde`)
+                            .setDescription(`Es probable que la solicitud haya sido bloqueada por el proxy local, intenta en un canal de nsfw o intenta mas tarde\n\n${err}`)
                             .setColor("Red")
                             .setFooter({ text: `Cloudflare dns | Squid Proxy | PancyProxy` })
                         ],

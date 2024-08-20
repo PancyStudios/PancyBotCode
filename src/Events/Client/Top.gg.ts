@@ -1,7 +1,6 @@
 import { Webhook } from '@top-gg/sdk'
 import { Router} from 'express'
 import { Event } from '../../Structure/Events'
-import { logs } from '../..'
 export var RouterVotos = Router()
 
 export default new Event('ready', async client => {
@@ -15,5 +14,5 @@ export default new Event('ready', async client => {
     RouterVotos.get("/", (_, res) => {
         res.send('Escuchando Votos')
     })
-    logs.info('Escuchando los votos')
+    console.info('Escuchando los votos')
 })

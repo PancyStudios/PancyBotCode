@@ -11,8 +11,8 @@ export class PoruClient extends Poru {
             name: "PancyBeta",
             host: process.env.linkserver,
             password: process.env.linkpassword,
-            port: 3625,
-            secure: false
+            secure: true,
+            port: 443,
         }], {
             defaultPlatform: 'spsearch',
             send: null,
@@ -25,12 +25,14 @@ export class PoruClient extends Poru {
         this.on('socketClose', async player => {
             console.warn(`Socket closed ${player.guildId}`, 'Poru')
         })
+        this.on('debug', async (e) => {
+            console.debug(e, 'Poru')
+        })
         this.on('nodeError', async (err) => { 
             console.error(`Error al conectar con el servidor local de lavalink: ${err.name}`, 'Poru')
             console.warn('Intentando reconectar...', 'Poru')
-            
             console.error(err, 'Poru')
-            await errorHandler.report({
+            errorHandler.report({
                 error: 'Lavalink 401',
                 message: `Error al conectar con el servidor local de lavalink: ${err.name}`
             })

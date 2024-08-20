@@ -1,4 +1,3 @@
-import { logs } from '../..'
 import { Event } from '../../Structure/Events'
 import axios from 'axios'
 

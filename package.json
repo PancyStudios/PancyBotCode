@@ -1,6 +1,6 @@
 {
   "name": "pancybot",
-  "version": "0.0.3-prealpha",
+  "version": "0.1.0-prealpha",
   "description": "Un bot de discord multifuncional",
   "main": "src/index.ts",
   "author": "ImTurbis",
@@ -8,26 +8,31 @@
   "privatebot": true,
   "scripts": {
     "start": "ts-node .",
-    "dev": "ts-node-dev src/index.ts"
+    "dev": "ts-node-dev src/index.ts",
+    "serve": "ts-node src/Utils/Handlers/Web/index.ts"
   },
   "dependencies": {
     "@top-gg/sdk": "3.1.6",
     "anti-ip-logger": "1.0.1",
     "axios": "1.7.2",
+    "axios-cookiejar-support": "^5.0.2",
     "cacheger": "1.1.3",
     "chalk": "4.1.2",
-    "craiyon": "2.0.0",
     "discord.js": "14.15.3",
     "dotenv": "16.4.5",
     "express": "4.19.2",
+    "express-rate-limit": "^7.4.0",
     "figlet": "^1.7.0",
+    "hastebin-gen": "^2.0.5",
     "luxon": "^3.5.0",
     "moment": "^2.30.1",
     "moment-duration-format": "2.3.2",
     "mongoose": "8.4.1",
     "ms": "2.1.3",
     "nekos.life": "^3.0.0",
+    "playwright": "^1.46.1",
     "poru": "5.2.0",
+    "telegraf": "^4.16.3",
     "uglify-js": "3.18.0",
     "winston": "3.13.0"
   },
@@ -38,7 +43,7 @@
     "@types/moment-duration-format": "^2.2.6",
     "@types/ms": "0.7.34",
     "@types/uglify-js": "3.17.5",
-    "ts-node": "10.9.2",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "2.0.0",
     "typescript": "5.4.5"
   }

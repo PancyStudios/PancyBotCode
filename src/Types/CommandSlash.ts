@@ -1,6 +1,6 @@
 import {
     ChatInputApplicationCommandData,
-    CommandInteraction,
+    ChatInputCommandInteraction,
     CommandInteractionOptionResolver,
     GuildMember,
     PermissionResolvable
@@ -17,7 +17,7 @@ import { GuildDataFirst } from '../Database/Type/Security';
  * }
  * }
  */
-export interface ExtendedInteraction extends CommandInteraction {
+export interface ExtendedInteraction extends ChatInputCommandInteraction {
     member: GuildMember;
 }
 

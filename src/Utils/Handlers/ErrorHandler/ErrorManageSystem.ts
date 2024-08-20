@@ -1,5 +1,4 @@
 import { WebhookClient, EmbedBuilder } from 'discord.js'
-import { existsSync, mkdirSync, writeFileSync} from 'fs'
 import { version } from '../../../../package.json'
 import { client } from '../../..'
 import { ReportErrorOptions } from '../../../Types/Error'
@@ -33,22 +32,22 @@ export class ErrorHandler {
 
         process.on('unhandledRejection', async (err: Error) => {
             errors++;
-            console.log(`${errors}`)
+            console.error(errors)
             console.debug('Unhandled Rejection/Catch', 'AntiCrash');
-            console.log(err);
+            console.error(err);
             
         });
         process.on("uncaughtException", (err, origin) => {
             console.debug('Uncaught Exception/Catch', 'AntiCrash');
-            console.log(err);
-            console.log(origin);
+            console.error(err);
+            console.error(origin);
             errors++;
-            console.log(`${errors}`)
+            console.error(errors)
         });
         process.on('uncaughtExceptionMonitor', (err, origin) => {
             console.debug('Uncaught Exception/Catch (MONITOR)', 'AntiCrash');
-            console.log(err);
-            console.log(origin);
+            console.error(err);
+            console.error(origin);
             errors++;
         });
     }

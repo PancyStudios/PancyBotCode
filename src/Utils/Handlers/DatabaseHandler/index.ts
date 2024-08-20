@@ -1,8 +1,8 @@
-import { Guild, antiRF } from '../../../Database/BotDataBase'
+import { Guild, antiRF } from '../../../Database/Schemas/BotDataBase'
 import { version, privatebot } from '../../../../package.json'
 import discord from 'discord.js'
 import { ExtendedClient } from '../../../Structure/Client';
-
+import { connect } from 'mongoose'
 
 export async function install_commands(client: ExtendedClient, guild: discord.Guild) {
 	try {
@@ -183,4 +183,3 @@ export async function install_commands(client: ExtendedClient, guild: discord.Gu
 		}
 	} catch (error) {console.error(error)}
 }
-

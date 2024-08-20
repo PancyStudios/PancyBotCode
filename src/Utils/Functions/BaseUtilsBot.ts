@@ -1,7 +1,7 @@
 import { connection } from "mongoose";
 import { Message, EmbedBuilder } from "discord.js";
-import { warns } from "../../Database/Warns";
-import { Timers } from "../../Database/Timers";
+import { warns } from "../../Database/Schemas/Warns";
+import { Timers } from "../../Database/Schemas/Timers";
 import { client } from "../.."
 const usersWithCooldown = new Map();
 const cooldown = new Map();
@@ -9,35 +9,6 @@ const responses = new Map();
 
 export class PancyBotUtils { 
     constructor(){}
-
-    getStatusDB () {
-        var StringStatus = '| Unknown'
-        var isOnline = false
-        switch (connection.readyState) {
-            case 0:
-                StringStatus = '| Desconectado'
-            break;
-            case 1:
-                StringStatus = '| En linea'
-                isOnline = true
-            break;
-            case 2:
-                StringStatus = '| Conectando'
-                isOnline = true
-            break;
-            case 3:
-                StringStatus = '| Desconectando'
-            break;
-            case 99:
-                StringStatus = '| Error `MONGODB: 99`'
-            break;
-        }
-        return {
-            StringStatus,
-            isOnline
-        }
-    }
-
 
 async automoderator(client, mongoose, message, sanctionReason) {
     let userWarns = await warns.findOne({ guildId: message.guild.id, userId: message.author.id });

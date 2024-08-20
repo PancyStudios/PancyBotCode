@@ -3,6 +3,8 @@ declare global {
         interface ProcessEnv {
             botToken: string;
             mongodbUrl: string;
+            mongodbPass: string;
+            mongodbUser: string;
             topggPassword: string;
             errorWebhook: string;
             logsWebhook: string;
@@ -19,6 +21,9 @@ declare global {
             linkErrorTracker: string;
             spotifyClientId: string;
             spotifyClientSecret: string;
+            hasteServer: string;
+            craiyonToken: string;
+            logsWebServerWebhook: string;
         }
     }
 }

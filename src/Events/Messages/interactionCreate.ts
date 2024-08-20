@@ -1,74 +1,90 @@
 import { CommandInteractionOptionResolver, GuildMember } from "discord.js";
-import { client, utils, logs } from '../..';
+import { client, utils } from '../..';
 import { Event } from "../../Structure/Events";
 import { ExtendedInteraction } from "../../Types/CommandSlash";
 import { botStaff, forceDisableCommandsSlash } from '../../Database/Local/variables.json'
 import { GuildDataFirst } from "../../Database/Type/Security";
-import { Guild } from "../../Database/BotDataBase";
+import { Guild } from "../../Database/Schemas/BotDataBase";
 import { install_commands } from "../../Utils/Handlers/DatabaseHandler";
 let prefix: string
 let guildDb: GuildDataFirst
 
 
 export default new Event("interactionCreate", async (interaction) => {
-    if (interaction.isCommand()) {
-        if(forceDisableCommandsSlash.some(x => x === interaction.commandName)) {
-            return interaction.reply({ content: 'El comando se encuenta deshabilitado', ephemeral: true})
-        }
-        
-        const status = utils.getStatusDB()
-        if(status) {
-            guildDb = await Guild.findOne({ id: interaction.guild.id }) as GuildDataFirst
-            if(!guildDb.configuration) install_commands
-            prefix = guildDb.configuration.prefix
-        } else {
-            prefix = "pan!"
-        }
-
-
+    if (interaction.isChatInputCommand()) {
         const command = client.commands.get(interaction.commandName);
-        if (!command){
-            const devCommand = client.commandsDev.get(interaction.commandName);
-            if(devCommand) {
-                return
-            } else {
-                return interaction.reply({content: "Este comando no existe!", ephemeral: true});
-            }
-        }
-            await interaction.deferReply();
-            let userPermissions = command.userPermissions;
+        const subCommandName = interaction.options.getSubcommand(false);
+        const subCommandGroupName = interaction.options.getSubcommandGroup(false);
+        const subCommand = client.commands.get(`${interaction.commandName}.${subCommandName}`);
+        const subCommandGroup = client.commands.get(`${interaction.commandName}.${subCommandGroupName}.${subCommandName}`);
+
+        if(command) {
+            if(forceDisableCommandsSlash.some(x => x === command.name)) return interaction.reply({ content: "Este comando esta deshabilitado temporalmente", ephemeral: true });
+            if(command.isDev) return;
+
+            let permissions = command.userPermissions;
             let botPermissions = command.botPermissions;
-            if(!interaction.guild.members.cache.get(interaction.user.id).permissions.has(userPermissions || [])) return interaction.followUp(`No tienes permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof userPermissions === 'string' ? userPermissions : userPermissions.join(', ')}\``)
-            if(!interaction.guild.members.cache.get(client.user.id).permissions.has(botPermissions || [])) return interaction.followUp(`No tengo permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof botPermissions === 'string' ? botPermissions : botPermissions.join(', ')}\``)
-        if(command.isDev) {
-            if(interaction.user.id !== botStaff.ownerBot) return interaction.followUp("Solo el dueño del bot puede usar este commando"); console.log('NO')
-            command.run({
+            if(permissions) {
+                if(!(interaction.member as GuildMember).permissions.has(permissions)) return interaction.reply({ content: `No tienes permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof permissions === 'string' ? permissions : permissions.join(', ')}\``, ephemeral: true });
+            }
+            if(botPermissions) {
+                const me = await interaction.guild.members.fetchMe();
+                if(!me?.permissions.has(botPermissions)) return interaction.reply({ content: `No tengo permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof botPermissions === 'string' ? botPermissions : botPermissions.join(', ')}\``, ephemeral: true });
+            }
+
+            await command.run({
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
                 prefix,
                 guilddb: guildDb,
-            });
-        } else if (command.database) {
-            const DBStatus = utils.getStatusDB().isOnline
-            if(!DBStatus) return interaction.followUp({ content: "Comando no disponible temporalmente \n\nMotivo: `DATABASE ERROR`", ephemeral: true })
-        } else if (command.inVoiceChannel) {
-            if(!(interaction.member as GuildMember).voice.channel) return interaction.followUp("Necesitas estas conectado a un canal de texto")
-            command.run({
+            })
+        } else if(subCommand) {
+            if(forceDisableCommandsSlash.some(x => x === subCommand.name)) return interaction.reply({ content: "Este comando esta deshabilitado temporalmente", ephemeral: true });
+            if(subCommand.isDev) return;
+
+            let permissions = subCommand.userPermissions;
+            let botPermissions = subCommand.botPermissions;
+            if(permissions) {
+                if(!(interaction.member as GuildMember).permissions.has(permissions)) return interaction.reply({ content: `No tienes permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof permissions === 'string' ? permissions : permissions.join(', ')}\``, ephemeral: true });
+            }
+            if(botPermissions) {
+                const me = await interaction.guild.members.fetchMe();
+                if(!me?.permissions.has(botPermissions)) return interaction.reply({ content: `No tengo permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof botPermissions === 'string' ? botPermissions : botPermissions.join(', ')}\``, ephemeral: true });
+            }
+
+
+            await subCommand.run({
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
                 prefix,
                 guilddb: guildDb,
-            });
-        } else {
-            command.run({
+            })
+        } else if(subCommandGroup) {
+            if(forceDisableCommandsSlash.some(x => x === subCommandGroup.name)) return interaction.reply({ content: "Este comando esta deshabilitado temporalmente", ephemeral: true });
+            if(subCommandGroup.isDev) return;
+
+            let permissions = subCommandGroup.userPermissions;
+            let botPermissions = subCommandGroup.botPermissions;
+            if(permissions) {
+                if(!(interaction.member as GuildMember).permissions.has(permissions)) return interaction.reply({ content: `No tienes permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof permissions === 'string' ? permissions : permissions.join(', ')}\``, ephemeral: true });
+            }
+            if(botPermissions) {
+                const me = await interaction.guild.members.fetchMe();
+                if(!me?.permissions.has(botPermissions)) return interaction.reply({ content: `No tengo permisos para ejecutar este comando.\n Uno de estos permisos puede faltar: \`${typeof botPermissions === 'string' ? botPermissions : botPermissions.join(', ')}\``, ephemeral: true });
+            }
+
+
+            await subCommandGroup.run({
                 args: interaction.options as CommandInteractionOptionResolver,
                 client,
                 interaction: interaction as ExtendedInteraction,
                 prefix,
                 guilddb: guildDb,
-            });
+            })
         }
+    } else if(interaction.isCommand()) {
+
     }
 });

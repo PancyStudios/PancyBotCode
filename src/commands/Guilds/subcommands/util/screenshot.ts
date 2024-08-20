@@ -47,7 +47,7 @@ export default new Command({
                 try {
                     const context = await browser.newContext({
                         proxy: {
-                            server: 'http://localhost:3128', // Puerto por defecto de Squid
+                            server: 'http://10.0.0.213:3128', // Puerto por defecto de Squid
                         }
                     });
                     const page: Page = await context.newPage();

@@ -27,7 +27,7 @@ export default new Command({
                     const context = await browser.newContext();
                     const page: Page = await context.newPage();
                     await page.goto(url);
-                    const buffer = await page.screenshot({ fullPage: true });
+                    const buffer = await page.screenshot();
                     await interaction.followUp({ embeds: [new EmbedBuilder().setImage("attachment://screenshot.png")], files: [{ attachment: buffer, name: "screenshot.png" }] });
                     await browser.close()
                 } catch (err) {

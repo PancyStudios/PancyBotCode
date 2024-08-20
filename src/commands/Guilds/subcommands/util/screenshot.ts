@@ -56,11 +56,12 @@ export default new Command({
                     await interaction.followUp({ embeds: [new EmbedBuilder().setImage("attachment://screenshot.png")], files: [{ attachment: buffer, name: "screenshot.png" }], ephemeral: true });
                     await browser.close()
                 } catch (err) {
+                    const errorMessage = (err as Error).message?.split('\n')[0];
                     await interaction.followUp({ 
                         embeds: [
                             new EmbedBuilder()
                             .setTitle('PancyProxy | Solicitud bloqueada')
-                            .setDescription(`Es probable que la solicitud haya sido bloqueada por el proxy local, intenta en un canal de nsfw o intenta mas tarde\n\n${err}`)
+                            .setDescription(`Es probable que la solicitud haya sido bloqueada por el proxy local, intenta en un canal de nsfw o intenta mas tarde\n\n${errorMessage}`)
                             .setColor("Red")
                             .setFooter({ text: `Cloudflare dns | Squid Proxy | PancyProxy` })
                         ],

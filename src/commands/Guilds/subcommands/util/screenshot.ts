@@ -19,6 +19,7 @@ export default new Command({
 
     run: async ({ interaction }) => {
         const url = interaction.options.getString("url", true);
+        await interaction.deferReply();
         const browser: Browser = await firefox.launch();
         const context = await browser.newContext({
             proxy: {
@@ -28,7 +29,7 @@ export default new Command({
         const page: Page = await context.newPage();
         await page.goto(url);
         const buffer = await page.screenshot();
-        await interaction.reply({ embeds: [new EmbedBuilder().setImage("attachment://screenshot.png")], files: [{ attachment: buffer, name: "screenshot.png" }] });
+        await interaction.followUp({ embeds: [new EmbedBuilder().setImage("attachment://screenshot.png")], files: [{ attachment: buffer, name: "screenshot.png" }] });
         await browser.close()
     }
 })

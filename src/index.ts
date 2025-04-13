@@ -14,8 +14,6 @@ export var Server = app.listen(process.env.PORT, () => {
 })
 export const database = new Database()
 
-// PLAYWRIGHT INSTALL ERROR
-
 client.start()
 
 console.log(process.cwd())

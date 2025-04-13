@@ -130,6 +130,7 @@ async automoderator(client, mongoose, message, sanctionReason) {
         }
         return newArray;
     }
+
     // async ratelimitFilter(message: Message) {
     //     if(usersWithCooldown.has(message.author.id)) {
     //         let seeCooldown = await usersWithCooldown.get(message.author.id);

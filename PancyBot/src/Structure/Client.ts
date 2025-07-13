@@ -84,11 +84,11 @@ export class ExtendedClient extends Client {
         const slashCommandsDev: ApplicationCommandDataResolvable[] = [];
 
         const integratedCommandsDirUser = await globPromise(
-            `${process.cwd()}/src/commands/Users/*`
+            `${process.cwd()}/PancyBot/src/commands/Users/*`
         );
 
         const integratedCommandsDirGuild = await globPromise(
-            `${process.cwd()}/src/commands/Guilds/*`
+            `${process.cwd()}/PancyBot/src/commands/Guilds/*`
         );
 
         for(const dir of integratedCommandsDirGuild) {
@@ -146,7 +146,7 @@ export class ExtendedClient extends Client {
                     break;
                 case 'subcommandsgroup':
                     const commandGroupSubCategories = await globPromise(
-                        `${process.cwd()}/src/commands/subcommand_group/*`
+                        `${process.cwd()}/PancyBot/src/commands/subcommand_group/*`
                     );
             
                     for (const subGroupcommandsPath of commandGroupSubCategories) {
@@ -202,7 +202,7 @@ export class ExtendedClient extends Client {
                     break;
                 case 'Dev':
                     const integratedCommandsDirGuildDev = await globPromise(
-                        `${process.cwd()}/src/commands/Guilds/*`
+                        `${process.cwd()}/PancyBot/src/commands/Guilds/*`
                     );
                     for(const dirDev of integratedCommandsDirGuildDev) {
                         const nameDirDev = path.basename(dirDev);   
@@ -253,7 +253,7 @@ export class ExtendedClient extends Client {
                                 break;
                             case 'subcommandsgroup':
                                 const commandGroupSubCategories = await globPromise(
-                                    `${process.cwd()}/src/commands/subcommand_group/*`
+                                    `${process.cwd()}/PancyBot/src/commands/subcommand_group/*`
                                 );
                         
                                 for (const subGroupcommandsPath of commandGroupSubCategories) {
@@ -318,7 +318,7 @@ export class ExtendedClient extends Client {
 
         // Event
         const eventFiles = await globPromise(
-            `${process.cwd()}/src/Events/*/*{.ts,.js}`
+            `${process.cwd()}/PancyBot/src/Events/*/*{.ts,.js}`
         );
         eventFiles.forEach(async (filePath) => {
             const event: Event<keyof ClientEvents> = await this.importFile(

@@ -7,3 +7,4 @@ package-lock.json
 .npm
 yarn.lock
 yarn-error.log
+logs/

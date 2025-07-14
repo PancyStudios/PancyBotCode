@@ -5,3 +5,5 @@ package-lock.json
 *.gz
 *.tar.gz
 .npm
+yarn.lock
+yarn-error.log

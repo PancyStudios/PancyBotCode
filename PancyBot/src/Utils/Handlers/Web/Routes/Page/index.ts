@@ -15,3 +15,14 @@ PublicView.get("/ToS", (_, res) => {
             break;
     }
 })
+
+PublicView.get("/privacy-policy", (_, res) => {
+    switch(process.env.enviroment) {
+        case "dev":
+            res.sendFile(path.join(__dirname, '.', 'Views', 'Privacity.Canary.html'));
+            break;
+        default:
+            res.sendFile(path.join(__dirname, '.', 'Views', 'Privacity.html'));
+            break;
+    }
+})

@@ -5,8 +5,7 @@ import {
     GuildMember,
     PermissionResolvable
 } from 'discord.js';
-import { ExtendedClient } from '../Structure/Client';
-import { GuildDataFirst } from '../Database/Type/Security';
+import {ExtendedClient} from '../Structure/Client';
 
 /**
  * {
@@ -25,8 +24,6 @@ interface RunOptions {
     client: ExtendedClient;
     interaction: ExtendedInteraction;
     args: CommandInteractionOptionResolver;
-    prefix: string;
-    guilddb: GuildDataFirst;
 }
 
 type RunFunction = (options: RunOptions) => any;

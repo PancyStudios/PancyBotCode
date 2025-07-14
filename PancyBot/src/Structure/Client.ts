@@ -46,8 +46,8 @@ export class ExtendedClient extends Client {
 
     async start() {
         // Cargamos los módulos usando los manejadores
-        this.commandHandler.loadCommands();
-        this.eventHandler.loadEvents();
+        await this.commandHandler.loadCommands();
+        await this.eventHandler.loadEvents();
 
         // Iniciamos sesión
         await this.login(process.env.botToken);

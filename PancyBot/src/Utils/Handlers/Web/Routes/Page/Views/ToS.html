@@ -1,10 +1,129 @@
+<!------------------------------------------------------------------>
+<!--                                                              -->
+<!--            TOS.HTML (Términos y Condiciones - PancyBot)        -->
+<!--                                                              -->
+<!------------------------------------------------------------------>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones - PancyBot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-900 text-gray-300">
+
+<!-- Header -->
+<header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-700">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <!-- SVG Logo de PancyBot -->
+            <svg class="w-10 h-10 text-indigo-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM17.5 14.5C17.5 15.33 16.83 16 16 16H8C7.17 16 6.5 15.33 6.5 14.5V10.5C6.5 9.67 7.17 9 8 9H16C16.83 9 17.5 9.67 17.5 10.5V14.5Z" fill="currentColor"/>
+                <path d="M9 13.5L10.5 12L9 10.5V13.5Z" fill="#111827"/>
+                <path d="M15 13.5L13.5 12L15 10.5V13.5Z" fill="#111827"/>
+            </svg>
+            <h1 class="text-2xl font-bold text-white">PancyBot</h1>
+        </div>
+        <nav>
+            <a href="privacy.html" class="text-gray-400 hover:text-white transition-colors">Política de Privacidad</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-4xl font-bold text-white text-center mb-4">Términos y Condiciones</h2>
+        <p class="text-center text-gray-400 mb-10">Última actualización: 11 de julio de 2025</p>
+
+        <div class="space-y-8">
+            <section>
+                <p class="mb-4">
+                    ¡Bienvenido a PancyBot! Estos Términos y Condiciones ("Términos") constituyen un acuerdo legal vinculante que rige el uso de la instancia oficial y pública de <strong>PancyBot</strong> ("el Servicio"), operada por <strong>PancyStudio Developers</strong>.
+                </p>
+                <p>
+                    Al añadir PancyBot a su servidor de Discord o al interactuar con cualquiera de sus funciones, usted acepta y se compromete a cumplir con estos Términos. El uso del código fuente del bot, por otro lado, se rige por su propia licencia de software.
+                </p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">1. Diferencia entre Servicio y Software</h3>
+                <p class="mb-2">Es fundamental entender la diferencia entre el "Servicio" y el "Software":</p>
+                <ul class="list-disc list-inside space-y-2 pl-4">
+                    <li><strong>El Servicio:</strong> Se refiere a la instancia de PancyBot que nosotros alojamos y operamos. El uso del Servicio se rige por <strong>estos Términos y Condiciones</strong>.</li>
+                    <li><strong>El Software:</strong> Se refiere al código fuente de PancyBot, disponible públicamente en nuestro repositorio de GitHub. El uso del Software (descargar, modificar, auto-alojar) se rige exclusivamente por la <strong>licencia de código abierto</strong> adjunta en dicho repositorio.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">2. Licencia de Código Abierto</h3>
+                <p>El Software de PancyBot es de código abierto y se distribuye bajo los términos de la Licencia MIT. Eres libre de alojar tu propia instancia del Bot, siempre que cumplas con los términos de dicha licencia. PancyStudio Developers no es responsable del funcionamiento, seguridad o prácticas de privacidad de ninguna instancia que no sea la oficial.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">3. Uso Aceptable del Servicio</h3>
+                <p class="mb-2">Usted se compromete a no utilizar nuestro Servicio oficial para ninguna de las siguientes actividades:</p>
+                <ul class="list-disc list-inside space-y-2 pl-4">
+                    <li>Realizar, promover o facilitar cualquier actividad que viole las leyes aplicables o los Términos de Servicio de Discord.</li>
+                    <li>Explotar errores (bugs), realizar spam de comandos, o intentar deliberadamente sobrecargar, interrumpir o dañar nuestra infraestructura.</li>
+                    <li>Utilizar el Bot para generar, mostrar o distribuir contenido odioso, difamatorio, acosador o que infrinja los derechos de terceros.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">4. Funciones Premium ("Protocolo Omega")</h3>
+                <p>PancyBot puede ofrecer Funciones Premium que requieran una activación o suscripción. Estas funciones solo pueden ser activadas y utilizadas en la instancia oficial del Bot. La licencia de código abierto le da acceso para ver el código, pero no le otorga el derecho a usar funcionalmente las características premium sin la activación correspondiente en nuestro Servicio.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">5. Propiedad Intelectual y Marca</h3>
+                <p>Los nombres "PancyBot", "PancyStudio" y "MiauMedia", así como sus logotipos, son marcas propiedad de sus desarrolladores. La licencia de código abierto no le otorga el derecho a utilizar nuestras marcas de una manera que sugiera que su instancia del bot es un servicio oficial o respaldado por nosotros.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">6. Terminación del Servicio</h3>
+                <p>Nos reservamos el derecho de suspender o terminar su acceso a nuestro Servicio, de manera temporal o permanente, sin previo aviso, si determinamos que ha violado estos Términos y Condiciones.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">7. Exclusión de Garantías y Limitación de Responsabilidad</h3>
+                <p>El Servicio se proporciona "TAL CUAL" y "SEGÚN DISPONIBILIDAD". No garantizamos que el Servicio estará siempre en línea, libre de errores o que funcionará ininterrumpidamente. En la máxima medida permitida por la ley, PancyStudio Developers no será responsable de ningún daño directo o indirecto que resulte del uso o la incapacidad de usar nuestro Servicio oficial.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">8. Ley Aplicable</h3>
+                <p>Este acuerdo se regirá e interpretará de acuerdo con la legislación correspondiente a su ubicación. Si usted reside en México, el acuerdo se someterá a la Ley Federal del Derecho de Autor y demás leyes aplicables. Si reside fuera de México, el acuerdo se regirá por los tratados internacionales sobre derechos de autor y propiedad intelectual aplicables.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">9. Modificaciones y Contacto</h3>
+                <p>Podemos modificar estos Términos en cualquier momento. Le notificaremos de los cambios a través de nuestro servidor de soporte oficial. Si tiene alguna pregunta, contáctenos allí.</p>
+            </section>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-gray-700 mt-12">
+    <div class="container mx-auto px-6 py-6 text-center text-gray-400">
+        <p>&copy; 2025 PancyStudio. Todos los derechos reservados.</p>
+    </div>
+</footer>
 
 </body>
 </html>
+

@@ -1,8 +1,7 @@
-import { Router } from "express";
-import { client, database } from "../../../../../index";
-import { version } from "../../../../../../../package.json";
-export var PublicView = Router();
+import {Router} from "express";
 import path from 'path'
+
+export var PublicView = Router();
 
 PublicView.get("/ToS", (_, res) => {
     switch(process.env.enviroment) {
@@ -10,7 +9,7 @@ PublicView.get("/ToS", (_, res) => {
             res.sendFile(path.join(__dirname, '.', 'Views', 'ToS.Canary.html'))
             break;
         default:
-            res.sendFile(path.join(__dirname, '..', 'Views', 'ToS.html'));
+            res.sendFile(path.join(__dirname, '.', 'Views', 'ToS.html'));
             break;
     }
 })

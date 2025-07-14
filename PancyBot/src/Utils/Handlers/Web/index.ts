@@ -1,12 +1,13 @@
-import express, { Request, Response, NextFunction} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import rateLimit from "express-rate-limit";
-import { json, urlencoded } from 'body-parser';
-import { RouterVotos } from '../../../Events/Client/Top.gg'
-import { ApiRouter } from "./Routes/Api";
-import { EmbedBuilder, WebhookClient } from "discord.js";
+import {json, urlencoded} from 'body-parser';
+import {RouterVotos} from '../../../Events/Client/Top.gg'
+import {ApiRouter} from "./Routes/Api";
+import {EmbedBuilder, WebhookClient} from "discord.js";
 import hastebin from "hastebin-gen";
-import { client } from "../../../index";
+import {client} from "../../../index";
 import {PublicView} from "./Routes/Page";
+import path from "path";
 
 export const app = express()
 
@@ -20,7 +21,7 @@ const limiter = rateLimit({
     headers: true, 
 });
 
-function logsServer(req: Request, res: Response, next: NextFunction) {
+function logsServer(req: Request, _: Response, next: NextFunction) {
     try {
         const Webhook = new WebhookClient({ url: process.env.logsWebServerWebhook })
         if(req.method === 'GET') {
@@ -101,6 +102,6 @@ app.use(logsServer);
 app.use(limiter);
 app.use('/', PublicView);
 app.use('/api', ApiRouter);
-app.all('*', (req, res) => {
-    res.json({ message: 'Not Found' }).status(404)
+app.all('*', (_, res) => {
+    res.sendFile(path.join(__dirname, 'Views', '404.html'))
 })

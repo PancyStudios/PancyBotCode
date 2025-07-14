@@ -47,6 +47,7 @@ export class CommandHandler {
         for (const filePath of commandFiles) {
             const command = await this.importFile(filePath);
             if (!command?.name) continue;
+            console.debug(`[CommandHandler] ${command.name}: ${command.description}`);
             this.commands.set(command.name, command);
             this.slashCommands.push(command);
         }
@@ -75,6 +76,8 @@ export class CommandHandler {
                     options: command.options,
                 });
                 this.commands.set(`${categoryName}.${command.name}`, command);
+
+                console.debug(`[CommandHandler] ${categoryName}.${command.name}: ${command.description}`);
             }
             if(categoryCommand.options.length > 0) this.slashCommands.push(categoryCommand);
         }

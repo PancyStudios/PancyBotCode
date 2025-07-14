@@ -85,3 +85,49 @@
 [2025-07-14 08:35:29] [INFO] [SYS]: [CommandHandler] ✅ Comandos cargados: 21
 [2025-07-14 08:35:59] [WARN] [DB]: Se a detectado un error al conectar la base de datos
 [2025-07-14 08:35:59] [ERROR] [SYS]: connect ECONNREFUSED 193.149.164.141:9290
+[2025-07-14 08:39:59] [DEBUG] [WEB]: ApiRouter is loading
+[2025-07-14 08:39:59] [WARN] [Client]: Iniciando cliente
+[2025-07-14 08:39:59] [INFO] [DB]: Conectando a la base de datos
+[2025-07-14 08:39:59] [INFO] [SYS]: [CommandHandler] ✅ Iniciando carga de comandos...
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Iniciando carga de eventos...
+[2025-07-14 08:39:59] [INFO] [SYS]: /home/turbis/WebstormProjects/PancyBotCode
+[2025-07-14 08:39:59] [INFO] [SYS]: 🚀 Servidor escuchando en http://localhost:31234
+[2025-07-14 08:39:59] [DEBUG] [AntiCrash]: Uncaught Exception/Catch (MONITOR)
+[2025-07-14 08:39:59] [ERROR] [SYS]: listen EADDRINUSE: address already in use :::31234
+[2025-07-14 08:39:59] [ERROR] [SYS]: undefined
+[2025-07-14 08:39:59] [DEBUG] [AntiCrash]: Uncaught Exception/Catch
+[2025-07-14 08:39:59] [ERROR] [SYS]: listen EADDRINUSE: address already in use :::31234
+[2025-07-14 08:39:59] [ERROR] [SYS]: undefined
+[2025-07-14 08:39:59] [ERROR] [SYS]: undefined
+[2025-07-14 08:39:59] [INFO] [SYS]: [CommandHandler] ℹ️ La carga de grupos de subcomandos desde '/home/turbis/WebstormProjects/PancyBotCode/PancyBot/src/commands/Users/subcommandsgroup' debe implementarse.
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: ready
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: debug
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: error
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: ready
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: ready
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: warn
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: ready
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: guildDelete
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: guildBanAdd
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: guildCreate
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: interactionCreate
+[2025-07-14 08:39:59] [INFO] [SYS]: [EventHandler] ✅ Evento cargado: interactionCreate
+[2025-07-14 08:39:59] [INFO] [SYS]: [CommandHandler] ℹ️ La carga de grupos de subcomandos desde '/home/turbis/WebstormProjects/PancyBotCode/PancyBot/src/commands/Guilds/subcommandsgroup' debe implementarse.
+[2025-07-14 08:39:59] [INFO] [SYS]: [CommandHandler] ✅ Comandos cargados: 21
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Manager] Fetched Gateway Information
+	URL: wss://gateway.discord.gg
+	Recommended Shards: 1
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Manager] Session Limit Information
+	Total: 1000
+	Remaining: 997
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Shard 0] Connecting to wss://gateway.discord.gg?v=10&encoding=json
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Shard 0] Waiting for event hello for 60000ms
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Shard 0] Preparing first heartbeat of the connection with a jitter of 0.416683767559322; waiting 17188ms
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Shard 0] Waiting for identify throttle
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Shard 0] Identifying
+	shard id: 0
+	shard count: 1
+	intents: 643
+	compression: none
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Shard 0] Waiting for event ready for 15000ms
+[2025-07-14 08:39:59] [DEBUG] [SYS]: [WS => Shard 0] Shard received all its guilds. Marking as fully ready.

@@ -1,13 +1,15 @@
-import { WebhookClient, EmbedBuilder } from 'discord.js'
-import { version } from '../../../../../package.json'
-import { client } from '../../../index'
-import { ReportErrorOptions } from '../../../Types/Error'
+import {EmbedBuilder, WebhookClient} from 'discord.js'
+import {version} from '../../../../../package.json'
+import {client} from '../../../index'
+import {ReportErrorOptions} from '../../../Types/Error'
 
-const Webhook = new WebhookClient({ url: process.env.errorWebhook })
 
 export class ErrorHandler {
+    webhook: WebhookClient;
+
     constructor() {
         this.start()
+        this.webhook = new WebhookClient({ url: process.env.errorWebhook })
     }
 
     start() {
@@ -60,7 +62,7 @@ export class ErrorHandler {
         .setColor('Red')
         .setFooter({ text: `Pancybot v${version}` })
 
-        const message = await Webhook.send({
+        const message = await this.webhook.send({
             embeds: [
                 Embed
             ],

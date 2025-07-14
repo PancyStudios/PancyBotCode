@@ -1,6 +1,7 @@
 import winston from 'winston';
 import {Colors, EmbedBuilder, WebhookClient} from 'discord.js';
 import Transport from 'winston-transport';
+import {version} from '../../../../../package.json'
 import path from 'path';
 
 // --- Definición de Niveles y Colores ---
@@ -29,7 +30,7 @@ winston.addColors(logLevels.colors);
 
 // --- Transport Personalizado para Webhooks de Discord ---
 class DiscordWebhookTransport extends Transport {
-    private webhookClient: WebhookClient;
+    private webhookClient: WebhookClient | undefined;
     private levelColorMap: Record<string, number> = {
         critical: Colors.Red,
         error: Colors.Red,
@@ -47,7 +48,7 @@ class DiscordWebhookTransport extends Transport {
         }
     }
 
-    log(info, callback) {
+    log(info: { level: any; message: any; timestamp: any; prefix: any; stack: any; }, callback: () => void) {
         setImmediate(() => {
             this.emit('logged', info);
         });
@@ -62,8 +63,8 @@ class DiscordWebhookTransport extends Transport {
             .setColor(this.levelColorMap[level] || Colors.Default)
             .setTitle(`[${level.toUpperCase()}] ${prefix || 'SYS'}`)
             .setDescription(`\`\`\`${stack || message}\`\`\``)
-            .setFooter({ text: ``})
-            .setTimestamp(new Date(timestamp));
+            .setFooter({ text: `💫 Developed by PancyStudio | PancyBot ${version}`})
+            .setTimestamp();
 
         this.webhookClient.send({ embeds: [embed] }).catch(console.error);
 

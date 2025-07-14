@@ -1,0 +1,11 @@
+[2025-07-14 08:31:18] [ERROR] [SYS]: Cannot read properties of undefined (reading 'nodes')
+[2025-07-14 08:35:29] [ERROR] [SYS]: listen EADDRINUSE: address already in use :::31234
+[2025-07-14 08:35:29] [ERROR] [SYS]: undefined
+[2025-07-14 08:35:29] [ERROR] [SYS]: listen EADDRINUSE: address already in use :::31234
+[2025-07-14 08:35:29] [ERROR] [SYS]: undefined
+[2025-07-14 08:35:29] [ERROR] [SYS]: undefined
+[2025-07-14 08:35:29] [ERROR] [SYS]: getaddrinfo EAI_AGAIN discord.com
+[2025-07-14 08:35:29] [ERROR] [SYS]: undefined
+[2025-07-14 08:35:29] [ERROR] [SYS]: getaddrinfo EAI_AGAIN discord.com
+[2025-07-14 08:35:29] [ERROR] [SYS]: getaddrinfo EAI_AGAIN discord.com
+[2025-07-14 08:35:59] [ERROR] [SYS]: connect ECONNREFUSED 193.149.164.141:9290

@@ -7,8 +7,8 @@
   "license": "MIT",
   "privatebot": true,
   "scripts": {
-    "start": "ts-node .",
-    "dev": "ts-node-dev PancyBot/src/index.ts",
+    "start": "tsx PancyBot/src/index.ts",
+    "dev": "tsx watch PancyBot/src/index.ts",
     "serve": "ts-node PancyBot/src/Utils/Handlers/Web/index.ts"
   },
   "dependencies": {
@@ -46,6 +46,7 @@
     "@types/uglify-js": "3.17.5",
     "ts-node": "^10.9.2",
     "ts-node-dev": "2.0.0",
+    "tsx": "^4.20.3",
     "typescript": "5.4.5"
   }
 }

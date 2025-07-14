@@ -18,8 +18,7 @@
         "forceConsistentCasingInFileNames": true,
     },
     "include": [
-      "PancyBot/src", "enviroment.d.ts",
-      "PancyBot/src/commands/Guilds/commands/test"
+      "PancyBot/src/**/*",
     ],
     "exclude": ["node_modules",],
 }

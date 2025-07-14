@@ -1,11 +1,11 @@
-import { config } from 'dotenv'
-config()
+import 'dotenv/config';
 import './Utils/Handlers/ErrorHandler/LogSystem'
-import { Database } from './Database'
-import { ExtendedClient } from './Structure/Client'
-import { PancyBotUtils } from './Utils/Functions/BaseUtilsBot'
-import { ErrorHandler } from './Utils/Handlers/ErrorHandler/ErrorManageSystem'
-import { app } from './Utils/Handlers/Web'
+import {Database} from './Database'
+import {ExtendedClient} from './Structure/Client'
+import {PancyBotUtils} from './Utils/Functions/BaseUtilsBot'
+import {ErrorHandler} from './Utils/Handlers/ErrorHandler/ErrorManageSystem'
+import {app} from './Utils/Handlers/Web'
+
 export const errorHandler = new ErrorHandler()
 export const client = new ExtendedClient()
 export const utils = new PancyBotUtils()

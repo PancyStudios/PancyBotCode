@@ -1,6 +1,8 @@
 import {ClientEvents} from "discord.js";
 import {ExtendedClient} from "./Client";
 import {Event} from "./Events"; // Asumiendo que tienes una clase base 'Event'
+import fs from 'fs'
+import path from 'path'
 import {glob} from "glob";
 
 
@@ -16,10 +18,17 @@ export class EventHandler {
     }
 
     public async loadEvents() {
-        console.log("[EventHandler] ✅ Iniciando carga de eventos...");
-        const eventFiles = await glob(
-            `${process.cwd()}/PancyBot/src/Events/*/*{.ts,.js}`
-        );
+        console.system("Iniciando carga de eventos...", "EventHandler");
+        const eventsPath = path.join(process.cwd(), 'PancyBot', 'src', 'Events');
+
+        if (!fs.existsSync(eventsPath)) {
+            return console.warn(`El directorio de eventos no existe, omitiendo carga: ${eventsPath}`, "EventHandler");
+        }
+
+        const eventFiles = await glob(`${eventsPath}/*/*{.ts,.js}`).catch(err => {
+            console.error(`Error al buscar eventos: ${err.message}`, 'EventHandler');
+            return []; // Retorna un array vacío para prevenir el crash
+        });
 
         for (const filePath of eventFiles) {
             try {
@@ -27,9 +36,9 @@ export class EventHandler {
                 if (!event || !event.event) continue;
 
                 this.client.on(event.event, event.run);
-                console.log(`[EventHandler] ✅ Evento cargado: ${event.event}`);
+                console.debug(`Evento cargado: ${event.event}`, 'EventHandler');
             } catch (error) {
-                console.error(`[EventHandler] ❌ Error al cargar evento en ${filePath}:`, error);
+                console.error(`Error al cargar el evento en ${filePath}: ${error.message}`, 'EventHandler');
             }
         }
     }

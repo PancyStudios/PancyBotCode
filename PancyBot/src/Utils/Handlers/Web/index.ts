@@ -1,107 +1,93 @@
 import express, {NextFunction, Request, Response} from "express";
 import rateLimit from "express-rate-limit";
 import {json, urlencoded} from 'body-parser';
-import {RouterVotos} from '../../../Events/Client/Top.gg'
-import {ApiRouter} from "./Routes/Api";
-import {EmbedBuilder, WebhookClient} from "discord.js";
-import hastebin from "hastebin-gen";
-import {client} from "../../../index";
-import {PublicView} from "./Routes/Page";
 import path from "path";
 
-export const app = express()
+import {RouterVotos} from '../../../Events/Client/Top.gg';
+import {ApiRouter} from "./Routes/Api";
+import {PublicView} from "./Routes/Page";
 
-const limiter = rateLimit({
-    windowMs:  60 * 1000,
-    max: 100,
-    message: {
-        error: 'Demasiadas solicitudes, por favor intente de nuevo más tarde.'
-    },
-    statusCode: 429,
-    headers: true, 
-});
+export const app = express();
+const PORT = process.env.PORT || 3000;
 
-function logsServer(req: Request, _: Response, next: NextFunction) {
-    try {
-        const Webhook = new WebhookClient({ url: process.env.logsWebServerWebhook })
-        if(req.method === 'GET') {
-            const Embed = new EmbedBuilder()
-            .setTitle(`Logs server - Nueva solicitud GET`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
-            .setColor('Green')
-            .setTimestamp()
-            .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
-
-            Webhook.send({ embeds: [Embed] })
-        } else if(req.method === 'POST') {
-            const bodyLength = JSON.stringify(req.body).length;
-            if(bodyLength > 3500) {
-                hastebin(JSON.stringify(req.body), { extension: 'json' }).then((url) => {
-                    console.log(`El cuerpo de la solicitud es demasiado largo, se ha subido a hastebin: ${url}`)
-                    
-                    const Embed = new EmbedBuilder()
-                    .setTitle(`Logs server - Nueva solicitud POST`)
-                    .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${url}`)
-                    .setColor('Green')
-                    .setTimestamp()
-                    .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
-
-                    Webhook.send({ embeds: [Embed] })
-                })
-            } else {
-                const Embed = new EmbedBuilder()
-                .setTitle(`Logs server - Nueva solicitud POST`)
-                .setDescription(`> **IP:** ${req.ip}\n> **Route:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
-                .setColor('Green')
-                .setTimestamp()
-                .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
-
-                Webhook.send({ embeds: [Embed] })
-            }
-        } else if(req.method === 'PUT') {
-            const Embed = new EmbedBuilder()
-            .setTitle(`Logs server - Nueva solicitud PUT`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
-            .setColor('Green')
-            .setTimestamp()
-            .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
-
-            Webhook.send({ embeds: [Embed] })
-        } else if(req.method === 'DELETE') {
-            const Embed = new EmbedBuilder()
-            .setTitle(`Logs server - Nueva solicitud DELETE`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
-            .setColor('Green')
-            .setTimestamp()
-            .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
-
-            Webhook.send({ embeds: [Embed] })
-        } else if(req.method === 'PATCH') {
-            const Embed = new EmbedBuilder()
-            .setTitle(`Logs server - Nueva solicitud PATCH`)
-            .setDescription(`> **IP:** ${req.ip}\n> **URL:** ${req.url}\n> **Query:** ${JSON.stringify(req.query)}\n> **Headers:** ${JSON.stringify(req.headers)}\n> **Body:** ${JSON.stringify(req.body)}`)
-            .setColor('Green')
-            .setTimestamp()
-            .setFooter({ text: `${client.isReady() ? client.user.displayName : 'PancyWeb (NOT DJS CLIENT)'}` })
-
-            Webhook.send({ embeds: [Embed] })
-        }
-
-        next()
-    } catch (error) {
-        console.error(error)
-        next()
-    }
-}
-
+// =================================================================
+// 1. CONFIGURACIÓN INICIAL
+// =================================================================
 app.set('trust proxy', 2);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'Views'));
+
+// =================================================================
+// 2. MIDDLEWARES GENERALES
+// =================================================================
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use('/votos', RouterVotos);
+
+// Servir archivos estáticos bajo el prefijo /public
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Tu middleware de logs
+function logsServer(req: Request, _: Response, next: NextFunction) {
+    console.log(`[LOG] Nueva solicitud: ${req.method} ${req.url}`);
+    next();
+}
 app.use(logsServer);
+
+// Tu rate limiter
+const limiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 100,
+    message: { error: 'Demasiadas solicitudes, por favor intente de nuevo más tarde.' },
+    statusCode: 429,
+    headers: true,
+});
 app.use(limiter);
-app.use('/', PublicView);
+
+
+// =================================================================
+// 3. RUTAS DE LA APLICACIÓN
+// =================================================================
+app.use('/votos', RouterVotos);
 app.use('/api', ApiRouter);
-app.all('*', (_, res) => {
-    res.sendFile(path.join(__dirname, 'Views', '404.html'))
-})
+app.use('/', PublicView);
+
+// Ruta de prueba para errores 5xx
+app.get('/error-test', (req, res, next) => {
+    const err = new Error('Fallo en el motor de hiperimpulso. ¡Revisar inyectores!');
+    // Pasamos el error al siguiente middleware (el de manejo de errores)
+    next(err);
+});
+
+
+// =================================================================
+// 4. MANEJO DE ERRORES (¡MUY IMPORTANTE EL ORDEN!)
+// =================================================================
+
+// Middleware de manejo de errores 5xx
+// Se ejecuta solo si una ruta anterior llama a next(err)
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack); // Loguea el error completo para depuración
+
+    const statusCode = err.status || 500;
+    const isDevelopment = process.env.NODE_ENV === 'development';
+
+    res.status(statusCode).render('5xx', {
+        error: {
+            status: statusCode,
+            message: isDevelopment ? err.message : "Nuestros sistemas encontraron una anomalía.",
+            stack: isDevelopment ? err.stack : null
+        }
+    });
+});
+
+// Middleware de manejo de errores 404 (Atrapa todo)
+// Se ejecuta solo si ninguna ruta anterior coincidió
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, 'Views', '404.html'));
+});
+
+
+// --- Iniciar el servidor ---
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
+});

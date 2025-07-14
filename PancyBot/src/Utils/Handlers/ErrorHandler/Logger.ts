@@ -57,7 +57,7 @@ class DiscordWebhookTransport extends Transport {
             return callback();
         }
 
-        const { level, message, timestamp, prefix, stack } = info;
+        const { level, message, prefix, stack } = info;
 
         const embed = new EmbedBuilder()
             .setColor(this.levelColorMap[level] || Colors.Default)
@@ -107,11 +107,15 @@ const logger = winston.createLogger({
             filename: path.join(process.cwd(), 'logs', 'error.log'),
             level: 'error',
             format: fileFormat,
+            maxsize: 524288000, // 500 MB en bytes (500 * 1024 * 1024)
+            maxFiles: 5,       // Conserva los últimos 5 archivos de log
         }),
         // Transport para el archivo combinado
         new winston.transports.File({
             filename: path.join(process.cwd(), 'logs', 'combined.log'),
             format: fileFormat,
+            maxsize: 524288000, // 500 MB en bytes (500 * 1024 * 1024)
+            maxFiles: 5,       // Conserva los últimos 5 archivos de log
         }),
         // Transport para el webhook de ERRORES
         new DiscordWebhookTransport({

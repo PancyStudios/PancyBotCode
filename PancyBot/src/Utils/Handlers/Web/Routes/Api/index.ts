@@ -25,8 +25,5 @@ ApiRouter.get("/bot/stats", (_, res) => {
         res.status(503).json({ error: 'Bot is not ready' })
     }
 })
-ApiRouter.all("/*", (_, res) => {
-    res.status(503).json({ error: 'En desarrollo' })
-})
 
 console.debug('ApiRouter is loading', 'WEB')

@@ -4,4 +4,4 @@ package-lock.json
 .idea
 *.gz
 *.tar.gz
-
+.npm

@@ -31,7 +31,7 @@ export class CommandHandler {
 
     public async loadCommands() {
         console.log("[CommandHandler] ✅ Iniciando carga de comandos...");
-        const commandsPath = path.join(process.cwd(), 'PancyBot', 'src', 'commands');
+        const commandsPath = path.join(process.cwd(), 'PancyBot', 'src', 'Guilds');
 
         // Estructura simplificada para manejar los tipos de comandos
         const commandTypes = ['Users', 'Guilds'];

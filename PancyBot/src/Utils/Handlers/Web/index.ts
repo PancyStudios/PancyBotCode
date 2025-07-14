@@ -83,11 +83,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 // Middleware de manejo de errores 404 (Atrapa todo)
 // Se ejecuta solo si ninguna ruta anterior coincidió
 app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'Views', '404.html'));
+    res.status(404).sendFile(path.join(__dirname, 'Routes', 'Page', 'Views', '404.html'));
 });
 
-
-// --- Iniciar el servidor ---
-app.listen(PORT, () => {
-    console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
-});

@@ -1,10 +1,8 @@
 import {ClientEvents} from "discord.js";
 import {ExtendedClient} from "./Client";
 import {Event} from "./Events"; // Asumiendo que tienes una clase base 'Event'
-import glob from "glob";
-import {promisify} from "util";
+import {glob} from "glob";
 
-const globPromise = promisify(glob);
 
 export class EventHandler {
     public client: ExtendedClient;
@@ -19,7 +17,7 @@ export class EventHandler {
 
     public async loadEvents() {
         console.log("[EventHandler] ✅ Iniciando carga de eventos...");
-        const eventFiles = await globPromise(
+        const eventFiles = await glob(
             `${process.cwd()}/PancyBot/src/Events/*/*{.ts,.js}`
         );
 

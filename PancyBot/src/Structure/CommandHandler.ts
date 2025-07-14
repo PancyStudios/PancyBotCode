@@ -9,11 +9,8 @@
 import {ApplicationCommandDataResolvable, ApplicationCommandOptionType, Collection} from "discord.js";
 import {ExtendedClient} from "./Client";
 import {CommandType} from "../Types/CommandSlash";
-import glob from "glob";
+import {glob} from "glob";
 import path from "path";
-import {promisify} from "util";
-
-const globPromise = promisify(glob);
 
 export class CommandHandler {
     public client: ExtendedClient;
@@ -47,7 +44,7 @@ export class CommandHandler {
     }
 
     private async _loadSimpleCommands(dir: string) {
-        const commandFiles = await globPromise(`${dir}/*/*{.js,.ts}`);
+        const commandFiles = await glob(`${dir}/*/*{.js,.ts}`);
         for (const filePath of commandFiles) {
             const command = await this.importFile(filePath);
             if (!command?.name) continue;
@@ -57,10 +54,10 @@ export class CommandHandler {
     }
 
     private async _loadSubcommands(dir: string) {
-        const categoryDirs = await globPromise(`${dir}/*`);
+        const categoryDirs = await glob(`${dir}/*`);
         for (const categoryPath of categoryDirs) {
             const categoryName = path.basename(categoryPath);
-            const commandFiles = await globPromise(`${categoryPath}/*{.js,.ts}`);
+            const commandFiles = await glob(`${categoryPath}/*{.js,.ts}`);
 
             const categoryCommand = {
                 name: categoryName,

@@ -1,6 +1,7 @@
-import { Router } from "express";
-import { client, database } from "../../../../../index";
-import { version } from "../../../../../../../package.json";
+import {Router} from "express";
+import {client, database} from "../../../../../index";
+import {version} from "../../../../../../../package.json";
+
 export var ApiRouter = Router();
 
 ApiRouter.get("/bot/stats", (_, res) => {
@@ -25,5 +26,10 @@ ApiRouter.get("/bot/stats", (_, res) => {
         res.status(503).json({ error: 'Bot is not ready' })
     }
 })
+
+ApiRouter.use((_req, res, _) => {
+    res.status(503).json({ error: 'En desarrollo' })
+});
+
 
 console.debug('ApiRouter is loading', 'WEB')

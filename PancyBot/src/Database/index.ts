@@ -1,14 +1,15 @@
-import { connect, Model, Document, Types, connection } from 'mongoose';
-import { premiumGuildModel, premiumModel } from './Schemas/premium';
-import { warns, WarnsInterface } from './Schemas/Warns';
-import { Premium, PremiumGuild } from './Type/Premium';
-import { TempbanModel } from './Schemas/Tempbans';
-import { GuildDataFirst } from './Type/Security';
-import { TempbanOptions } from './Type/Tempan';
-import { Guild } from './Schemas/BotDataBase';
-import { Collection } from 'discord.js';
-import { EmbedDb } from './Type/Embeds';
-import { Embeds, EmbedsSchema } from './Schemas/Embeds';
+import {connect, connection, Document, Model, Types} from 'mongoose';
+import {premiumGuildModel, premiumModel} from './Schemas/premium';
+import {warns, WarnsInterface} from './Schemas/Warns';
+import {Premium, PremiumGuild} from './Type/Premium';
+import {TempbanModel} from './Schemas/Tempbans';
+import {GuildDataFirst} from './Type/Security';
+import {TempbanOptions} from './Type/Tempan';
+import {Guild} from './Schemas/BotDataBase';
+import {Collection} from 'discord.js';
+import {EmbedDb} from './Type/Embeds';
+import {Embeds} from './Schemas/Embeds';
+
 export class Database {
     warns: Model<WarnsInterface, {}, {}, {}, Document<unknown, {}, WarnsInterface> & WarnsInterface & {
         _id: Types.ObjectId;
@@ -106,5 +107,10 @@ export class Database {
             console.debug('Reconectando a la base de datos', 'MongoDB')
             await this.connect()
         }
+    }
+
+    public async disconnect() {
+        await connection.destroy();
+        console.warn('La base de datos ha sido desconectada', 'MongoDB')
     }
 }

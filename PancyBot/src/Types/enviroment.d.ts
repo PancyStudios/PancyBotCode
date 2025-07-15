@@ -25,6 +25,11 @@ declare global {
             craiyonToken: string;
             logsWebServerWebhook: string;
             authScreenshots: string;
+            MQTT_Host: string;
+            MQTT_Port:  string;
+            MQTT_User: string;
+            MQTT_Password: string;
+
         }
     }
 }

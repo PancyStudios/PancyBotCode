@@ -25,15 +25,6 @@ export class MqttCommunicator {
     private responseHandlers: Map<string, (response: MqttResponse) => void> = new Map();
 
     constructor(clientId: string) {
-        const mqttOptions = {
-            host: process.env.MQTT_HOST,
-            port: parseInt(process.env.MQTT_PORT || '1883'),
-            protocol: process.env.MQTT_PROTOCOL === 'mqtts' ? 'mqtts' : 'mqtt',
-            username: process.env.MQTT_USERNAME,
-            password: process.env.MQTT_PASSWORD,
-            clientId: `${clientId}_${randomUUID()}`, // Asegura un ID de cliente único
-        };
-
         this.client = mqtt.connect({
             host: process.env.MQTT_Host,
             port: 8883,

@@ -36,7 +36,7 @@ export class MqttCommunicator {
 
         this.client = mqtt.connect({
             host: process.env.MQTT_Host,
-            port: parseInt(process.env.MQTT_Port || '1883'),
+            port: 8883,
             username: process.env.enviroment == 'prod' ? 'PancyBot_Stable' : 'PancyBot_Canary',
             password: process.env.MQTT_Password,
             clientId: `${clientId}_${randomUUID()}`,
@@ -47,7 +47,8 @@ export class MqttCommunicator {
         });
 
         this.client.on('error', (error) => {
-            console.error(`Error de conexión MQTT: ${error.message}`, 'MQTT');
+            console.error(`Error de conexión MQTT:`, 'MQTT');
+            console.error(error, 'MQTT');
         });
     }
 

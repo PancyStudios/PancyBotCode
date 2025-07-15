@@ -39,6 +39,7 @@ export class MqttCommunicator {
             port: 8883,
             username: process.env.enviroment == 'prod' ? 'PancyBot_Stable' : 'PancyBot_Canary',
             password: process.env.MQTT_Password,
+            clientId: `${clientId}_${randomUUID()}`,
             protocol: 'mqtts',
         });
 

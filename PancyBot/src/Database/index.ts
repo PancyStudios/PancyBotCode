@@ -53,9 +53,7 @@ export class Database {
     private async connect() {
         try {   
             console.log('Conectando a la base de datos', 'DB')
-            await connect(process.env.mongodbUrl, { 
-                user: process.env.mongodbUser,
-                pass: process.env.mongodbPass,
+            await connect(process.env.mongodbUrl, {
                 tls: false,
                 dbName: 'PancyBot',
             })

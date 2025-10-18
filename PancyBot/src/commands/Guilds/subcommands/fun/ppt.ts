@@ -1,9 +1,9 @@
-import { EmbedBuilder, Colors } from "discord.js";
-import { Command } from "../../../../Structure/CommandSlash";
+import {EmbedBuilder} from "discord.js";
+import {Command} from "../../../../Structure/CommandSlash";
 
 export default new Command({
   name: `ppt`,
-  category: "diversion",
+  category: "fun",
   description: `juega piedra papel o tijeras`,
   options: [
     {

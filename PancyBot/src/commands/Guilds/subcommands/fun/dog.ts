@@ -1,12 +1,13 @@
-import { Command } from "../../../../Structure/CommandSlash";
-import { EmbedBuilder, Colors } from "discord.js";
+import {Command} from "../../../../Structure/CommandSlash";
+import {EmbedBuilder} from "discord.js";
 import nekos from "nekos.life";
+
 const neko = new nekos();
 
 export default new Command({
     name: "dog",
     description: "Muestra una imagen de un perro",
-    category: "diversion",
+    category: "fun",
     botPermissions: ["EmbedLinks"],
     isDev: false,
 
@@ -23,6 +24,6 @@ export default new Command({
             .setImage(imagen.url)
             .setFooter({ text: interaction.user.displayName, iconURL: interaction.user.displayAvatarURL()});
 
-        interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed] });
     }
 })

@@ -30,12 +30,10 @@ export default new Event('ready', async (_) => {
     const shutdown = async (signal: string) => {
         console.warn(`Señal de apagado recibida: ${signal}. Cerrando conexiones...`, 'SYS');
 
-        // Cierra la conexión MQTT de forma segura
         await mqttBot.destroy();
 
         await database.disconnect();
 
-        // Cierra la conexión de Discord
         await client.destroy();
 
         console.system('Todas las conexiones cerradas. El proceso terminará.', 'SYS');

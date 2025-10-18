@@ -1,11 +1,11 @@
-import { Command } from "../../../../Structure/CommandSlash";
-import { EmbedBuilder, Colors } from "discord.js";
+import {Command} from "../../../../Structure/CommandSlash";
+import {Colors, EmbedBuilder} from "discord.js";
 import figlet from "figlet";
 
 export default new Command({
     name: "ascii",
     description: "Muestra un texto ASCII",
-    category: "diversion",
+    category: "fun",
     isDev: false,
     options: [{
         name: "texto",
@@ -24,6 +24,6 @@ export default new Command({
             .setDescription(ascii)
             .setFooter({ text: interaction.user.displayName, iconURL: interaction.user.displayAvatarURL() });
 
-        interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed] });
     }
 })

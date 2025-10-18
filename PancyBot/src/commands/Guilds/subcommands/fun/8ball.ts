@@ -1,12 +1,13 @@
-import { Command } from '../../../../Structure/CommandSlash'
-import { utils } from '../../../../index'
-import { EmbedBuilder, Colors } from 'discord.js'
+import {Command} from '../../../../Structure/CommandSlash'
+import {utils} from '../../../../index'
+import {Colors, EmbedBuilder} from 'discord.js'
+
 const prefix = 'pan!'
 
 export default new Command({
     name: '8ball',
     description: "Preguntale algo al bot",
-    category: "diversion",
+    category: "fun",
     options: [
         {
             name: 'pregunta',
@@ -39,6 +40,6 @@ export default new Command({
         .setTimestamp()
         .setColor(Colors.Blurple)
 
-        interaction.reply({ embeds: [EmbedQuest] })
+        await interaction.reply({ embeds: [EmbedQuest] })
     }
 })

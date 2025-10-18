@@ -1,4 +1,5 @@
 import {
+    AutocompleteInteraction,
     ChatInputApplicationCommandData,
     ChatInputCommandInteraction,
     CommandInteractionOptionResolver,
@@ -26,7 +27,13 @@ interface RunOptions {
     args: CommandInteractionOptionResolver;
 }
 
+interface AutocompleteOptions {
+    client: ExtendedClient;
+    interaction: AutocompleteInteraction;
+}
+
 type RunFunction = (options: RunOptions) => any;
+type AutocompleteFunction = (options: AutocompleteOptions) => void;
 
 export type CommandType = {
     userPermissions?: PermissionResolvable[];
@@ -35,6 +42,7 @@ export type CommandType = {
     inVoiceChannel?: boolean;
     category: string;
     run: RunFunction;
+    auto?: AutocompleteFunction;
     database?: boolean;
 
 } & ChatInputApplicationCommandData;

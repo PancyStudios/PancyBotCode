@@ -24,8 +24,6 @@ export default new Command({
 
     run: async ({interaction, args}) => {
         const user = args.getUser("usuario", true);
-        const guild = interaction.guild!;
-        const botMember = guild.members.me!;
 
         const RoleSelect = new RoleSelectMenuBuilder({
             customId: `addrole_${user.id}`,

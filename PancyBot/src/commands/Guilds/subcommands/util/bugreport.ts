@@ -1,6 +1,14 @@
-import { Command } from "../../../../Structure/CommandSlash";
-import { EmbedBuilder, WebhookClient, ButtonBuilder, ButtonStyle, ActionRowBuilder, ApplicationCommandOptionType, MessageActionRowComponentBuilder } from "discord.js";
-import { version } from "../../../../../../package.json";
+import {Command} from "../../../../Structure/CommandSlash";
+import {
+    ActionRowBuilder,
+    ApplicationCommandOptionType,
+    ButtonBuilder,
+    ButtonStyle,
+    EmbedBuilder,
+    MessageActionRowComponentBuilder,
+    WebhookClient
+} from "discord.js";
+import {version} from "../../../../../../package.json";
 
 const Webhook = new WebhookClient({ url: process.env.bugsWebhook })
 

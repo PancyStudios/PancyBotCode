@@ -27,7 +27,7 @@ export default new Command({
         const guild = interaction.guild!;
         const botMember = guild.members.me!;
         const manageableRoles = guild.roles.cache
-            .filter(r => r.id !== guild.id && !r.managed && botMember.roles.highest.position > r.position && interaction.member.roles.highest.position > r.position)
+            .filter(r => r.id !== guild.id && !r.managed && botMember.roles.highest.position > r.position)
             .sort((a, b) => b.position - a.position)
             .map(r => ({ label: r.name.slice(0, 100), value: r.id, description: `Pos ${r.position}` }))
             .slice(0, 25);

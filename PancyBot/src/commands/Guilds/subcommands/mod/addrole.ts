@@ -26,22 +26,13 @@ export default new Command({
         const user = args.getUser("usuario", true);
         const guild = interaction.guild!;
         const botMember = guild.members.me!;
-        const manageableRoles = guild.roles.cache
-            .filter(r => r.id !== guild.id && !r.managed && botMember.roles.highest.position > r.position)
-            .sort((a, b) => b.position - a.position)
-            .map(r => ({ label: r.name.slice(0, 100), value: r.id, description: `Pos ${r.position}` }))
-            .slice(0, 25);
-
-        if (manageableRoles.length === 0) {
-            return interaction.reply({ content: 'No hay roles que pueda gestionar.', flags: ['Ephemeral'] });
-        }
 
         const RoleSelect = new RoleSelectMenuBuilder({
             customId: `addrole_${user.id}`,
             placeholder: 'Selecciona los roles a añadir',
             minValues: 1,
+            maxValues: 25
         })
-            .setMaxValues(Math.min(25, manageableRoles.length))
 
         const ActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(RoleSelect);
 

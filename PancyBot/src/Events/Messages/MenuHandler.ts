@@ -60,9 +60,11 @@ export default new Event("interactionCreate", async (interaction: Interaction) =
         if (interaction.customId.startsWith('role_assign_menu_')) {
             await interaction.update({ content: '⚙️ Recibiendo solicitud...', embeds: [], components: [] });
 
-            const [_, __, type, targetId, executorId] = interaction.customId.split('_');
+            const [_, __, ___, type, targetId, executorId] = interaction.customId.split('_');
             const executor = await interaction.guild.members.fetch(executorId);
 
+            console.debug(interaction.customId);
+            console.debug(type);
             let targetMembers: Collection<string, GuildMember>;
             try {
                 if (type === 'self') targetMembers = new Collection([[executorId, executor]]);
@@ -102,7 +104,7 @@ export default new Event("interactionCreate", async (interaction: Interaction) =
             await interaction.editReply(`⚙️ **Preparando ${targetMembers.size} tareas...**\n*Progreso: 0 / ${targetMembers.size}*`);
 
             // Llenamos la cola con todas las tareas
-            for (const [memberId, member] of targetMembers) {
+            for (const [_memberId, member] of targetMembers) {
                 if (member.id === interaction.guild.ownerId || (member.roles.highest.position >= executor.roles.highest.position && member.id !== executor.id)) {
                     membersProcessed++;
                     continue;

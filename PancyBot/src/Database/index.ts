@@ -59,8 +59,9 @@ export class Database {
 
         // Listeners para eventos de desconexión
         connection.on('disconnected', () => this.handleDisconnection());
-        connection.on('error', (error) => {
+        connection.on('error', (err) => {
             console.error('Error en la conexión con MongoDB:', 'DB');
+            console.error(err);
             this.handleDisconnection();
         });
     }

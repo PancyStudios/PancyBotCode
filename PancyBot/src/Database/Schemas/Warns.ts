@@ -1,19 +1,10 @@
+import {model, Schema, SchemaTypes} from "mongoose";
+import {WarnsDb} from "../Type/Warns";
 
-import { Schema, SchemaTypes, model } from "mongoose";
-import { Warns } from "../Type/Warns";
+export const warnsSchema = new Schema({
+    guildId: { type: SchemaTypes.String, required: true },
+    userId: { type: SchemaTypes.String, required: true },
+    warns: { type: SchemaTypes.Array, required: true }
+})
 
-export interface WarnsInterface {
-    guildId: string;
-    userId: string;
-    warns: Array<Warns>;
-    subCount: number;
-}
-
-const warnsSchema = new Schema({
-    guildId: SchemaTypes.String,
-    userId: SchemaTypes.String,
-    warns: SchemaTypes.Array,
-    subCount: SchemaTypes.Number
-});
-
-export const warns = model<WarnsInterface>('Warns', warnsSchema);
+export const warns = model<WarnsDb>('Warns', warnsSchema);

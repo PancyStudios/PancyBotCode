@@ -11,8 +11,8 @@ import {
 import moment from "moment";
 
 export default new Command({
-    name: "addrole",
-    description: "Asigna roles a ti mismo, a un usuario o a todos los miembros con un rol específico.",
+    name: "assing-role",
+    description: "Asigna o remueve roles a ti mismo, a un usuario o a todos los miembros con un rol específico.",
     category: "mod",
     options: [
         {
@@ -52,7 +52,8 @@ export default new Command({
             targetDescription = `al usuario **${userTarget.user.tag}**`;
             targetId = `user_${userTarget.id}`;
         } else if (roleTarget) {
-            const memberCount = roleTarget.members.size;
+            const role = await interaction.guild.roles.fetch(roleTarget.id);
+            const memberCount = role.members.size;
             // Usamos nuestra pausa proactiva (250ms) para el cálculo
             const estimatedMilliseconds = memberCount * 250;
             const duration = moment.duration(estimatedMilliseconds).format("h [horas], m [minutos] y s [segundos]");
@@ -75,7 +76,7 @@ export default new Command({
         if (assignableRoles.size === 0) {
             return interaction.reply({
                 content: '🚫 No hay roles disponibles que puedas asignar según tu jerarquía.',
-                ephemeral: true
+                flags: ['Ephemeral']
             });
         }
 
@@ -116,7 +117,7 @@ export default new Command({
         await interaction.reply({
             embeds: [embed],
             components: [row],
-            ephemeral: true
+            flags: ['Ephemeral']
         });
     }
 })

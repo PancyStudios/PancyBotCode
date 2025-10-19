@@ -1,11 +1,12 @@
 
-export type Warns = { 
-    moderator: String,
-    reason: String,
+export type Warns = {
+    reason: string
+    moderator: string
+    id: string
 }
 
-export interface WarnsSchema {
-    content: Warns[]
-    guildid: String;
-    user: String
+export type WarnsDb = {
+    guildId: string
+    userId: string
+    warns: Warns[]
 }

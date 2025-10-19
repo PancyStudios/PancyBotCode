@@ -1,8 +1,9 @@
-import { AuditLogEvent, EmbedBuilder, TextChannel } from "discord.js";
-import { Event } from "../../Structure/Events";
-import { database } from "../../index";
+import {AuditLogEvent, EmbedBuilder, TextChannel} from "discord.js";
+import {Event} from "../../Structure/Events";
+import {database} from "../../index";
+
 export default new Event('guildBanAdd', async (g) => {
-    const requestLog = await database.guildDb.findOne({ id: g.guild.id})
+    const requestLog = await database.guilds.get({ id: g.guild.id})
     if(!requestLog.configuration.logs.includes(AuditLogEvent.MemberBanAdd)) return;
     if(!requestLog.configuration.logsChannel) return;
     g.guild.fetchAuditLogs({ type: AuditLogEvent.MemberBanAdd}).then(async (log) => {

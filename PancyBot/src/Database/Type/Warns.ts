@@ -2,7 +2,7 @@
 export type Warns = {
     reason: string
     moderator: string
-    id: string
+    id: string, timestamp: number
 }
 
 export type WarnsDb = {

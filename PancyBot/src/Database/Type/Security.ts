@@ -1,4 +1,4 @@
-import { AuditLogEvent } from "discord.js"
+import {AuditLogEvent} from "discord.js"
 
 export interface GuildDataFirst {
     // SERVER ID
@@ -105,6 +105,24 @@ export interface GuildDataFirst {
 
     // MODERACIÓN
     moderation: {
+        logs: {
+            warns: {
+                enable: boolean,
+                channel: string
+            }
+            mutes: {
+                enable: boolean,
+                channel: string
+            }
+            kicks: {
+                enable: boolean,
+                channel: string
+            }
+            bans: {
+                enable: boolean,
+                channel: string
+            }
+        }
         dataModeration: {
             muterole: string
             forceReasons: Array<any>

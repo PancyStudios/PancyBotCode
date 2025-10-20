@@ -28,6 +28,7 @@ export default new Command({
                 headers: {
                     Authorization: `Bearer ${process.env.authScreenshots}`,
                     Accept: 'image/png',
+                    'X-From-ID': interaction.user.id
                 },
                 responseType: 'arraybuffer',
                 maxRedirects: 2,

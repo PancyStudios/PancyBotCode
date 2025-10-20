@@ -22,7 +22,7 @@ export default new Command({
         await interaction.deferReply();
 
         try {
-            const { data } = await axios.post<Buffer>('https://screenshot.pancy.miau.media/api/private/screenshot', {
+            const { data, status } = await axios.post<Buffer>('https://screenshot.pancy.miau.media/api/private/screenshot', {
                 url
             }, {
                 headers: {
@@ -36,6 +36,7 @@ export default new Command({
                     return status >= 200 && status < 520; // Accept only 2xx status code
                 }
             })
+            console.debug(data + ' ' + status, 'ScreenShots')
             const image = new AttachmentBuilder(data, { name: `screenshot.png` })
             const embed = new EmbedBuilder()
                 .setTitle("Captura de pantalla")

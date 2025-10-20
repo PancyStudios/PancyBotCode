@@ -22,7 +22,7 @@ export default new Command({
         await interaction.deferReply();
 
         try {
-            const { data } = await axios.post<Buffer>('https://screenshot.pancy.miau.media/screenshot', {
+            const { data } = await axios.post<Buffer>('https://screenshot.pancy.miau.media/api/private/screenshot', {
                 url
             }, {
                 headers: {

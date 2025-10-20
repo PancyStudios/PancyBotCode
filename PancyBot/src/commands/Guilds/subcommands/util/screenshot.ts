@@ -1,5 +1,5 @@
-import { Command } from "../../../../Structure/CommandSlash";
-import {ApplicationCommandOptionType, AttachmentBuilder, channelLink, ChannelType, EmbedBuilder} from "discord.js";
+import {Command} from "../../../../Structure/CommandSlash";
+import {ApplicationCommandOptionType, AttachmentBuilder, ChannelType, EmbedBuilder} from "discord.js";
 import axios from "axios";
 
 export default new Command({
@@ -22,7 +22,7 @@ export default new Command({
         await interaction.deferReply();
 
         try {
-            const { data } = await axios.post<Buffer>('https://screenshot.pancy.xyz', {
+            const { data } = await axios.post<Buffer>('https://screenshot.pancy.miau.media', {
                 url
             }, {
                 headers: {

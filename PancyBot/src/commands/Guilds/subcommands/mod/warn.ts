@@ -1,8 +1,8 @@
 import {Command} from "../../../../Structure/CommandSlash";
 import {database, errorHandler} from "../../../../index";
+import {Warns} from "../../../../Database/Type/Warns";
 import {EmbedBuilder, GuildMember} from "discord.js";
 import {randomUUID} from "crypto";
-import {Warns} from "../../../../Database/Type/Warns";
 
 export default new Command({
     name: "warn",
@@ -54,7 +54,7 @@ export default new Command({
         try {
             const warnDb = await warns.get({ guildId: guildId, userId: userWarn.id });
             const newWarn: Warns = {
-                reason: reasonArg,
+                reason: reason,
                 moderator: interaction.user.id,
                 id: shortId,
                 timestamp: Date.now() / 1000,

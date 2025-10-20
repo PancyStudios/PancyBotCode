@@ -22,11 +22,11 @@ export default new Command({
         await interaction.deferReply();
 
         try {
-            const { data } = await axios.post<Buffer>('https://screenshot.pancy.miau.media', {
+            const { data } = await axios.post<Buffer>('https://screenshot.pancy.miau.media/screenshot', {
                 url
             }, {
                 headers: {
-                    Authorization: `Bearer ${process.env.screenshotToken}`,
+                    Authorization: `Bearer ${process.env.authScreenshots}`,
                     Accept: 'image/png',
                 },
                 responseType: 'arraybuffer',

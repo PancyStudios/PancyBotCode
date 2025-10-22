@@ -1,6 +1,7 @@
 import express, {NextFunction, Request, Response} from "express";
-import rateLimit from "express-rate-limit";
+import {EmbedBuilder, WebhookClient} from "discord.js";
 import {json, urlencoded} from 'body-parser';
+import rateLimit from "express-rate-limit";
 import path from "path";
 
 import {RouterVotos} from '../../../Events/Client/Top.gg';
@@ -9,11 +10,12 @@ import {PublicView} from "./Routes/Page";
 
 export const app = express();
 const PORT = process.env.PORT || 3000;
+const webhook = new WebhookClient({ url: process.env.logsWebServerWebhook })
 
 // =================================================================
 // 1. CONFIGURACIÓN INICIAL
 // =================================================================
-app.set('trust proxy', 2);
+app.enable('trust proxy'); // Si estás detrás de un proxy (como Heroku, Nginx, etc.)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'Views'));
 
@@ -29,6 +31,13 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // Tu middleware de logs
 function logsServer(req: Request, _: Response, next: NextFunction) {
     console.log(`[LOG] Nueva solicitud: ${req.method} ${req.url}`);
+    const Embed = new EmbedBuilder()
+        .setTitle(`💫 | Nueva solicitud al servidor web de tipo ${req.method}`)
+        .setDescription(`> **Ruta:** \`${req.url}\`\n> **IP:** \`${req.ip}\`\n> **Headers:** \`\`\`${JSON.stringify(req.headers, null, 2)}\`\`\`\n> **Query:** \`\`\`${JSON.stringify(req.query, null, 2)}\`\`\`\n> **Body:** \`\`\`${JSON.stringify(req.body, null, 2)}\`\`\``)
+        .setColor(0x00AE86)
+        .setTimestamp();
+
+    webhook.send({ embeds: [Embed] }).catch(console.error);
     next();
 }
 app.use(logsServer);
@@ -36,10 +45,10 @@ app.use(logsServer);
 // Tu rate limiter
 const limiter = rateLimit({
     windowMs: 60 * 1000,
-    max: 100,
+    limit: 100,
     message: { error: 'Demasiadas solicitudes, por favor intente de nuevo más tarde.' },
     statusCode: 429,
-    headers: true,
+    standardHeaders: true,
 });
 app.use(limiter);
 

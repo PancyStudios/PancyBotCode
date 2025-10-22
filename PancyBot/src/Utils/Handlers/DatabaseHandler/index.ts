@@ -62,6 +62,12 @@ export async function install_commands(client: ExtendedClient, guild: DiscordGui
                     raidmode: { enable: false, timeToDisable: '1d', password: 'Nothing', activedDate: 0 }
                 },
                 moderation: {
+                    logs: {
+                        warns: { enable: false, channel: ''},
+                        mutes: { enable: false, channel: ''},
+                        kicks: { enable: false, channel: ''},
+                        bans: { enable: false, channel: ''},
+                    },
                     dataModeration: {
                         muterole: '',
                         forceReasons: [],

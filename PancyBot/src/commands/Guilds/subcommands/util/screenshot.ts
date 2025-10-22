@@ -22,7 +22,11 @@ export default new Command({
         await interaction.deferReply();
 
         try {
-            const { data, status } = await axios.post<Buffer>('https://screenshot.pancy.miau.media/api/private/screenshot', {
+            const channel = await interaction.guild.channels.fetch(interaction.channelId);
+            const isNsfwPatch = channel?.type === ChannelType.GuildText && channel.nsfw;
+            const urlApi = isNsfwPatch ? 'https://screenshot.pancy.miau.media/api/private/screenshot/nsfw' : 'https://screenshot.pancy.miau.media/api/private/screenshot/sfw';
+
+            const { data, status } = await axios.post<ArrayBuffer>(urlApi, {
                 url
             }, {
                 headers: {
@@ -37,13 +41,13 @@ export default new Command({
                     return status >= 200 && status < 520; // Accept only 2xx status code
                 }
             })
-            console.debug(data + ' ' + status, 'ScreenShots')
-            const image = new AttachmentBuilder(data, { name: `screenshot.png` })
+            const imageBuffer = Buffer.from(data);
+            const image = new AttachmentBuilder(imageBuffer, { name: `screenshot.png` })
             const embed = new EmbedBuilder()
                 .setTitle("Captura de pantalla")
                 .setImage(`attachment://screenshot.png`)
                 .setColor('Blue')
-                .setFooter({ text: `Solicitado por ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
+                .setFooter({ text: `Solicitado por ${interaction.user.tag} | HTTP: ${status}`, iconURL: interaction.user.displayAvatarURL() })
                 .setTimestamp()
             await interaction.followUp({ embeds: [embed], files: [image] })
         } catch (err) {

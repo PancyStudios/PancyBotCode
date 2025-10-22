@@ -15,7 +15,7 @@ const webhook = new WebhookClient({ url: process.env.logsWebServerWebhook })
 // =================================================================
 // 1. CONFIGURACIÓN INICIAL
 // =================================================================
-app.enable('trust proxy'); // Si estás detrás de un proxy (como Heroku, Nginx, etc.)
+app.set('trust proxy', 1); // Si estás detrás de un proxy (como Heroku, Nginx, etc.)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'Views'));
 
@@ -33,7 +33,7 @@ function logsServer(req: Request, _: Response, next: NextFunction) {
     console.log(`[LOG] Nueva solicitud: ${req.method} ${req.url}`);
     const Embed = new EmbedBuilder()
         .setTitle(`💫 | Nueva solicitud al servidor web de tipo ${req.method}`)
-        .setDescription(`> **Ruta:** \`${req.url}\`\n> **IP:** \`${req.ip}\`\n> **Headers:** \`\`\`${JSON.stringify(req.headers, null, 2)}\`\`\`\n> **Query:** \`\`\`${JSON.stringify(req.query, null, 2)}\`\`\`\n> **Body:** \`\`\`${JSON.stringify(req.body, null, 2)}\`\`\``)
+        .setDescription(`> **Ruta:** \`${req.url}\`\n> **IP:** \`${req.ip}\`\n> **Headers:** \`\`\`${JSON.stringify(req.headers)}\`\`\` \n> **Query:** \`\`\`${JSON.stringify(req.query)}\`\`\` \n> **Body:** \`\`\`${JSON.stringify(req.body)}\`\`\``)
         .setColor(0x00AE86)
         .setTimestamp();
 

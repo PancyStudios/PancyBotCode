@@ -14,7 +14,9 @@ export var Server = app.listen(process.env.PORT, () => {
 })
 export const database = new Database()
 
-client.start()
+client.start().then(() => {
+
+})
 
 console.log(process.cwd())
 

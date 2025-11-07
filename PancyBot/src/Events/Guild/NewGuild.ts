@@ -13,13 +13,13 @@ export default new Event("guildCreate", async guild => {
     const NewGuildEmbed = new EmbedBuilder()
         .setTitle("Nuevo servidor")
         .setDescription(`
-            He sido añadido a un nuevo servidor: ${guild.name} (${guild.id})
+            He sido añadido a un nuevo servidor: ${guild.name} | (${guild.id})
 
-            Dueño: ${guild.members.cache.get(guild.ownerId).user.tag} (${guild.ownerId})
-            Miembros: ${guild.memberCount}
-            Canales: ${guild.channels.cache.size} 
-            Roles: ${guild.roles.cache.size}
-            Creado el: ${guild.createdAt}
+            > 👤 Dueño: ${guild.members.cache.get(guild.ownerId).user.tag} (${guild.ownerId})
+            > 👥 Miembros: ${guild.memberCount}
+            > 🗃️ Canales: ${guild.channels.cache.size} 
+            > 📝 Roles: ${guild.roles.cache.size}
+            >  Creado el: ${guild.createdAt}
             `)
         .setColor(Colors.Green)
         .setTimestamp()

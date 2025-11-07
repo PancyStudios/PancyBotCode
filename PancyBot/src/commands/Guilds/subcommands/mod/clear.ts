@@ -1,5 +1,5 @@
-import { Command } from "../../../../Structure/CommandSlash";
-import { TextChannel, Collection, Message } from "discord.js";
+import {Command} from "../../../../Structure/CommandSlash";
+import {ApplicationCommandOptionType, Collection, Message, TextChannel} from "discord.js";
 
 // Función auxiliar para introducir una pausa
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -14,7 +14,7 @@ export default new Command({
         {
             name: 'cantidad',
             description: 'Cantidad de mensajes a eliminar (hasta 99999)',
-            type: 4,
+            type: ApplicationCommandOptionType.Number,
             required: true
         }
     ],

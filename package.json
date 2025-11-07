@@ -1,6 +1,6 @@
 {
   "name": "pancybot",
-  "version": "0.1.0-prealpha",
+  "version": "0.1.0a-prealpha",
   "description": "Un bot de discord multifuncional",
   "main": "PancyBot/src/index.ts",
   "author": "ImTurbis",
@@ -14,7 +14,7 @@
   "dependencies": {
     "@top-gg/sdk": "3.1.6",
     "anti-ip-logger": "1.0.1",
-    "axios": "1.10.0",
+    "axios": "1.12.0",
     "axios-cookiejar-support": "^5.0.2",
     "cacheger": "1.1.3",
     "chalk": "4.1.2",

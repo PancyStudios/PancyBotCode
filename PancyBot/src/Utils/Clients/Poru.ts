@@ -1,7 +1,15 @@
-import { EmbedBuilder, ButtonStyle, ButtonBuilder, ActionRowBuilder, TextChannel, ButtonInteraction, GuildMember} from 'discord.js'
-import { Poru } from 'poru'
-import { ExtendedClient } from '../../Structure/Client'
-import { errorHandler } from '../../index'
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonInteraction,
+	ButtonStyle,
+	EmbedBuilder,
+	GuildMember,
+	TextChannel
+} from 'discord.js'
+import {Poru} from 'poru'
+import {ExtendedClient} from '../../Structure/Client'
+import {errorHandler} from '../../index'
 import ms from 'ms'
 
 export class PoruClient extends Poru {
@@ -11,15 +19,15 @@ export class PoruClient extends Poru {
             name: "PancyBeta",
             host: process.env.linkserver,
             password: process.env.linkpassword,
-            secure: true,
-            port: 443,
+            secure: false,
+            port: 2333,
         }], {
-            defaultPlatform: 'spsearch',
+            defaultPlatform: 'dzsearch',
             send: null,
             autoResume: false,
             library: "discord.js",
         })
-        this.on('nodeConnect', async (node) => {
+        this.on('nodeConnect', async (_node) => {
             console.info('Conectado con lavalink server', 'Poru')
         })
         this.on('socketClose', async player => {
@@ -182,7 +190,7 @@ export class PoruClient extends Poru {
             }
             });
         
-            collector.on('end', async (i) => {
+            collector.on('end', async (_i) => {
                 await MESSAGE.edit({ embeds: [embed3], components: [row1]});
             })
         })

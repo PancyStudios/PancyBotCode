@@ -1,6 +1,6 @@
-import { EmbedBuilder } from "@discordjs/builders";
-import { Colors, GuildMember, TextChannel, User } from "discord.js"
-import { Command } from "../../../../Structure/CommandSlash";
+import {EmbedBuilder} from "@discordjs/builders";
+import {Colors, GuildMember, User} from "discord.js"
+import {Command} from "../../../../Structure/CommandSlash";
 
 export default new Command({
   name: "ban",
@@ -95,6 +95,10 @@ export default new Command({
     interaction.guild.members.ban(member.id, {
       reason: `${interaction.user.tag} - ${razon}`,
     });
+
+		const date = new Date();
+		const dateTimestamp = date.getTime() / 1000;
+
     embed
       .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .setThumbnail(
@@ -102,25 +106,8 @@ export default new Command({
           ? (member as GuildMember).user.displayAvatarURL()
           : member.displayAvatarURL()
       )
-      .setTitle("Baneo exitoso ")
-      .addFields([
-        {
-          name: "> Usuario Baneado",
-          value: !!(member as any).user ? (member as GuildMember).user.tag : (member as User).tag
-        },
-        {
-          name: "> Razón:",
-          value: razon
-        },
-        {
-          name: "> ID del Moderador:",
-          value: interaction.user.id
-        },
-        {
-          name: "> ID del Servidor:",
-          value: interaction.guild.id
-        }
-      ])
+      .setTitle("🔨 - Baneo Exitoso")
+	    .setDescription(`🍂 Usuario baneado: ${!!(member as any).user ? (member as GuildMember).user.tag : (member as User).tag} (${member.id})\n🍁 Razón: ${reason}\n\n⚒ - Acción realizada por: ${interaction.user.username} (${interaction.user.id})\n🛡 - Realizado en el canal: ${interaction.channel.url}\n\n🕒 - Fecha: <t:${Math.floor(dateTimestamp)}>`)
       .setColor(Colors.Aqua)
       .setTimestamp();
 

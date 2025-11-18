@@ -1,5 +1,6 @@
 import {Command} from "../../../../Structure/CommandSlash";
-import {ApplicationCommandOptionType, Collection, Message, TextChannel} from "discord.js";
+import {ApplicationCommandOptionType, Collection, EmbedBuilder, Message, TextChannel} from "discord.js";
+import moment from "moment/moment";
 
 // Función auxiliar para introducir una pausa
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -33,10 +34,11 @@ export default new Command({
         }
 
         // Manda una respuesta para evitar que la interacción expire
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: ['Ephemeral'] });
 
         // 2. Proceso de eliminación
         try {
+            const ms = Date.now()
             let lastId: string | undefined;
 
             while (eliminadosTotal < cantidadDeseada) {
@@ -81,7 +83,12 @@ export default new Command({
                 if (eliminadosTotal >= cantidadDeseada) break;
             }
 
-            // 3. Confirmación final
+            const duration = moment.duration(Date.now() - ms).format("h [horas], m [minutos] y s [segundos]");
+            const embed = new EmbedBuilder()
+                .setTitle('')
+
+
+
             await interaction.editReply({
                 content: `✅ Se eliminaron **${eliminadosTotal}** mensajes (incluidos mensajes antiguos) del canal.`
             });

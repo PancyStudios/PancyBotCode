@@ -9,7 +9,6 @@ import {ApiRouter} from "./Routes/Api";
 import {PublicView} from "./Routes/Page";
 
 export const app = express();
-const PORT = process.env.PORT || 3000;
 const webhook = new WebhookClient({ url: process.env.logsWebServerWebhook })
 
 // =================================================================
@@ -27,18 +26,29 @@ app.use(urlencoded({ extended: true }));
 
 // Servir archivos estáticos bajo el prefijo /public
 app.use('/public', express.static(path.join(__dirname, 'public')));
-
+const allow_host = /^(.+\.)?miau\.media/gm
 // Tu middleware de logs
-function logsServer(req: Request, _: Response, next: NextFunction) {
-    console.log(`[LOG] Nueva solicitud: ${req.method} ${req.url}`);
-    const Embed = new EmbedBuilder()
-        .setTitle(`💫 | Nueva solicitud al servidor web de tipo ${req.method}`)
-        .setDescription(`> **Ruta:** \`${req.url}\`\n> **IP:** \`${req.ip}\`\n> **Headers:** \`\`\`${JSON.stringify(req.headers)}\`\`\` \n> **Query:** \`\`\`${JSON.stringify(req.query)}\`\`\` \n> **Body:** \`\`\`${JSON.stringify(req.body)}\`\`\``)
-        .setColor(0x00AE86)
-        .setTimestamp();
+function logsServer(req: Request, res: Response, next: NextFunction) {
+	if(allow_host.test(req.host)) {
+		console.log(`[LOG] Nueva solicitud: ${req.method} ${req.url}`);
+		const Embed = new EmbedBuilder()
+			.setTitle(`💫 | Nueva solicitud al servidor web de tipo ${req.method}`)
+			.setDescription(`> **Ruta:** \`${req.url}\`\n> **IP:** \`${req.ip}\`\n> **Headers:** \`\`\`${JSON.stringify(req.headers)}\`\`\` \n> **Query:** \`\`\`${JSON.stringify(req.query)}\`\`\` \n> **Body:** \`\`\`${JSON.stringify(req.body)}\`\`\``)
+			.setColor(0x00AE86)
+			.setTimestamp();
 
-    webhook.send({ embeds: [Embed] }).catch(console.error);
-    next();
+		webhook.send({embeds: [Embed]}).catch(console.error);
+		next();
+	} else {
+		console.warn(`[LOG] Solicitud Sospechosa: ${req.method} ${req.url} | ${req.ip}`);
+		const EmbedSuspect = new EmbedBuilder()
+		.setTitle(`💫 | Solicitud Sospechosa Rechazada: ${req.method} ${req.url}`)
+		.setDescription(`> **Ruta:** \`${req.url}\`\n> **IP:** \`${req.ip}\`\n> **Headers:** \`\`\`${JSON.stringify(req.headers)}\`\`\` \n> **Query:** \`\`\`${JSON.stringify(req.query)}\`\`\` \n> **Body:** \`\`\`${JSON.stringify(req.body)}\`\`\``)
+			.setColor('Orange')
+			.setTimestamp();
+		webhook.send({embeds: [EmbedSuspect]}).catch(console.error);
+		res.sendStatus(423)
+	}
 }
 app.use(logsServer);
 
@@ -74,7 +84,7 @@ app.get('/error-test', (req, res, next) => {
 
 // Middleware de manejo de errores 5xx
 // Se ejecuta solo si una ruta anterior llama a next(err)
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     console.error(err.stack); // Loguea el error completo para depuración
 
     const statusCode = err.status || 500;
@@ -91,7 +101,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 // Middleware de manejo de errores 404 (Atrapa todo)
 // Se ejecuta solo si ninguna ruta anterior coincidió
-app.use((req, res, next) => {
+app.use((req, res, _next) => {
     res.status(404).sendFile(path.join(__dirname, 'Routes', 'Page', 'Views', '404.html'));
 });
 

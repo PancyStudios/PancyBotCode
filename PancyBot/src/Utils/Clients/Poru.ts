@@ -14,6 +14,7 @@ import ms from 'ms'
 
 export class PoruClient extends Poru {
     constructor(client: ExtendedClient) {
+			console.debug('Initializing Poru', 'Poru')
         let reconnectIntents = 0
         super(client, [{         
             name: "PancyBeta",

@@ -54,8 +54,8 @@ export class ExtendedClient extends Client {
 
         // El registro de comandos ahora se maneja en el evento 'ready'
         // dentro del EventHandler para asegurar que el bot esté listo.
-        this.once('ready', () => {
-            this.player = new PoruClient(this);
+        this.once('ready', (c) => {
+            this.player = new PoruClient(c as ExtendedClient);
             this.commandHandler.registerCommands();
         });
     }

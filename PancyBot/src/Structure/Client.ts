@@ -57,6 +57,7 @@ export class ExtendedClient extends Client {
         this.once('ready', (c) => {
             this.player = new PoruClient(c as ExtendedClient);
             this.commandHandler.registerCommands();
+						this.player.init()
         });
     }
 }

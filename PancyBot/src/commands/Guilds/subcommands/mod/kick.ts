@@ -1,9 +1,9 @@
 import {EmbedBuilder} from "@discordjs/builders";
-import {Colors, GuildMember, User} from "discord.js"
+import {ApplicationCommandOptionType, Colors, GuildMember, User} from "discord.js"
 import {Command} from "../../../../Structure/CommandSlash";
 
 export default new Command({
-	name: "ban",
+	name: "kick",
 	description: "Expulsa a un usuario del servidor",
 	category: "mod",
 	userPermissions: ["KickMembers"],
@@ -12,25 +12,25 @@ export default new Command({
 		{
 			name: "usuario",
 			description: "Usuario a expulsar",
-			type: 6,
+			type: ApplicationCommandOptionType.User,
 			required: false,
 		},
 		{
 			name: "user_id",
 			description: "ID del usuario a expulsar",
-			type: 3,
+			type: ApplicationCommandOptionType.String,
 			required: false
 		},
 		{
 			name: "username",
 			description: "Nombre del usuario a expulsar",
-			type: 3,
+			type: ApplicationCommandOptionType.String,
 			required: false
 		},
 		{
 			name: "razon",
 			description: "Razon de la expulsion",
-			type: 3,
+			type: ApplicationCommandOptionType.String,
 			required: false
 		}
 	],

@@ -47,7 +47,7 @@ function logsServer(req: Request, res: Response, next: NextFunction) {
 			.setColor('Orange')
 			.setTimestamp();
 		webhook.send({embeds: [EmbedSuspect]}).catch(console.error);
-		res.sendStatus(423)
+		res.destroy();
 	}
 }
 app.use(logsServer);

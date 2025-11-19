@@ -151,10 +151,10 @@ export class PoruClient extends Poru {
         
                 const embed5 = new EmbedBuilder()
                 .setColor('Blurple')
-                .setTitle('Started Playing')
+                .setTitle('Iniciando reproduccion')
                 .setThumbnail(track.info.artworkUrl)
                 .setTimestamp()
-                .setDescription(`**Title:** [${track.info.title}](${track.info.uri}) \n\n **Song Duration** ${ms(track.info.length)}   \n\n **Status:** Skiped by <@${i.user.id}> `)
+                .setDescription(`**Titulo:** [${track.info.title}](${track.info.uri}) \n\n **Duracion:** ${ms(track.info.length)}   \n\n **Status:** Skiped por <@${i.user.id}> `)
                 .setFooter({ text: `Author: ${track.info.author}`});
         
                                 
@@ -165,12 +165,12 @@ export class PoruClient extends Poru {
                 
             await i.deferUpdate();
             if(player.isPaused){
-                await i.reply({ content: 'Music is Already Paused', ephemeral: true});
+                await i.reply({ content: 'La Musica ya esta pausada', flags: ['Ephemeral'] });
             }  
             
             if (!player.isPaused)  {
                 
-                player.pause(true)
+                await player.pause(true)
                 await i.editReply({ embeds: [embed2], components: [row3]});
             }
             }   if (i.customId === 'resume') {
@@ -195,10 +195,10 @@ export class PoruClient extends Poru {
                 await MESSAGE.edit({ embeds: [embed3], components: [row1]});
             })
         })
-        this.on('trackEnd', (player, _track, _lavalink) => {
+        this.on('queueEnd', (player) => {
             const guild = client.guilds.cache.get(player.guildId);
             (guild.channels.cache.get(player.textChannel) as TextChannel).send({content:`Queue has ended!`});
             player.destroy();
-        })        
+        })
     }
 }

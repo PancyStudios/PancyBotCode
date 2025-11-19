@@ -8,7 +8,6 @@
  */
 import {Client, Collection, GatewayIntentBits, Partials} from "discord.js";
 import {CommandType} from "../Types/CommandSlash"; // Asumiendo una carpeta 'types'
-import {Poru} from "poru";
 import {PoruClient} from "../Utils/Clients/Poru"; // Asumiendo una carpeta 'utils'
 import {CommandHandler} from "./CommandHandler";
 import {EventHandler} from "./EventHandler";
@@ -16,7 +15,7 @@ import {EventHandler} from "./EventHandler";
 export class ExtendedClient extends Client {
     // Las colecciones ahora son parte del CommandHandler, pero podemos exponerlas aquí si es necesario.
     public commands: Collection<string, CommandType> = new Collection();
-    public player: Poru;
+    public player: PoruClient;
     public commandHandler: CommandHandler;
     public eventHandler: EventHandler;
 

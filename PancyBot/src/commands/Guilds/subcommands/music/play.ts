@@ -23,8 +23,12 @@ export default new Command({
 		}
 
 		if (/^https?:\/\//.test(focused)) {
+			const isValid = isValidUrl(focused);
 			return interaction.respond([
-				{ name: '🔗 Enlace detectado (Presiona Enter)', value: focused }
+				{
+					name: isValid ? '✅ Enlace compatible detectado' : '❌ Enlace no soportado (Solo Spotify/Deezer)',
+					value: focused
+				}
 			]);
 		}
 
@@ -37,10 +41,10 @@ export default new Command({
 
 			if (!res || res.tracks.length === 0) return interaction.respond([]);
 
-			const tracks = res.tracks.slice(0, 25);
+			const tracks = res.tracks.slice(0, 10);
 
 			const suggestions = tracks.map(track => {
-				const label = `${track.info.title} - ${track.info.author}`.slice(0, 100);
+				const label = `🎧 | ${track.info.title} - ${track.info.author}`.slice(0, 100);
 				return {
 					name: label,
 					value: track.info.uri
@@ -151,4 +155,11 @@ function formatTime(ms: number): string {
 	const secondsStr = (seconds < 10) ? "0" + seconds : seconds;
 	if (hours > 0) return `${hoursStr}:${minutesStr}:${secondsStr}`;
 	return `${minutesStr}:${secondsStr}`;
+}
+
+function isValidUrl(url: string): boolean {
+	const spotifyRegex = /^(https?:\/\/)?(www\.)?(open\.|play\.)?spotify\.com\/.*|^spotify:.*/i;
+	const deezerRegex = /^(https?:\/\/)?(www\.)?deezer\.com\/.*|^(https?:\/\/)?deezer\.page\.link\/.*/i;
+
+	return spotifyRegex.test(url) || deezerRegex.test(url);
 }

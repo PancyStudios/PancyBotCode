@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PancyBot Canary - Zona de Pruebas</title>
+    <meta name="description" content="Versión experimental de PancyBot. Prueba las nuevas funciones antes que nadie en el universo de Discord.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #0f0500; color: #e2e8f0; overflow-x: hidden; }
+
+        /* --- ANIMACIONES ESPACIALES (Versión Ámbar) --- */
+        .stars-bg {
+            background-image:
+                    radial-gradient(1px 1px at 10% 10%, white 1px, transparent 0),
+                    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.7) 1px, transparent 0),
+                    radial-gradient(2px 2px at 40% 70%, white 1px, transparent 0),
+                    radial-gradient(1px 1px at 60% 40%, rgba(251, 191, 36, 0.5) 1px, transparent 0), /* Amarillo */
+                    radial-gradient(2px 2px at 80% 10%, white 1px, transparent 0),
+                    radial-gradient(1px 1px at 90% 80%, rgba(245, 158, 11, 0.5) 1px, transparent 0); /* Naranja */
+            background-size: 550px 550px;
+            animation: starsMove 100s linear infinite;
+        }
+        @keyframes starsMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 1000px; }
+        }
+        .nebula {
+            background: radial-gradient(circle at 50% 50%, rgba(251, 146, 60, 0.15), transparent 70%); /* Naranja Nebulosa */
+            animation: pulseNebula 10s ease-in-out infinite alternate;
+        }
+        @keyframes pulseNebula {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0.8; }
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #fbbf24, #f97316); /* Ámbar a Naranja */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+        }
+        .glass-panel {
+            background: rgba(25, 15, 5, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 191, 36, 0.1); /* Borde Ámbar sutil */
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(251, 191, 36, 0.4);
+            box-shadow: 0 0 50px rgba(251, 191, 36, 0.15);
+            transform: translateY(-5px);
+        }
+        .float { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        /* Botón "Peligro" */
+        .btn-canary {
+            background: linear-gradient(90deg, #d97706, #b45309);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            color: white;
+        }
+        .btn-canary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, #b45309, #d97706);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        .btn-canary:hover::before { opacity: 1; }
+
+        /* Cinta de advertencia */
+        .hazard-tape {
+            background: repeating-linear-gradient(
+                    45deg,
+                    #000,
+                    #000 10px,
+                    #fbbf24 10px,
+                    #fbbf24 20px
+            );
+        }
+    </style>
+</head>
+<body class="relative">
+
+<!-- Barra de Advertencia Superior -->
+<div class="w-full h-2 hazard-tape"></div>
+<div class="bg-amber-600/90 text-black text-xs font-bold text-center py-1 px-4 uppercase tracking-widest backdrop-blur-sm sticky top-0 z-[60]">
+    ⚠️ Advertencia: Estás en la versión Canary (Desarrollo) - Puede contener inestabilidad ⚠️
+</div>
+
+<!-- Fondo del Universo (Ámbar) -->
+<div class="fixed inset-0 z-[-1] bg-[#0f0500]">
+    <div class="absolute inset-0 stars-bg opacity-60"></div>
+    <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-orange-900/20 rounded-full blur-[120px] nebula"></div>
+    <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-amber-900/20 rounded-full blur-[100px] nebula" style="animation-delay: -5s;"></div>
+</div>
+
+<!-- Navbar -->
+<nav class="fixed w-full z-50 border-b border-amber-500/10 bg-[#0f0500]/80 backdrop-blur-md top-6"> <!-- Top ajustado por la barra de alerta -->
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="flex items-center gap-3 group">
+            <img src="/public/logo.png" alt="PancyBot Logo" class="w-10 h-10 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)] group-hover:rotate-12 transition-transform duration-500 grayscale sepia brightness-125 hue-rotate-[-30deg] saturate-200"> <!-- Filtro para hacer el logo más ámbar -->
+            <span class="text-2xl font-bold text-white tracking-wide">PancyBot <span class="text-amber-500">Canary</span></span>
+        </a>
+
+        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+            <a href="#novedades" class="hover:text-amber-400 transition-colors">Novedades</a>
+            <a href="#debug" class="hover:text-orange-400 transition-colors">Debug</a>
+            <a href="/dashboard" class="hover:text-yellow-400 transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Dev Dashboard
+            </a>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="flex items-center gap-4">
+            <a href="/dashboard" class="text-amber-200 hover:text-white text-sm font-bold border border-amber-500/30 px-4 py-2 rounded-lg hover:bg-amber-500/10 transition-all">
+                Dev Login
+            </a>
+            <a href="https://discord.com/api/oauth2/authorize?client_id=ID_BOT_CANARY&permissions=8&scope=bot%20applications.commands"
+               class="hidden sm:flex btn-canary text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg shadow-orange-500/30 transition-transform hover:scale-105">
+                Invitar Beta
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="min-h-screen flex items-center justify-center pt-20 px-6 relative overflow-hidden">
+    <div class="container mx-auto flex flex-col md:flex-row items-center gap-12">
+
+        <div class="md:w-1/2 text-center md:text-left z-10">
+            <div class="inline-block py-1 px-3 rounded-full border border-amber-500/50 bg-amber-900/20 text-amber-400 text-xs font-bold tracking-widest uppercase mb-6 animate-pulse">
+                🚧 Zona de Construcción &middot; Build #dev-latest
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                El futuro de <br>
+                <span class="gradient-text">PancyBot</span>
+            </h1>
+            <p class="text-lg text-gray-400 mb-10 leading-relaxed max-w-lg mx-auto md:mx-0">
+                Bienvenido al laboratorio. Aquí probamos las nuevas funciones de música, economía y moderación antes de que lleguen a la Tierra. Úsalo bajo tu propio riesgo.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <a href="https://discord.com/api/oauth2/authorize?client_id=ID_BOT_CANARY&permissions=8&scope=bot%20applications.commands"
+                   class="btn-canary text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl shadow-amber-600/20 transition-transform hover:-translate-y-1 text-center">
+                    🧪 Probar Canary
+                </a>
+                <a href="/bugreport" class="glass-panel text-gray-300 px-8 py-4 rounded-xl font-bold text-lg hover:text-white hover:bg-white/5 transition-all text-center flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    Reportar Bug
+                </a>
+            </div>
+        </div>
+
+        <!-- Imagen/Logo Gigante (Variación Canary) -->
+        <div class="md:w-1/2 flex justify-center relative z-10">
+            <div class="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px]">
+                <div class="absolute inset-0 bg-gradient-to-tr from-orange-600 to-amber-500 rounded-full blur-[80px] opacity-40 animate-pulse"></div>
+                <!-- Filtro sepia/saturación para cambiar el color del logo a tonos cálidos -->
+                <img src="/public/logo.png" alt="Planet Logo" class="relative w-full h-full object-contain float drop-shadow-2xl grayscale sepia brightness-110 hue-rotate-[-30deg] saturate-200">
+
+                <div class="absolute top-0 right-10 w-16 h-16 glass-panel rounded-2xl flex items-center justify-center animate-bounce border-amber-500/30" style="animation-duration: 3s;">
+                    <span class="text-2xl">⚠️</span>
+                </div>
+                <div class="absolute bottom-10 left-0 w-20 h-20 glass-panel rounded-full flex items-center justify-center animate-bounce border-amber-500/30" style="animation-duration: 4s; animation-delay: 1s;">
+                    <span class="text-3xl">🐛</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Panel de Debug (Exclusivo Canary) -->
+<section id="debug" class="py-24 relative">
+    <div class="container mx-auto px-6">
+        <div class="glass-panel rounded-3xl p-8 md:p-12 border-l-4 border-l-amber-500 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-amber-500/10 to-transparent pointer-events-none"></div>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-white mb-2">Información de Sistema</h2>
+                <p class="text-gray-400">Métricas en tiempo real del entorno de desarrollo.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="p-4 rounded-lg bg-black/40 border border-amber-500/20">
+                    <div class="text-xs text-gray-500 uppercase mb-1">Environment</div>
+                    <div class="text-amber-400 font-mono font-bold text-lg">development</div>
+                </div>
+                <div class="p-4 rounded-lg bg-black/40 border border-amber-500/20">
+                    <div class="text-xs text-gray-500 uppercase mb-1">Lavalink Ver.</div>
+                    <div class="text-amber-400 font-mono font-bold text-lg">v4.0.8-dev</div>
+                </div>
+                <div class="p-4 rounded-lg bg-black/40 border border-amber-500/20">
+                    <div class="text-xs text-gray-500 uppercase mb-1">Database</div>
+                    <div class="text-amber-400 font-mono font-bold text-lg">MongoDB Atlas</div>
+                </div>
+                <div class="p-4 rounded-lg bg-black/40 border border-amber-500/20">
+                    <div class="text-xs text-gray-500 uppercase mb-1">Node.js</div>
+                    <div class="text-amber-400 font-mono font-bold text-lg">v20.x</div>
+                </div>
+            </div>
+
+            <!-- Consola Ficticia -->
+            <div class="mt-8 bg-black rounded-lg p-4 font-mono text-xs text-green-400 h-32 overflow-hidden border border-gray-800 opacity-70">
+                <p>> System initialized...</p>
+                <p>> Loading modules: [Music, Economy, Moderation]... OK</p>
+                <p>> Connecting to Deezer API (Master Key)... OK</p>
+                <p>> WARNING: Experimental features enabled.</p>
+                <p class="animate-pulse">> Waiting for commands_</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-white/5 bg-black/50 backdrop-blur-xl py-12 mt-20">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="text-center md:text-left">
+            <span class="text-lg font-bold text-amber-500 block tracking-widest uppercase text-xs mb-1">Development Build</span>
+            <span class="text-2xl font-bold gradient-text">PancyBot Canary</span>
+            <p class="text-xs text-gray-500 mt-2">© 2025 PancyStudio. Versión Inestable.</p>
+        </div>
+        <div class="flex gap-8 text-sm text-gray-400">
+            <a href="/privacy-policy" class="hover:text-amber-400 transition-colors">Privacidad Canary</a>
+            <a href="/ToS" class="hover:text-amber-400 transition-colors">Términos Canary</a>
+            <a href="https://discord.gg/soporte" class="hover:text-amber-400 transition-colors">Reportar Error</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -14,7 +14,44 @@ export default new Command({
 			required: true
 		}
 	],
+	async auto({ client, interaction }) {
+		const focused = interaction.options.getFocused();
 
+		if (!focused || focused.length < 2) {
+			return interaction.respond([]);
+		}
+
+		if (/^https?:\/\//.test(focused)) {
+			return interaction.respond([
+				{ name: '🔗 Enlace detectado (Presiona Enter)', value: focused }
+			]);
+		}
+
+		try {
+			const res = await client.player.resolve({
+				query: focused,
+				source: 'dzsearch',
+				requester: interaction.user
+			});
+
+			if (!res || res.tracks.length === 0) return interaction.respond([]);
+
+			const tracks = res.tracks.slice(0, 25);
+
+			const suggestions = tracks.map(track => {
+				const label = `${track.info.title} - ${track.info.author}`.slice(0, 100);
+				return {
+					name: label,
+					value: track.info.uri
+				};
+			});
+
+			await interaction.respond(suggestions);
+
+		} catch (e) {
+			return interaction.respond([]);
+		}
+	},
 	run: async ({ client, interaction, args }) => {
 		const member = interaction.member as GuildMember;
 		const voiceChannel = member.voice.channel;

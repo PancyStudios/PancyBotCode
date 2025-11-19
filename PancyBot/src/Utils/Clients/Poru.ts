@@ -26,9 +26,10 @@ export class PoruClient extends Poru {
         this.on('socketClose', async player => {
             console.warn(`Socket closed ${player.guildId}`, 'Poru')
         })
-        this.on('debug', async (e) => {
-	        if(e === 'PancyBot') return;
+        this.on('debug', async (e, ew) => {
+	        if(e === 'PancyBeta') return;
 					console.debug(e, 'Poru')
+	        console.debug(ew, 'Poru')
         })
         this.on('nodeError', async (err) => { 
             console.error(`Error al conectar con el servidor local de lavalink: ${err.name}`, 'Poru')
@@ -69,6 +70,7 @@ export class PoruClient extends Poru {
 
 	        const channelText = guild.channels.cache.get(player.textChannel) as TextChannel
 	        const MESSAGE = await channelText.send({embeds: [embed]} );
+
 
 	        const ttt = track.info.length
 

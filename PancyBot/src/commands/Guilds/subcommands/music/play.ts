@@ -11,7 +11,8 @@ export default new Command({
 			name: "cancion",
 			description: "Nombre de la canción o URL (Spotify, Apple Music, Deezer, etc.)",
 			type: ApplicationCommandOptionType.String,
-			required: true
+			required: true,
+			autocomplete: true
 		}
 	],
 	async auto({ client, interaction }) {

@@ -28,6 +28,15 @@ export default new Command({
 			return interaction.reply({ content: "❌ No tengo permisos para unirme o hablar en ese canal.", flags: ['Ephemeral'] });
 		}
 
+		const playerExist = client.player.players.get(interaction.guildId);
+
+		if ((playerExist && member.voice.channelId !== playerExist.voiceChannel) || !member.permissions.has('ManageGuild')) {
+			return interaction.reply({
+				content: `❌ Ya estoy reproduciendo música en <#${playerExist.voiceChannel}>. Debes unirte a ese canal para pedir canciones o tener el permiso de ManageGuild para tener prioridad.`,
+				flags: ['Ephemeral'],
+			});
+		}
+
 		await interaction.deferReply();
 
 		// --- LÓGICA INTELIGENTE DE FUENTE ---
@@ -61,7 +70,7 @@ export default new Command({
 			const track = res.tracks[0];
 			player.queue.add(track);
 
-			if (!player.isPlaying && !player.isPaused) player.play();
+			if (!player.isPlaying && !player.isPaused) await player.play();
 
 			const embed = new EmbedBuilder()
 				.setColor("Blurple")
@@ -79,14 +88,29 @@ export default new Command({
 				player.queue.add(track);
 			}
 
-			if (!player.isPlaying && !player.isPaused) player.play();
+			if (!player.isPlaying && !player.isPaused) await player.play();
 
 			const embed = new EmbedBuilder()
 				.setColor("Blurple")
-				.setDescription(`🎶 Playlist cargada: **${res.playlistInfo.name}** (${res.tracks.length} canciones)`)
-				.setFooter({ text: `Fuente: ${res.tracks[0].info.sourceName}` });
+				.setDescription(`🎶 Playlist **${res.playlistInfo.name}** cargada.`)
+				.addFields(
+					{ name: "Canciones", value: `${res.tracks.length}`, inline: true },
+					{ name: "Duración Total", value: formatTime(res.tracks.reduce((acc, cur) => acc + cur.info.length, 0)), inline: true }
+				)
+				.setFooter({ text: `Fuente: ${res.tracks[0].info.sourceName} | Pedido por ${member.user.tag}`, iconURL: member.user.displayAvatarURL() });
 
 			return interaction.editReply({ embeds: [embed] });
 		}
 	}
 });
+
+function formatTime(ms: number): string {
+	const seconds = Math.floor((ms / 1000) % 60);
+	const minutes = Math.floor((ms / (1000 * 60)) % 60);
+	const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+	const hoursStr = (hours < 10) ? "0" + hours : hours;
+	const minutesStr = (minutes < 10) ? "0" + minutes : minutes;
+	const secondsStr = (seconds < 10) ? "0" + seconds : seconds;
+	if (hours > 0) return `${hoursStr}:${minutesStr}:${secondsStr}`;
+	return `${minutesStr}:${secondsStr}`;
+}

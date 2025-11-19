@@ -1,12 +1,4 @@
-import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonInteraction,
-	ButtonStyle,
-	EmbedBuilder,
-	GuildMember,
-	TextChannel
-} from 'discord.js'
+import {ButtonInteraction, ButtonStyle, EmbedBuilder, GuildMember, TextChannel} from 'discord.js'
 import {Poru} from 'poru'
 import {ExtendedClient} from '../../Structure/Client'
 import {errorHandler} from '../../index'
@@ -35,7 +27,8 @@ export class PoruClient extends Poru {
             console.warn(`Socket closed ${player.guildId}`, 'Poru')
         })
         this.on('debug', async (e) => {
-            console.debug(e, 'Poru')
+	        if(e === 'PancyBot') return;
+					console.debug(e, 'Poru')
         })
         this.on('nodeError', async (err) => { 
             console.error(`Error al conectar con el servidor local de lavalink: ${err.name}`, 'Poru')
@@ -56,149 +49,42 @@ export class PoruClient extends Poru {
             }
         })
         this.on('trackStart', async (player, track) => {
-            const guild = client.guilds.cache.get(player.guildId)
-            const button1 = new ButtonBuilder()
-            .setLabel('Pause')
-            .setCustomId('pause')
-            .setStyle(ButtonStyle.Primary)
-        
-            const button2 = new ButtonBuilder()
-            .setLabel('Resume')
-            .setCustomId('resume')
-            .setStyle(ButtonStyle.Success)
-        
-            const button3 = new ButtonBuilder()
-            .setLabel('Skip')
-            .setCustomId('skip')
-            .setStyle(ButtonStyle.Success)
-        
-            const button4 = new ButtonBuilder()
-            .setLabel('Pause')
-            .setCustomId('dpause')
-            .setDisabled(true)
-            .setStyle(ButtonStyle.Secondary)
-        
-            const button5 = new ButtonBuilder()
-            .setLabel('Resume')
-            .setCustomId('dresume')
-            .setDisabled(true)
-            .setStyle(ButtonStyle.Secondary)
-        
-            const button6 = new ButtonBuilder()
-                .setLabel('Skip')
-                .setCustomId('dskip')
-                .setDisabled(true)
-                .setStyle(ButtonStyle.Secondary)
-        
-            const button7 = new ButtonBuilder()
-                .setLabel('Stop')
-                .setCustomId('stop')
-                .setStyle(ButtonStyle.Danger)
-        
-            const button8 = new ButtonBuilder()
-                .setLabel('Stop')
-                .setCustomId('dstop')
-                .setDisabled(true)
-                .setStyle(ButtonStyle.Secondary)
-        
-            const row1 = new ActionRowBuilder<ButtonBuilder>()
-                .addComponents(button4, button5, button6, button8)
-            const row2 = new ActionRowBuilder<ButtonBuilder>()
-                .addComponents(button1, button3, button7)
-            const row3 = new ActionRowBuilder<ButtonBuilder>()
-                .addComponents(button2, button3)
-        
-            const embed = new EmbedBuilder()
-                .setColor('Blurple')
-                .setTitle('Started Playing')
-                .setThumbnail(track.info.artworkUrl)
-                .setTimestamp()
-                .setDescription(`**Title:** [${track.info.title}](${track.info.uri}) \n\n **Song Duration** ${ms(track.info.length)}   \n\n **Status:** **Playing** \n\n *Join my VC to use buttons*`)
-                .setFooter({ text: `Author: ${track.info.author}`});
-        
-            const embed3 = new EmbedBuilder()
-                .setColor('Blurple')
-                .setTitle('Song was Ended')
-                .setThumbnail(track.info.artworkUrl)
-                .setTimestamp()
-                .setDescription(`**Title:** [${track.info.title}](${track.info.uri}) \n\n **Song Duration** ${ms(track.info.length)}   \n\n **Status:** **Finished** `)
-                .setFooter({ text: `Author: ${track.info.author}`});
-                
-            const channelText = guild.channels.cache.get(player.textChannel) as TextChannel
-            const MESSAGE = await channelText.send({ embeds: [embed], components: [row2]});
-        
-            const ttt = track.info.length
-        
-            const filter = i  => (i as ButtonInteraction).guild.members.cache.get(client.user.id).voice.channel == ((i as ButtonInteraction).member as GuildMember).voice.channel
-        
-            const collector = MESSAGE.channel.createMessageComponentCollector({ filter, time: ttt });
-            collector.on('collect', async i => {
-            const embed4 = new EmbedBuilder()
-                .setColor('Blurple')
-                .setTitle('Started Playing')
-                .setThumbnail(track.info.artworkUrl)
-                .setTimestamp()
-                .setDescription(`**Title:** [${track.info.title}](${track.info.uri}) \n\n **Song Duration** ${ms(track.info.length)}   \n\n **Status:** Resumed by <@${i.user.id}> \n\n *People in channel can use button* `)
-                .setFooter({ text: `Author: ${track.info.author}`});
-        
-                const embed2 = new EmbedBuilder()
-                .setColor('Blurple')
-                .setTitle('Music Paused')
-                .setThumbnail(track.info.artworkUrl)
-                .setTimestamp()
-                .setDescription(`**Title:** [${track.info.title}](${track.info.uri}) \n\n **Song Duration:** ${ms(track.info.length)}   \n\n **Status:** Paused by <@${i.user.id}> \n\n *People in channel can use button* `)
-                .setFooter({ text: `Author: ${track.info.author}`});
-        
-                const embed5 = new EmbedBuilder()
-                .setColor('Blurple')
-                .setTitle('Iniciando reproduccion')
-                .setThumbnail(track.info.artworkUrl)
-                .setTimestamp()
-                .setDescription(`**Titulo:** [${track.info.title}](${track.info.uri}) \n\n **Duracion:** ${ms(track.info.length)}   \n\n **Status:** Skiped por <@${i.user.id}> `)
-                .setFooter({ text: `Author: ${track.info.author}`});
-        
-                                
-            if (i.customId === 'pause') {
-                    // if (i.guild.me.voice.channel !== i.member.voice.channel) {
-                    //  await i.reply({ content: 'You have to join my VC!', ephemeral: true});
-                    // }
-                
-            await i.deferUpdate();
-            if(player.isPaused){
-                await i.reply({ content: 'La Musica ya esta pausada', flags: ['Ephemeral'] });
-            }  
-            
-            if (!player.isPaused)  {
-                
-                await player.pause(true)
-                await i.editReply({ embeds: [embed2], components: [row3]});
-            }
-            }   if (i.customId === 'resume') {
-                await i.deferUpdate();
-                player.pause(false)
-                await i.editReply({ embeds: [embed4], components: [row2]});
-            }
-        
-                    if (i.customId === 'skip') {
-                    await i.deferUpdate();   
-                    player.skip();
-                        await i.editReply({ embeds: [embed5], components: [row1]});
-            }
-                    if (i.customId === 'stop') {
-                    await i.deferUpdate();
-                    player.destroy()
-                    await i.editReply({ embeds: [embed5], components: [row1]});
-            }
-            });
-        
-            collector.on('end', async (_i) => {
-                await MESSAGE.edit({ embeds: [embed3], components: [row1]});
-            })
-        })
-        this.on('queueEnd', (player) => {
-            const guild = client.guilds.cache.get(player.guildId);
-            (guild.channels.cache.get(player.textChannel) as TextChannel).send({content:`Queue has ended!`});
-            player.destroy();
+	        const guild = client.guilds.cache.get(player.guildId)
+
+	        const embed = new EmbedBuilder()
+		        .setColor('Blurple')
+		        .setTitle('Started Playing')
+		        .setThumbnail(track.info.artworkUrl)
+		        .setTimestamp()
+		        .setDescription(`**Title:** [${track.info.title}](${track.info.uri}) \n **Song Duration** ${ms(track.info.length)}   \n **Estado:** **Reproduciendo** \n *Join my VC to use buttons*`)
+		        .setFooter({text: `Author: ${track.info.author}`});
+
+	        const embed3 = new EmbedBuilder()
+		        .setColor('Blurple')
+		        .setTitle('La cancion a finalizado')
+		        .setThumbnail(track.info.artworkUrl)
+		        .setTimestamp()
+		        .setDescription(`**Titulo:** [${track.info.title}](${track.info.uri}) \n **Duracion** ${ms(track.info.length)}   \n **Estado:** **Finalizada** `)
+		        .setFooter({text: `Author: ${track.info.author}`});
+
+	        const channelText = guild.channels.cache.get(player.textChannel) as TextChannel
+	        const MESSAGE = await channelText.send({embeds: [embed]} );
+
+	        const ttt = track.info.length
+
+	        const filter = i => (i as ButtonInteraction).guild.members.cache.get(client.user.id).voice.channel == ((i as ButtonInteraction).member as GuildMember).voice.channel
+
+	        const collector = MESSAGE.channel.createMessageComponentCollector({filter, time: ttt });
+	        collector.on('collect', async _i => {
+		        collector.on('end', async (_i) => {
+			        await MESSAGE.edit({embeds: [embed3]});
+		        })
+	        })
+	        this.on('queueEnd', (player) => {
+		        const guild = client.guilds.cache.get(player.guildId);
+		        (guild.channels.cache.get(player.textChannel) as TextChannel).send({content: `Queue has ended!`});
+		        player.destroy();
+	        })
         })
     }
 }

@@ -28,7 +28,7 @@ export class MqttCommunicator {
         this.client = mqtt.connect({
             host: process.env.MQTT_Host,
             port: 1883,
-            username: process.env.enviroment == 'prod' ? 'PancyBot_Stable' : 'PancyBot_Canary',
+            username: process.env.MQTT_User,
             password: process.env.MQTT_Password,
             clientId: `${clientId}_${randomUUID()}`,
             protocol: 'mqtt',

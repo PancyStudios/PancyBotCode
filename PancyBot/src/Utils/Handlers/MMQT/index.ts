@@ -27,11 +27,11 @@ export class MqttCommunicator {
     constructor(clientId: string) {
         this.client = mqtt.connect({
             host: process.env.MQTT_Host,
-            port: 8883,
+            port: 1883,
             username: process.env.enviroment == 'prod' ? 'PancyBot_Stable' : 'PancyBot_Canary',
             password: process.env.MQTT_Password,
             clientId: `${clientId}_${randomUUID()}`,
-            protocol: 'mqtts',
+            protocol: 'mqtt',
         });
 
         this.client.on('connect', () => {

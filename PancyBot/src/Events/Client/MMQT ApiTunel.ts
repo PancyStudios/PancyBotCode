@@ -25,6 +25,30 @@ export default new Event('ready', async (_) => {
         })
     })
 
+	mqttBot.on('get-bot-guild-ids', async () => {
+		return client.guilds.cache.map(guild => guild.id);
+	});
+
+	mqttBot.on('get-guild-info', async (payload) => {
+		const { guildId } = payload;
+		const guild = client.guilds.cache.get(guildId);
+
+		if (!guild) return null;
+
+		return {
+			id: guild.id,
+			name: guild.name,
+			icon: guild.icon,
+			ownerId: guild.ownerId,
+			memberCount: guild.memberCount,
+			description: guild.description,
+			premiumTier: guild.premiumTier,
+			banner: guild.banner,
+			channels: guild.channels.cache.map(c => ({ id: c.id, name: c.name, type: c.type })),
+			roles: guild.roles.cache.map(c => ({ id: c.id, name: c.name })),
+		};
+	});
+
 
     // --- MANEJO DE SEÑALES DE APAGADO ---
     const shutdown = async (signal: string) => {

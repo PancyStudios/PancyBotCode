@@ -15,6 +15,7 @@ export default new Command({
 		if (player.isPaused) return interaction.reply({ content: "⚠️ Ya está pausado.", flags: ['Ephemeral'] });
 
 		await player.pause(true);
+		client.player.stopProgressInterval(interaction.guildId);
 		client.player.publishMusicEvent(interaction.guildId, 'paused', {
 			isPlaying: true,
 			isPaused: true,

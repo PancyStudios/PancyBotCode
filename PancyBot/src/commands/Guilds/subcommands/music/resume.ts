@@ -18,8 +18,8 @@ export default new Command({
 		await player.pause(false);
 
 		client.player.publishMusicEvent(interaction.guildId, 'resume', {
-			isPlaying: false,
-			isPaused: true,
+			isPlaying: true,
+			isPaused: false,
 			currentTrack: player.currentTrack,
 			progress: player.position / 1000,
 			volume: player.volume,

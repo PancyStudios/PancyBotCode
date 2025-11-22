@@ -16,7 +16,7 @@ export default new Command({
 
 		await player.pause(true);
 		client.player.publishMusicEvent(interaction.guildId, 'paused', {
-			isPlaying: false,
+			isPlaying: true,
 			isPaused: true,
 			currentTrack: player.currentTrack,
 			progress: player.position / 1000,

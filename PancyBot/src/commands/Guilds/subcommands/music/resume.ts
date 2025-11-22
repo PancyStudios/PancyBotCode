@@ -21,10 +21,16 @@ export default new Command({
 		client.player.publishMusicEvent(interaction.guildId, 'resume', {
 			isPlaying: true,
 			isPaused: false,
-			currentTrack: player.currentTrack,
-			progress: player.position / 1000,
+			currentTrack: player.currentTrack ? {
+				title: player.currentTrack.info.title,
+				artist: player.currentTrack.info.author,
+				duration: player.currentTrack.info.length / 1000,
+				thumbnail: player.currentTrack.info.artworkUrl,
+				url: player.currentTrack.info.uri
+			} : null,
+			progress: player.position / 1000, // segundos
 			volume: player.volume,
-			queue: player.queue.map(t => ({
+			queue: player.queue.map((t: any) => ({
 				title: t.info.title,
 				artist: t.info.author,
 				duration: t.info.length / 1000

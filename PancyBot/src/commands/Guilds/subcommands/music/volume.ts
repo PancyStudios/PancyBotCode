@@ -1,5 +1,5 @@
-import {Command} from "../../../../Structure/CommandSlash";
-import {ApplicationCommandOptionType, GuildMember} from "discord.js";
+import { Command } from "../../../../Structure/CommandSlash";
+import { ApplicationCommandOptionType, GuildMember } from "discord.js";
 
 export default new Command({
 	name: "volume",

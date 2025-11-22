@@ -3,7 +3,7 @@ import { Poru } from 'poru'
 import { ExtendedClient } from '../../Structure/Client'
 import { errorHandler } from '../../index'
 import ms from 'ms'
-import { mqttBot } from '../../mqttClient'
+import { mqttBot } from '../mqttClient'
 
 export class PoruClient extends Poru {
 	paruCache: Collection<string, { channel: string, message: string }> = new Collection()

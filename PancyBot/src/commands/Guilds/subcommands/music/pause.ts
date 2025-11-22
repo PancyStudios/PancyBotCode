@@ -15,6 +15,19 @@ export default new Command({
 		if (player.isPaused) return interaction.reply({ content: "⚠️ Ya está pausado.", flags: ['Ephemeral'] });
 
 		await player.pause(true);
+		client.player.publishMusicEvent(interaction.guildId, 'paused', {
+			isPlaying: false,
+			isPaused: true,
+			currentTrack: player.currentTrack,
+			progress: player.position / 1000,
+			volume: player.volume,
+			queue: player.queue.map(t => ({
+				title: t.info.title,
+				artist: t.info.author,
+				duration: t.info.length / 1000
+			}))
+		})
+		
 		return interaction.reply("⏸ **Música pausada.**");
 	}
 });

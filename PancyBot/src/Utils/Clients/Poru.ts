@@ -25,14 +25,6 @@ export class PoruClient extends Poru {
 			library: "discord.js",
 		})
 
-		const publishMusicEvent = (guildId: string, event: string, data: any) => {
-			mqttBot.publish(`pancy/music/${guildId}/${event}`, {
-				...data,
-				guildId,
-				timestamp: Date.now()
-			});
-		};
-
 		this.on('nodeConnect', async (_node) => {
 			console.info('Conectado con lavalink server', 'Poru')
 		})
@@ -78,7 +70,7 @@ export class PoruClient extends Poru {
 			this.paruCache.set(guild.id, { channel: channelText.id, message: MESSAGE.id })
 
 			// MQTT: Publicar evento playing
-			publishMusicEvent(player.guildId, 'playing', {
+			this.publishMusicEvent(player.guildId, 'playing', {
 				isPlaying: true,
 				isPaused: false,
 				currentTrack: {
@@ -98,7 +90,7 @@ export class PoruClient extends Poru {
 			});
 
 			// Iniciar intervalo de progreso
-			this.startProgressInterval(player, publishMusicEvent);
+			this.startProgressInterval(player, this.publishMusicEvent);
 		})
 		this.on('trackEnd', async (player, track) => {
 			this.stopProgressInterval(player.guildId);
@@ -123,7 +115,7 @@ export class PoruClient extends Poru {
 			}
 
 			// MQTT: Publicar evento stopped (temporalmente hasta que empiece la siguiente o termine la cola)
-			publishMusicEvent(player.guildId, 'stopped', {
+			this.publishMusicEvent(player.guildId, 'stopped', {
 				isPlaying: false,
 				isPaused: false,
 				currentTrack: null,
@@ -140,7 +132,7 @@ export class PoruClient extends Poru {
 			await (guild.channels.cache.get(player.textChannel) as TextChannel).send({ content: `Cola finalizada!` });
 
 			// MQTT: Publicar evento queueEnd
-			publishMusicEvent(player.guildId, 'stopped', {
+			this.publishMusicEvent(player.guildId, 'stopped', {
 				isPlaying: false,
 				isPaused: false,
 				currentTrack: null,
@@ -190,4 +182,13 @@ export class PoruClient extends Poru {
 			this.progressIntervals.delete(guildId);
 		}
 	}
+
+	public publishMusicEvent(guildId: string, event: string, data: any) {
+		mqttBot.publish(`pancy/music/${guildId}/${event}`, {
+			...data,
+			guildId,
+			timestamp: Date.now()
+		});
+	};
+
 }

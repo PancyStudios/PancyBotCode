@@ -15,6 +15,7 @@ export default new Command({
 		if (!player) return interaction.reply({ content: "❌ No estoy reproduciendo música.", flags: ['Ephemeral'] });
 
 		await player.destroy();
+		
 		return interaction.reply("⏹ **Desconectado y cola limpiada.**");
 	}
 });

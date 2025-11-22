@@ -1,9 +1,9 @@
-import {MqttCommunicator} from '../../Utils/Handlers/MMQT'
-import {Event} from "../../Structure/Events";
-import {client, database} from "../../index";
-import {version} from '../../../../package.json'
+import { MqttCommunicator } from '../../Utils/Handlers/MMQT'
+import { Event } from "../../Structure/Events";
+import { client, database } from "../../index";
+import { version } from '../../../../package.json'
 
-const mqttBot = new MqttCommunicator(`${process.env.enviroment == 'prod' ? 'pancybot' : 'pancybot_canary'}` );
+import { mqttBot } from '../../Utils/mqttClient';
 
 export default new Event('ready', async (_) => {
     mqttBot.on('get-stats', async () => {
@@ -25,29 +25,33 @@ export default new Event('ready', async (_) => {
         })
     })
 
-	mqttBot.on('get-bot-guild-ids', async () => {
-		return client.guilds.cache.map(guild => guild.id);
-	});
+    mqttBot.on('get-bot-guild-ids', async () => {
+        return client.guilds.cache.map(guild => guild.id);
+    });
 
-	mqttBot.on('get-guild-info', async (payload) => {
-		const { guildId } = payload;
-		const guild = client.guilds.cache.get(guildId);
+    mqttBot.on('get-guild-info', async (payload) => {
+        const { guildId } = payload;
+        const guild = client.guilds.cache.get(guildId);
 
-		if (!guild) return null;
+        if (!guild) return null;
 
-		return {
-			id: guild.id,
-			name: guild.name,
-			icon: guild.icon,
-			ownerId: guild.ownerId,
-			memberCount: guild.memberCount,
-			description: guild.description,
-			premiumTier: guild.premiumTier,
-			banner: guild.banner,
-			channels: guild.channels.cache.map(c => ({ id: c.id, name: c.name, type: c.type })),
-			roles: guild.roles.cache.map(c => ({ id: c.id, name: c.name })),
-		};
-	});
+        return {
+            id: guild.id,
+            name: guild.name,
+            icon: guild.icon,
+            ownerId: guild.ownerId,
+            memberCount: guild.memberCount,
+            description: guild.description,
+            premiumTier: guild.premiumTier,
+            banner: guild.banner,
+            channels: guild.channels.cache.map(c => ({
+
+            })),
+            roles: guild.roles.cache.map(c => ({
+
+            })),
+        };
+    });
 
 
     // --- MANEJO DE SEÑALES DE APAGADO ---

@@ -1,7 +1,5 @@
 import { User } from "discord.js"
 
-
-
 export interface EconomyGlobal {
     user: User, 
     GameData: {

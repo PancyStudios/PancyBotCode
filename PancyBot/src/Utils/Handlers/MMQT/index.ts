@@ -6,8 +6,8 @@
  * Esta clase maneja la lógica de comunicación MQTT. Puede ser usada
  * tanto por el Bot como por la API.
  */
-import mqtt, {MqttClient} from 'mqtt';
-import {randomUUID} from 'crypto';
+import mqtt, { MqttClient } from 'mqtt';
+import { randomUUID } from 'crypto';
 
 interface MqttRequest {
     correlationId: string;
@@ -44,7 +44,7 @@ export class MqttCommunicator {
         });
     }
 
-        // --- MÉTODO PARA CERRAR LA CONEXIÓN ---
+    // --- MÉTODO PARA CERRAR LA CONEXIÓN ---
     public destroy(): Promise<void> {
         return new Promise((resolve) => {
             if (!this.client || !this.client.connected) {
@@ -59,6 +59,10 @@ export class MqttCommunicator {
     }
 
     // --- Métodos para la API (el que pide) ---
+
+    public publish(topic: string, payload: any): void {
+        this.client.publish(topic, JSON.stringify(payload));
+    }
 
     public async request(topic: string, payload: any, timeout = 5000): Promise<any> {
         const correlationId = randomUUID();

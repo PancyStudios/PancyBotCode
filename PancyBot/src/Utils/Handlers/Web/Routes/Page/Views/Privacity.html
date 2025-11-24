@@ -1,0 +1,117 @@
+
+<!------------------------------------------------------------------>
+<!--                                                              -->
+<!--                  PRIVACY.HTML (Política de Privacidad)         -->
+<!--                                                              -->
+<!------------------------------------------------------------------>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad - PancyBot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300">
+
+<!-- Header -->
+<header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-700">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <!-- SVG Logo de PancyBot -->
+            <svg class="w-10 h-10 text-indigo-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM17.5 14.5C17.5 15.33 16.83 16 16 16H8C7.17 16 6.5 15.33 6.5 14.5V10.5C6.5 9.67 7.17 9 8 9H16C16.83 9 17.5 9.67 17.5 10.5V14.5Z" fill="currentColor"/>
+                <path d="M9 13.5L10.5 12L9 10.5V13.5Z" fill="#111827"/>
+                <path d="M15 13.5L13.5 12L15 10.5V13.5Z" fill="#111827"/>
+            </svg>
+            <h1 class="text-2xl font-bold text-white">PancyBot</h1>
+        </div>
+        <nav>
+            <a href="tos.html" class="text-gray-400 hover:text-white transition-colors">Términos y Condiciones</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-4xl font-bold text-white text-center mb-4">Política de Privacidad</h2>
+        <p class="text-center text-gray-400 mb-10">Última actualización: 11 de julio de 2025</p>
+
+        <div class="space-y-8">
+            <section>
+                <p>
+                    En PancyStudio, tu privacidad es una prioridad. Esta Política de Privacidad tiene como objetivo informarte de manera clara y transparente sobre qué información recopila la instancia oficial de <strong>PancyBot</strong> ("el Bot", "el Servicio"), por qué la recopilamos y cómo la utilizamos. Esta política se aplica exclusivamente a la instancia oficial operada por <strong>PancyStudio Developers</strong>.
+                </p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">1. Información que Recopilamos</h3>
+                <p class="mb-4">Para funcionar correctamente, PancyBot necesita recopilar y almacenar una cantidad mínima de información:</p>
+                <div class="space-y-3">
+                    <div>
+                        <h4 class="font-bold text-lg text-white">a) Datos de Configuración:</h4>
+                        <ul class="list-disc list-inside space-y-1 pl-4">
+                            <li><strong>ID del Servidor de Discord (Guild ID):</strong> Para guardar ajustes específicos de tu servidor.</li>
+                            <li><strong>ID de Usuario de Discord (User ID):</strong> Para gestionar configuraciones personales y perfiles.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-white">b) Datos de Operación y Monitoreo:</h4>
+                        <ul class="list-disc list-inside space-y-1 pl-4">
+                            <li><strong>Logs de Unión y Salida de Servidores:</strong> Registramos cuando el Bot es añadido o expulsado de un servidor (nombre e ID del servidor) para fines estadísticos. Estos registros se envían a un canal privado en nuestro servidor de soporte.</li>
+                            <li><strong>Informes de Errores (Error Logs):</strong> Si ocurre un error, se genera un informe automático que puede contener el ID del servidor y del usuario que causó el error, para ayudarnos a solucionarlo.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-white">c) Información que NO Recopilamos:</h4>
+                        <p>PancyBot <strong>nunca</strong> almacenará de forma permanente el contenido de tus mensajes, tu correo electrónico, o cualquier otra información personal sensible.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">2. Cómo Utilizamos tu Información</h3>
+                <p>Utilizamos la información recopilada exclusivamente para el funcionamiento del Bot, para diagnóstico y mejora, y para fines estadísticos. <strong>No vendemos, alquilamos ni compartimos tu información personal con terceros.</strong></p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">3. Almacenamiento y Seguridad de Datos</h3>
+                <p>La información de configuración se almacena en una base de datos **MongoDB**, alojada en nuestra propia infraestructura privada. Para garantizar la máxima seguridad, esta base de datos no está expuesta a la red pública de internet; opera con una conexión exclusivamente local, comunicándose únicamente con las instancias de servicio del Bot (Oracle) que residen en la misma tarjeta de red virtual. El acceso a esta infraestructura y a nuestros canales de logs está estrictamente limitado a los desarrolladores autorizados de PancyStudio.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">4. Tus Derechos y Control de Datos</h3>
+                <p>Puedes solicitar ver o eliminar todos los datos de configuración asociados a tu ID de usuario o al ID de tu servidor. Para ejercer estos derechos, por favor, contáctanos a través de nuestro servidor de soporte oficial de Discord.</p>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-bold gradient-text mb-3">5. Contacto</h3>
+                <p>Si tienes alguna pregunta o inquietud sobre esta Política de Privacidad, no dudes en contactarnos en nuestro servidor de soporte.</p>
+            </section>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-gray-700 mt-12">
+    <div class="container mx-auto px-6 py-6 text-center text-gray-400">
+        <p>&copy; 2025 PancyStudio. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -17,6 +17,8 @@
         "importHelpers": true,
         "forceConsistentCasingInFileNames": true,
     },
-    "include": ["src", "enviroment.d.ts"],
+    "include": [
+      "PancyBot/src/**/*",
+    ],
     "exclude": ["node_modules",],
 }

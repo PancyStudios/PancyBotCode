@@ -1,5 +1,10 @@
 node_modules/
+package-lock.json
 .env
-build/
-ErrorLogs/
-error.log
+.idea
+*.gz
+*.tar.gz
+.npm
+yarn.lock
+yarn-error.log
+logs/

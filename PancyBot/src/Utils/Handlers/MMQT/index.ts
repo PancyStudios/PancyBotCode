@@ -115,14 +115,20 @@ export class MqttCommunicator {
         this.client.subscribe(topic);
 
         this.client.on('message', async (receivedTopic, message) => {
-            if (receivedTopic !== topic) return;
+            // Verificar si el topic recibido coincide con el patrón (soportando wildcards)
+            if (!this.topicMatch(topic, receivedTopic)) return;
 
             const request: MqttRequest = JSON.parse(message.toString());
-            const responseTopic = `pancy/response/${requestTopic}/${request.correlationId}`;
+
+            // Extraer el requestTopic real desde receivedTopic (sin pancy/request/)
+            const actualRequestTopic = receivedTopic.replace('pancy/request/', '');
+            const responseTopic = `pancy/response/${actualRequestTopic}/${request.correlationId}`;
             let response: MqttResponse;
 
             try {
-                const data = await callback(request.payload);
+                // Pasar el topic completo en el payload para que el callback pueda extraer parámetros
+                const payloadWithTopic = { ...request.payload, _topic: actualRequestTopic };
+                const data = await callback(payloadWithTopic);
                 response = { correlationId: request.correlationId, data };
             } catch (error) {
                 response = { correlationId: request.correlationId, data: null, error: error.message };
@@ -130,5 +136,21 @@ export class MqttCommunicator {
 
             this.client.publish(responseTopic, JSON.stringify(response));
         });
+    }
+
+    // Helper para verificar si un topic recibido coincide con un patrón (con wildcards)
+    private topicMatch(pattern: string, topic: string): boolean {
+        const patternParts = pattern.split('/');
+        const topicParts = topic.split('/');
+
+        if (patternParts.length !== topicParts.length) return false;
+
+        for (let i = 0; i < patternParts.length; i++) {
+            if (patternParts[i] === '+') continue; // + coincide con cualquier cosa
+            if (patternParts[i] === '#') return true; // # coincide con todo lo que sigue
+            if (patternParts[i] !== topicParts[i]) return false;
+        }
+
+        return true;
     }
 }

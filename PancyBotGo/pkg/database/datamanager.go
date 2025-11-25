@@ -4,8 +4,9 @@ package database
 import (
 	"container/list"
 	"context"
-	"encoding/json"
 	"fmt"
+	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -59,15 +60,28 @@ func NewDataManager[T any](collectionName string, db *Database, opts ...DataMana
 	}
 }
 
-// generateCacheKey creates a unique key from a query
+// generateCacheKey creates a unique, deterministic key from a query
+// It sorts the keys to ensure consistent ordering regardless of map iteration order
 func (dm *DataManager[T]) generateCacheKey(query bson.M) string {
-	// Sort keys for consistent key generation
-	data, _ := json.Marshal(query)
 	collName := ""
 	if dm.collection != nil {
 		collName = dm.collection.Name()
 	}
-	return fmt.Sprintf("%s:%s", collName, string(data))
+
+	// Sort keys for deterministic serialization
+	keys := make([]string, 0, len(query))
+	for k := range query {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	// Build a deterministic key string
+	var parts []string
+	for _, k := range keys {
+		parts = append(parts, fmt.Sprintf("%s=%v", k, query[k]))
+	}
+
+	return fmt.Sprintf("%s:{%s}", collName, strings.Join(parts, ","))
 }
 
 // Get retrieves a document from cache or database

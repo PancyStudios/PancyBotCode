@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"sync"
 	"time"
 
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/logger"
@@ -151,11 +152,12 @@ type RateLimitConfig struct {
 
 // rateLimitMiddleware implements a simple rate limiter
 func (s *Server) rateLimitMiddleware() gin.HandlerFunc {
-	// Simple in-memory rate limiter
+	// Simple in-memory rate limiter with mutex for thread safety
 	type clientInfo struct {
 		count    int
 		resetAt  time.Time
 	}
+	var mu sync.RWMutex
 	clients := make(map[string]*clientInfo)
 
 	config := RateLimitConfig{
@@ -167,18 +169,27 @@ func (s *Server) rateLimitMiddleware() gin.HandlerFunc {
 		ip := c.ClientIP()
 		now := time.Now()
 
+		mu.RLock()
 		info, exists := clients[ip]
+		mu.RUnlock()
+
 		if !exists || now.After(info.resetAt) {
+			mu.Lock()
 			clients[ip] = &clientInfo{
 				count:   1,
 				resetAt: now.Add(config.WindowMs),
 			}
+			mu.Unlock()
 			c.Next()
 			return
 		}
 
+		mu.Lock()
 		info.count++
-		if info.count > config.MaxRequests {
+		count := info.count
+		mu.Unlock()
+
+		if count > config.MaxRequests {
 			c.JSON(http.StatusTooManyRequests, gin.H{
 				"error": "Demasiadas solicitudes, por favor intente de nuevo más tarde.",
 			})

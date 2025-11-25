@@ -255,25 +255,37 @@ func (mc *MqttCommunicator) Unsubscribe(topic string) error {
 }
 
 // topicMatch checks if a received topic matches a pattern (with wildcards)
+// '+' matches exactly one topic level
+// '#' matches zero or more topic levels and must be the last character
 func topicMatch(pattern, topic string) bool {
 	patternParts := strings.Split(pattern, "/")
 	topicParts := strings.Split(topic, "/")
 
-	if len(patternParts) != len(topicParts) {
-		return false
-	}
+	patternLen := len(patternParts)
+	topicLen := len(topicParts)
 
-	for i := 0; i < len(patternParts); i++ {
-		if patternParts[i] == "+" {
-			continue // + matches anything
-		}
+	for i := 0; i < patternLen; i++ {
+		// '#' wildcard matches zero or more remaining levels
 		if patternParts[i] == "#" {
-			return true // # matches everything that follows
+			return true // # matches everything that follows (including nothing)
 		}
+
+		// If we've run out of topic parts but pattern still has parts (not #)
+		if i >= topicLen {
+			return false
+		}
+
+		// '+' matches exactly one topic level
+		if patternParts[i] == "+" {
+			continue
+		}
+
+		// Exact match required
 		if patternParts[i] != topicParts[i] {
 			return false
 		}
 	}
 
-	return true
+	// Pattern exhausted, topic must also be exhausted for a match
+	return patternLen == topicLen
 }

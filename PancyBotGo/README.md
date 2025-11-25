@@ -13,7 +13,13 @@ PancyBotGo/
 │   └── commands/                # 📁 AQUÍ VAN TUS COMANDOS
 │       ├── register.go          # Registro de todos los comandos
 │       ├── util.go              # Comandos de utilidad (ping, status, etc.)
-│       └── music.go             # Comandos de música (play, pause, etc.)
+│       ├── music.go             # Comandos de música (play, pause, etc.)
+│       └── mod/                 # 📁 Grupo de subcomandos /mod
+│           ├── register.go      # Registra el grupo /mod
+│           ├── ban.go           # /mod ban
+│           ├── kick.go          # /mod kick
+│           ├── warn.go          # /mod warn
+│           └── mute.go          # /mod mute
 ├── pkg/
 │   ├── config/                  # Gestión de configuración
 │   ├── logger/                  # Sistema de logs con colores y webhooks
@@ -115,6 +121,90 @@ cmd := discord.NewCommand(
         Required:    false,
     },
 )
+```
+
+### Opción 3: Grupos de Subcomandos (`/mod ban`, `/mod kick`, etc.)
+
+Para crear comandos como `/mod ban`, `/mod kick`, etc., usa grupos de subcomandos.
+
+**Estructura de archivos (un comando por archivo):**
+```
+internal/commands/mod/
+├── register.go    # Registra el grupo /mod
+├── ban.go         # /mod ban
+├── kick.go        # /mod kick
+├── warn.go        # /mod warn
+└── mute.go        # /mod mute
+```
+
+**1. Crear `internal/commands/mod/register.go`:**
+```go
+package mod
+
+import "github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/discord"
+
+func RegisterModCommands(client *discord.ExtendedClient) {
+    // Crear subcomandos (cada uno puede estar en su propio archivo)
+    banCmd := createBanCommand()
+    kickCmd := createKickCommand()
+    warnCmd := createWarnCommand()
+
+    // Construir el grupo /mod con todos los subcomandos
+    modGroup := client.CommandHandler.BuildCommandGroup(
+        "mod",                      // Nombre del grupo
+        "Comandos de moderación",   // Descripción
+        banCmd,                     // Subcomandos...
+        kickCmd,
+        warnCmd,
+    )
+
+    // Registrar el grupo
+    client.CommandHandler.AddGlobalCommand(modGroup)
+}
+```
+
+**2. Crear `internal/commands/mod/ban.go` (un comando por archivo):**
+```go
+package mod
+
+import (
+    "fmt"
+    "github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/discord"
+    "github.com/bwmarrin/discordgo"
+)
+
+func createBanCommand() *discord.Command {
+    return discord.NewCommand(
+        "ban",
+        "Banea a un usuario",
+        "mod",
+        banHandler,
+    ).WithOptions(
+        &discordgo.ApplicationCommandOption{
+            Type:        discordgo.ApplicationCommandOptionUser,
+            Name:        "usuario",
+            Description: "Usuario a banear",
+            Required:    true,
+        },
+    ).WithUserPermissions(discordgo.PermissionBanMembers)
+}
+
+func banHandler(ctx *discord.CommandContext) error {
+    user := ctx.GetUserOption("usuario")
+    // Lógica del ban...
+    return ctx.Reply(fmt.Sprintf("🔨 %s ha sido baneado", user.Username))
+}
+```
+
+**3. Registrar en `internal/commands/register.go`:**
+```go
+import "github.com/PancyStudios/PancyBotCode/PancyBotGo/internal/commands/mod"
+
+func RegisterAll(client *discord.ExtendedClient) {
+    RegisterUtilCommands(client)
+    RegisterMusicCommands(client)
+    mod.RegisterModCommands(client)  // ← Añadir esta línea
+}
 ```
 
 ## Sistemas Convertidos

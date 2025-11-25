@@ -3,6 +3,7 @@
 package commands
 
 import (
+	"github.com/PancyStudios/PancyBotCode/PancyBotGo/internal/commands/mod"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/discord"
 )
 
@@ -15,7 +16,9 @@ func RegisterAll(client *discord.ExtendedClient) {
 	// Music commands
 	RegisterMusicCommands(client)
 
+	// Moderation commands (/mod ban, /mod kick, /mod warn, /mod mute)
+	mod.RegisterModCommands(client)
+
 	// Add more categories here as needed:
-	// RegisterModCommands(client)
 	// RegisterFunCommands(client)
 }

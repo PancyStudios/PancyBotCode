@@ -8,10 +8,12 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/PancyStudios/PancyBotCode/PancyBotGo/internal/commands"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/config"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/database"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/discord"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/errors"
+	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/lavalink"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/logger"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/mqtt"
 	"github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/web"
@@ -34,9 +36,13 @@ func main() {
 
 	// Initialize error handler
 	var discordClient *discord.ExtendedClient
+	var lavalinkClient *lavalink.LavalinkClient
 	errors.Init(cfg.ErrorWebhook, func() {
 		if discordClient != nil {
 			discordClient.Stop()
+		}
+		if lavalinkClient != nil {
+			lavalinkClient.Disconnect()
 		}
 	})
 
@@ -79,8 +85,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Register example commands
-	registerCommands(discordClient)
+	// Register commands using the new commands package
+	commands.RegisterAll(discordClient)
 
 	// Start the bot
 	if err := discordClient.Start(); err != nil {
@@ -88,6 +94,19 @@ func main() {
 		os.Exit(1)
 	}
 	defer discordClient.Stop()
+
+	// Initialize Lavalink after Discord is connected
+	lavalinkClient = lavalink.Init(discordClient.Session, []lavalink.NodeConfig{
+		{
+			Name:     "PancyBeta",
+			Host:     cfg.LinkServer,
+			Port:     2333,
+			Password: cfg.LinkPassword,
+			Secure:   false,
+		},
+	})
+	lavalinkClient.Connect()
+	defer lavalinkClient.Disconnect()
 
 	logger.Success("PancyBot Go iniciado correctamente!", "Main")
 
@@ -106,46 +125,4 @@ func getCurrentDir() string {
 		return "unknown"
 	}
 	return dir
-}
-
-// registerCommands registers all bot commands
-func registerCommands(client *discord.ExtendedClient) {
-	// Example ping command
-	pingCmd := discord.NewCommand(
-		"ping",
-		"Comprueba la latencia del bot",
-		"util",
-		func(ctx *discord.CommandContext) error {
-			latency := ctx.Client.Session.HeartbeatLatency().Milliseconds()
-			return ctx.Reply(fmt.Sprintf("🏓 Pong! Latencia: %dms", latency))
-		},
-	)
-
-	client.CommandHandler.RegisterCommand(pingCmd)
-	client.CommandHandler.AddGlobalCommand(pingCmd.ToApplicationCommand())
-
-	// Example status command
-	statusCmd := discord.NewCommand(
-		"status",
-		"Muestra el estado del bot",
-		"util",
-		func(ctx *discord.CommandContext) error {
-			db := database.Get()
-			dbStatus, _ := db.GetStatus()
-
-			return ctx.Reply(fmt.Sprintf(
-				"📊 **Estado del Bot**\n"+
-					"• Bot: 🟢 Online\n"+
-					"• Base de datos: %s\n"+
-					"• Servidores: %d",
-				dbStatus,
-				ctx.Client.GuildCount(),
-			))
-		},
-	)
-
-	client.CommandHandler.RegisterCommand(statusCmd)
-	client.CommandHandler.AddGlobalCommand(statusCmd.ToApplicationCommand())
-
-	logger.System(fmt.Sprintf("Registrados %d comandos", client.Commands.Size()), "Main")
 }

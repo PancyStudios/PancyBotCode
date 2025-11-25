@@ -8,16 +8,113 @@ Esta es la versión en Go de los sistemas esenciales de PancyBot. Incluye todas 
 PancyBotGo/
 ├── cmd/
 │   └── bot/
-│       └── main.go          # Punto de entrada principal
+│       └── main.go              # Punto de entrada principal
+├── internal/
+│   └── commands/                # 📁 AQUÍ VAN TUS COMANDOS
+│       ├── register.go          # Registro de todos los comandos
+│       ├── util.go              # Comandos de utilidad (ping, status, etc.)
+│       └── music.go             # Comandos de música (play, pause, etc.)
 ├── pkg/
-│   ├── config/              # Gestión de configuración
-│   ├── logger/              # Sistema de logs con colores y webhooks
-│   ├── database/            # Conexión MongoDB con DataManager y caché
-│   ├── mqtt/                # Comunicación MQTT para mensajería
-│   ├── discord/             # Cliente Discord con manejadores de comandos y eventos
-│   ├── web/                 # Servidor web HTTP con Gin
-│   └── errors/              # Manejo de errores y recuperación
-└── go.mod                   # Módulo Go y dependencias
+│   ├── config/                  # Gestión de configuración
+│   ├── logger/                  # Sistema de logs con colores y webhooks
+│   ├── database/                # Conexión MongoDB con DataManager y caché
+│   ├── mqtt/                    # Comunicación MQTT para mensajería
+│   ├── discord/                 # Cliente Discord con manejadores de comandos y eventos
+│   ├── lavalink/                # 🎵 Cliente Lavalink para música
+│   ├── web/                     # Servidor web HTTP con Gin
+│   └── errors/                  # Manejo de errores y recuperación
+└── go.mod                       # Módulo Go y dependencias
+```
+
+## 🚀 Cómo Añadir un Nuevo Comando
+
+### Opción 1: Añadir a un archivo existente
+
+Si tu comando pertenece a una categoría existente (util, music), añádelo al archivo correspondiente:
+
+```go
+// En internal/commands/util.go
+
+// Mi nuevo comando
+miComandoCmd := discord.NewCommand(
+    "micomando",                    // Nombre del comando
+    "Descripción de mi comando",    // Descripción
+    "util",                         // Categoría
+    func(ctx *discord.CommandContext) error {
+        // Tu lógica aquí
+        return ctx.Reply("¡Hola desde mi comando!")
+    },
+)
+client.CommandHandler.RegisterCommand(miComandoCmd)
+client.CommandHandler.AddGlobalCommand(miComandoCmd.ToApplicationCommand())
+```
+
+### Opción 2: Crear una nueva categoría
+
+1. **Crear archivo** en `internal/commands/`:
+
+```go
+// internal/commands/fun.go
+package commands
+
+import (
+    "github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/discord"
+)
+
+func RegisterFunCommands(client *discord.ExtendedClient) {
+    // Comando meme
+    memeCmd := discord.NewCommand(
+        "meme",
+        "Muestra un meme random",
+        "fun",
+        func(ctx *discord.CommandContext) error {
+            return ctx.Reply("🎭 Aquí va tu meme!")
+        },
+    )
+    client.CommandHandler.RegisterCommand(memeCmd)
+    client.CommandHandler.AddGlobalCommand(memeCmd.ToApplicationCommand())
+}
+```
+
+2. **Registrar en `register.go`**:
+
+```go
+// internal/commands/register.go
+func RegisterAll(client *discord.ExtendedClient) {
+    RegisterUtilCommands(client)
+    RegisterMusicCommands(client)
+    RegisterFunCommands(client)  // ← Añadir esta línea
+}
+```
+
+### Comandos con Opciones
+
+```go
+import "github.com/bwmarrin/discordgo"
+
+cmd := discord.NewCommand(
+    "saludar",
+    "Saluda a alguien",
+    "fun",
+    func(ctx *discord.CommandContext) error {
+        usuario := ctx.GetUserOption("usuario")
+        mensaje := ctx.GetStringOption("mensaje")
+        return ctx.Reply(fmt.Sprintf("¡Hola %s! %s", usuario.Username, mensaje))
+    },
+).WithOptions(
+    &discordgo.ApplicationCommandOption{
+        Type:        discordgo.ApplicationCommandOptionUser,
+        Name:        "usuario",
+        Description: "Usuario a saludar",
+        Required:    true,
+    },
+    &discordgo.ApplicationCommandOption{
+        Type:        discordgo.ApplicationCommandOptionString,
+        Name:        "mensaje",
+        Description: "Mensaje adicional",
+        Required:    false,
+    },
+)
 ```
 
 ## Sistemas Convertidos
@@ -60,6 +157,13 @@ PancyBotGo/
 - Reporte a webhooks
 - Recuperación de panics
 
+### 8. 🎵 Sistema de Música Lavalink (`pkg/lavalink/`)
+- Conexión a nodos Lavalink con reconexión automática
+- Búsqueda de canciones (Deezer, YouTube, SoundCloud)
+- Cola de reproducción con gestión completa
+- Publicación de eventos via MQTT
+- Comandos: play, pause, skip, stop, queue, volume, nowplaying
+
 ## Dependencias
 
 - **discordgo**: Cliente Discord para Go
@@ -68,12 +172,14 @@ PancyBotGo/
 - **gin-gonic/gin**: Framework web HTTP
 - **logrus**: Logging estructurado
 - **godotenv**: Carga de archivos .env
+- **gorilla/websocket**: WebSocket para Lavalink
 
 ## Requisitos
 
 - Go 1.21+
 - MongoDB
 - Broker MQTT (opcional)
+- Servidor Lavalink (para música)
 - Token de bot de Discord
 
 ## Instalación
@@ -108,6 +214,10 @@ MQTT_Host=localhost
 MQTT_Port=1883
 MQTT_User=
 MQTT_Password=
+
+# Lavalink (para música)
+linkserver=localhost
+linkpassword=youshallnotpass
 
 # Web Server
 PORT=3000
@@ -153,26 +263,6 @@ go test -cover ./...
 | Concurrencia | Async/await | Goroutines y channels |
 | Tipado | Estático (compilación) | Estático (compilación) |
 | Performance | V8 JIT | Compilado nativamente |
-
-## Ejemplo: Registrar un Comando
-
-```go
-import "github.com/PancyStudios/PancyBotCode/PancyBotGo/pkg/discord"
-
-// Crear comando
-cmd := discord.NewCommand(
-    "mi-comando",
-    "Descripción del comando",
-    "categoria",
-    func(ctx *discord.CommandContext) error {
-        return ctx.Reply("¡Hola!")
-    },
-)
-
-// Registrar en el handler
-client.CommandHandler.RegisterCommand(cmd)
-client.CommandHandler.AddGlobalCommand(cmd.ToApplicationCommand())
-```
 
 ## Ejemplo: Registrar un Evento
 
